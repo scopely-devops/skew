@@ -10,8 +10,7 @@ of resources.
 
 At the moment, the the only available ``scheme`` is the ``ARN'.  Skew uses the
 basic structure of
-(http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)[Amazon
-Resource Names] (ARNs) to assign a unique identifier to every AWS
+[Amazon Resource Names](http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html) (ARNs) to assign a unique identifier to every AWS
 resource.
 
 An example ARN pattern would be:
@@ -21,7 +20,7 @@ An example ARN pattern would be:
 This pattern identifies a specific EC2 instance running in the ``us-west-2``
 region under the account ID ``123456789012``.  The account ID is the 12-digit
 unique identifier for a specific AWS account as described
-(http://docs.aws.amazon.com/general/latest/gr/acct-identifiers.html)[here].
+[here](http://docs.aws.amazon.com/general/latest/gr/acct-identifiers.html).
 To allow **skew** to find your account number, you need to add it to your
 botocore/AWSCLI config file.  For example:
 
@@ -47,7 +46,7 @@ ARN above:
 	    print(resource.data)
 
 The call to lookup returns an ARN object which implements the
-(https://docs.python.org/2/library/stdtypes.html#iterator-types)[iterator pattern]
+[iterator pattern](https://docs.python.org/2/library/stdtypes.html#iterator-types)
 and returns a ``Resource`` object for each AWS resource that matches the
 ARN pattern provided.  The ``Resource`` object contains all of the data
 associated with the AWS resource in dictionary under the ``data`` attribute.
