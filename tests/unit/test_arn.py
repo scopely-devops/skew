@@ -17,7 +17,7 @@ import httpretty
 import mock
 import botocore.session
 
-from skew import lookup
+from skew import scan
 from skew.arn.resources import Resource
 from skew.arn.endpoint import Endpoint
 
@@ -64,7 +64,7 @@ class TestARN(unittest.TestCase):
                                body=body,
                                status=200)
         # Run the test
-        arn = lookup('arn:aws:iam:us-east-1:123456789012:user/*')
+        arn = scan('arn:aws:iam:us-east-1:123456789012:user/*')
         users = list(arn)
         self.assertEqual(len(users), 4)
         self.assertEqual(users[0].data['UserName'], 'foo')
@@ -100,7 +100,7 @@ class TestARN(unittest.TestCase):
                                    httpretty.Response(body=body2, status=200),
                                ])
         # Run the test
-        arn = lookup('arn:aws:ec2:us-east-1:123456789012:instance/*')
+        arn = scan('arn:aws:ec2:us-east-1:123456789012:instance/*')
         # Register our local event handler
         arn.register_for_event('resource-create.aws.ec2.*.*.instance.*',
                                self._my_callback)
@@ -111,11 +111,11 @@ class TestARN(unittest.TestCase):
         for i in instances:
             self.assertEqual(getattr(i, '__foobar__'), 'fiebaz')
         # Fetch non-existant resource
-        arn = lookup('arn:aws:ec2:us-east-1:123456789012:instance/i-decafbad')
+        arn = scan('arn:aws:ec2:us-east-1:123456789012:instance/i-decafbad')
         instances = list(arn)
         self.assertEqual(len(instances), 0)
         # Fetch a single instance
-        arn = lookup('arn:aws:ec2:us-east-1:123456789012:instance/i-123456789')
+        arn = scan('arn:aws:ec2:us-east-1:123456789012:instance/i-123456789')
         instances = list(arn)
         self.assertEqual(len(instances), 1)
         instance = instances[0]
@@ -161,7 +161,7 @@ class TestARN(unittest.TestCase):
                                        content_type=content_type),
                                ])
         # Run the test
-        arn = lookup('arn:aws:dynamodb:us-east-1:123456789012:table/*')
+        arn = scan('arn:aws:dynamodb:us-east-1:123456789012:table/*')
         # Fetch all Table resources
         tables = list(arn)
         self.assertEqual(len(tables), 2)
@@ -181,7 +181,7 @@ class TestARN(unittest.TestCase):
                                body=body,
                                status=200)
         # Run the test
-        arn = lookup('arn:aws:autoscaling:us-east-1:123456789012:autoScalingGroup/*')
+        arn = scan('arn:aws:autoscaling:us-east-1:123456789012:autoScalingGroup/*')
         asgs = list(arn)
         self.assertEqual(len(asgs), 2)
         self.assertEqual(asgs[0].data['AutoScalingGroupName'], 'foo')
@@ -196,7 +196,7 @@ class TestARN(unittest.TestCase):
                                body=body,
                                status=200)
         # Run the test
-        arn = lookup('arn:aws:cloudwatch:us-east-1:123456789012:alarm/*')
+        arn = scan('arn:aws:cloudwatch:us-east-1:123456789012:alarm/*')
         alarms = list(arn)
         self.assertEqual(len(alarms), 2)
         self.assertEqual(alarms[0].data['AlarmName'],

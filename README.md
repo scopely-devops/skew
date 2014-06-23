@@ -39,9 +39,9 @@ to quickly and easily return the data associated with those resources.
 For example, if you wanted to return the data associated with the example
 ARN above:
 
-    from skew import lookup
+    from skew import scan
 
-	arn = lookup('arn:aws:ec2:us-west-2:123456789012:instance/i-12345678')
+	arn = scan('arn:aws:ec2:us-west-2:123456789012:instance/i-12345678')
 	for resource in arn:
 	    print(resource.data)
 
@@ -55,7 +55,7 @@ Any of the elements of the ARN can be replaced with a regular expression.
 The simplest regular expression is ``*`` which means all available choices.
 So, for example:
 
-    arn = lookup('arn:aws:ec2:us-east-1:*:instance/*')
+    arn = scan('arn:aws:ec2:us-east-1:*:instance/*')
 
 would return an iterator for all EC2 instances in the ``us-east-1`` region
 found in all accounts defined in the config file.
@@ -63,7 +63,4 @@ found in all accounts defined in the config file.
 To find all DynamoDB tables in all US regions for the account ID 234567890123
 you would use:
 
-    arn = lookup('arn:aws:dynamodb:us-.*:234567890123:table/*')
-
-
-	
+    arn = scan('arn:aws:dynamodb:us-.*:234567890123:table/*')
