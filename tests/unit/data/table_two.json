@@ -1,0 +1,28 @@
+{
+    "Table": {
+        "AttributeDefinitions": [
+            {
+                "AttributeName": "id", 
+                "AttributeType": "S"
+            }
+        ], 
+        "ProvisionedThroughput": {
+            "NumberOfDecreasesToday": 0, 
+            "WriteCapacityUnits": 2, 
+            "LastIncreaseDateTime": 1371245850.477, 
+            "ReadCapacityUnits": 2, 
+            "LastDecreaseDateTime": 1386969444.127
+        }, 
+        "TableSizeBytes": 88621150, 
+        "TableName": "bar", 
+        "TableStatus": "ACTIVE", 
+        "KeySchema": [
+            {
+                "KeyType": "HASH", 
+                "AttributeName": "id"
+            }
+        ], 
+        "ItemCount": 468709, 
+        "CreationDateTime": 1368642593.791
+    }
+}

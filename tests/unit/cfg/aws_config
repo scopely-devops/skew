@@ -1,0 +1,24 @@
+[default]
+aws_access_key_id = foo
+aws_secret_access_key = bar
+
+[profile foo]
+aws_access_key_id = foo
+aws_secret_access_key = foosecret
+account_id = 123456789012
+
+[profile bar]
+aws_access_key_id = bar
+aws_secret_access_key = barsecret
+account_id = 234567890123
+
+[profile fie]
+aws_access_key_id = fie
+aws_secret_access_key = fiesecret
+account_id = 345678901234
+
+[profile baz]
+aws_access_key_id = baz
+aws_secret_access_key = bazsecret
+account_id = 456789012345
+
