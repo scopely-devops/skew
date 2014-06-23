@@ -18,9 +18,9 @@ import re
 from skew.arn import ARN
 
 
-def lookup(sku):
+def scan(sku):
     """
-    Look up a SKU.
+    Scan (i.e. look up) a SKU.
 
     The main interface into the skew library.  Pass in a SKU and we try
     to look it up and return the appropriate data.
