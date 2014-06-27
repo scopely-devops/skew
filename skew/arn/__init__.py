@@ -134,10 +134,10 @@ class ARN(object):
             resource_cls = skew.arn.resources.find_resource_class(
                 resource_type)
             if resource_id and resource_id != '*':
-                filter_name = resource_cls.Config.get('filter_name')
+                filter_name = resource_cls.Meta.filter_name
                 if filter_name:
                     kwargs[filter_name] = [resource_id]
-            enum_op, path = resource_cls.Config['enum_spec']
+            enum_op, path = resource_cls.Meta.enum_spec
             data = endpoint.call(enum_op, query=path, **kwargs)
             for d in data:
                 resource = resource_cls(endpoint, d)

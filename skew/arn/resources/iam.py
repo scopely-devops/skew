@@ -16,29 +16,27 @@ import skew.arn.resources
 
 class Group(skew.arn.resources.Resource):
 
-    Config = {
-        'service': 'iam',
-        'type': 'group',
-        'enum_spec': ('ListGroups', 'Groups'),
-        'detail_spec': None,
-        'id': 'GroupName',
-        'name': 'GroupName',
-        'filter_name': None,
-        'date': 'CreateDate',
-        'dimension': None
-    }
+    class Meta(object):
+        service = 'iam'
+        type = 'group'
+        enum_spec = ('ListGroups', 'Groups')
+        detail_spec = None
+        id = 'GroupName'
+        name = 'GroupName'
+        filter_name = None
+        date = 'CreateDate'
+        dimension = None
 
 
 class User(skew.arn.resources.Resource):
 
-    Config = {
-        'service': 'iam',
-        'type': 'user',
-        'enum_spec': ('ListUsers', 'Users'),
-        'detail_spec': None,
-        'id': 'UserName',
-        'filter_name': None,
-        'name': 'UserName',
-        'date': 'CreateDate',
-        'dimension': None
-    }
+    class Meta(object):
+        service = 'iam'
+        type = 'user'
+        enum_spec = ('ListUsers', 'Users')
+        detail_spec = None
+        id = 'UserName'
+        filter_name = None
+        name = 'UserName'
+        date = 'CreateDate'
+        dimension = None

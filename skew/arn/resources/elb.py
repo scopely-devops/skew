@@ -16,14 +16,13 @@ import skew.arn.resources
 
 class LoadBalancer(skew.arn.resources.Resource):
 
-    Config = {
-        'service': 'elb',
-        'type': 'loadbalancer',
-        'enum_spec': ('DescribeLoadBalancers', 'LoadBalancerDescriptions'),
-        'detail_spec': None,
-        'id': 'LoadBalancerName',
-        'filter_name': 'load_balancer_names',
-        'name': 'DNSName',
-        'date': 'CreatedTime',
-        'dimension': 'LoadBalancerName'
-    }
+    class Meta(object):
+        service = 'elb'
+        type = 'loadbalancer'
+        enum_spec = ('DescribeLoadBalancers', 'LoadBalancerDescriptions')
+        detail_spec = None
+        id = 'LoadBalancerName'
+        filter_name = 'load_balancer_names'
+        name = 'DNSName'
+        date = 'CreatedTime'
+        dimension = 'LoadBalancerName'

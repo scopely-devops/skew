@@ -16,29 +16,27 @@ import skew.arn.resources
 
 class DBInstance(skew.arn.resources.Resource):
 
-    Config = {
-        'service': 'rds',
-        'type': 'dbinstance',
-        'enum_spec': ('DescribeDBInstances', 'DBInstances'),
-        'detail_spec': None,
-        'id': 'DBInstanceIdentifier',
-        'filter_name': 'db_instance_identfier',
-        'name': 'Endpoint.Address',
-        'date': 'InstanceCreateTime',
-        'dimension': 'DBInstanceIdentifier'
-    }
+    class Meta(object):
+        service = 'rds'
+        type = 'dbinstance'
+        enum_spec = ('DescribeDBInstances', 'DBInstances')
+        detail_spec = None
+        id = 'DBInstanceIdentifier'
+        filter_name = 'db_instance_identfier'
+        name = 'Endpoint.Address'
+        date = 'InstanceCreateTime'
+        dimension = 'DBInstanceIdentifier'
 
 
 class DBSecurityGroup(skew.arn.resources.Resource):
 
-    Config = {
-        'service': 'rds',
-        'type': 'dbsecuritygroup',
-        'enum_spec': ('DescribeDBSecurityGroups', 'DBSecurityGroups'),
-        'detail_spec': None,
-        'id': 'DBSecurityGroupName',
-        'filter_name': 'db_security_group_name',
-        'name': 'DBSecurityGroupDescription',
-        'date': None,
-        'dimension': None
-    }
+    class Meta(object):
+        service = 'rds'
+        type = 'dbsecuritygroup'
+        enum_spec = ('DescribeDBSecurityGroups', 'DBSecurityGroups')
+        detail_spec = None
+        id = 'DBSecurityGroupName'
+        filter_name = 'db_security_group_name'
+        name = 'DBSecurityGroupDescription'
+        date = None
+        dimension = None

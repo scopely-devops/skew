@@ -18,22 +18,21 @@ import skew.arn.resources
 
 class Table(skew.arn.resources.Resource):
 
-    Config = {
-        'service': 'dynamodb',
-        'type': 'table',
-        'enum_spec': ('ListTables', 'TableNames'),
-        'detail_spec': ('DescribeTable', 'table_name', 'Table'),
-        'id': 'Table',
-        'filter_name': None,
-        'name': 'TableName',
-        'date': 'CreationDateTime',
-        'dimension': 'TableName'
-    }
+    class Meta(object):
+        service = 'dynamodb'
+        type = 'table'
+        enum_spec = ('ListTables', 'TableNames')
+        detail_spec = ('DescribeTable', 'table_name', 'Table')
+        id = 'Table'
+        filter_name = None
+        name = 'TableName'
+        date = 'CreationDateTime'
+        dimension = 'TableName'
 
     def __init__(self, endpoint, data):
         super(Table, self).__init__(endpoint, data)
         self._id = data
-        detail_op, param_name, detail_path = self.Config['detail_spec']
+        detail_op, param_name, detail_path = self.Meta.detail_spec
         params = {param_name: self.id}
         data = endpoint.call(detail_op, **params)
         self.data = jmespath.search(detail_path, data)
