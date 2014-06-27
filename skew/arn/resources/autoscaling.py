@@ -18,17 +18,16 @@ import skew.arn.resources
 
 class AutoScalingGroup(skew.arn.resources.Resource):
 
-    Config = {
-        'service': 'autoscaling',
-        'type': 'autoScalingGroup',
-        'name': 'AutoScalingGroupName',
-        'date': 'CreatedTime',
-        'dimension': 'AutoScalingGroupName',
-        'enum_spec': ('DescribeAutoScalingGroups', 'AutoScalingGroups'),
-        'detail_spec': None,
-        'id': 'AutoScalingGroupName',
-        'filter_name': 'auto_scaling_group_names'
-    }
+    class Meta(object):
+        service = 'autoscaling'
+        type = 'autoScalingGroup'
+        name = 'AutoScalingGroupName'
+        date = 'CreatedTime'
+        dimension = 'AutoScalingGroupName'
+        enum_spec = ('DescribeAutoScalingGroups', 'AutoScalingGroups')
+        detail_spec = None
+        id = 'AutoScalingGroupName'
+        filter_name = 'auto_scaling_group_names'
 
     def __init__(self, endpoint, data):
         super(AutoScalingGroup, self).__init__(endpoint, data)

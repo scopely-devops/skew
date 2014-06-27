@@ -24,10 +24,10 @@ from skew.arn.endpoint import Endpoint
 
 class FooResource(Resource):
 
-    Config = {
-        'service': 'ec2',
-        'type': 'foo',
-        'id': 'bar'}
+    class Meta(object):
+        service = 'ec2'
+        type = 'foo'
+        id = 'bar'
 
 
 def get_response_body(name):

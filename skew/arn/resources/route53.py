@@ -16,17 +16,16 @@ import skew.arn.resources
 
 class HostedZone(skew.arn.resources.Resource):
 
-    Config = {
-        'service': 'route53',
-        'type': 'hostedzone',
-        'enum_spec': ('ListHostedZones', 'HostedZones'),
-        'detail_spec': ('GetHostedZone', 'id', None),
-        'id': 'Id',
-        'filter_name': None,
-        'name': 'Name',
-        'date': None,
-        'dimension': None
-    }
+    class Meta(object):
+        service = 'route53'
+        type = 'hostedzone'
+        enum_spec = ('ListHostedZones', 'HostedZones')
+        detail_spec = ('GetHostedZone', 'id', None)
+        id = 'Id'
+        filter_name = None
+        name = 'Name'
+        date = None
+        dimension = None
 
     @property
     def id(self):

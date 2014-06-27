@@ -16,17 +16,16 @@ import skew.arn.resources
 
 class Instance(skew.arn.resources.Resource):
 
-    Config = {
-        'service': 'ec2',
-        'type': 'instance',
-        'enum_spec': ('DescribeInstances', 'Reservations[].Instances[]'),
-        'detail_spec': None,
-        'id': 'InstanceId',
-        'filter_name': 'instance_ids',
-        'name': 'PublicDnsName',
-        'date': 'LaunchTime',
-        'dimension': 'InstanceId'
-    }
+    class Meta(object):
+        service = 'ec2'
+        type = 'instance'
+        enum_spec = ('DescribeInstances', 'Reservations[].Instances[]')
+        detail_spec = None
+        id = 'InstanceId'
+        filter_name = 'instance_ids'
+        name = 'PublicDnsName'
+        date = 'LaunchTime'
+        dimension = 'InstanceId'
 
     @property
     def parent(self):
@@ -35,14 +34,13 @@ class Instance(skew.arn.resources.Resource):
 
 class SecurityGroup(skew.arn.resources.Resource):
 
-    Config = {
-        'service': 'ec2',
-        'type': 'security-group',
-        'enum_spec': ('DescribeSecurityGroups', 'SecurityGroups'),
-        'detail_spec': None,
-        'id': 'GroupId',
-        'filter_name': 'group_names',
-        'name': 'GroupName',
-        'date': None,
-        'dimension': None
-    }
+    class Meta(object):
+        service = 'ec2'
+        type = 'security-group'
+        enum_spec = ('DescribeSecurityGroups', 'SecurityGroups')
+        detail_spec = None
+        id = 'GroupId'
+        filter_name = 'group_names'
+        name = 'GroupName'
+        date = None
+        dimension = None
