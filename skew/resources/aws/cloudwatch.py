@@ -1,8 +1,8 @@
 
-import skew.arn.resources
+import skew.resources.resource
 
 
-class Alarm(skew.arn.resources.Resource):
+class Alarm(skew.resources.resource.Resource):
 
     class Meta(object):
         service = 'cloudwatch'

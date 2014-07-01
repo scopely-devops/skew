@@ -11,32 +11,22 @@
 # ANY KIND, either express or implied. See the License for the specific
 # language governing permissions and limitations under the License.
 
-import skew.arn.resources
+import skew.resources.resource
 
 
-class Group(skew.arn.resources.Resource):
-
-    class Meta(object):
-        service = 'iam'
-        type = 'group'
-        enum_spec = ('ListGroups', 'Groups')
-        detail_spec = None
-        id = 'GroupName'
-        name = 'GroupName'
-        filter_name = None
-        date = 'CreateDate'
-        dimension = None
-
-
-class User(skew.arn.resources.Resource):
+class HostedZone(skew.resources.resource.Resource):
 
     class Meta(object):
-        service = 'iam'
-        type = 'user'
-        enum_spec = ('ListUsers', 'Users')
-        detail_spec = None
-        id = 'UserName'
+        service = 'route53'
+        type = 'hostedzone'
+        enum_spec = ('ListHostedZones', 'HostedZones')
+        detail_spec = ('GetHostedZone', 'id', None)
+        id = 'Id'
         filter_name = None
-        name = 'UserName'
-        date = 'CreateDate'
+        name = 'Name'
+        date = None
         dimension = None
+
+    @property
+    def id(self):
+        return self._id.split('/')[-1]

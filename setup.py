@@ -5,22 +5,21 @@ try:
 except ImportError:
     from distutils.core import setup
 
-from skew import __version__
-
+import os
 
 packages = [
     'skew',
 ]
 
 requires = [
-    'botocore>=0.49.0',
+    'botocore>=0.54.0',
     'jmespath>=0.4.1'
 ]
 
 
 setup(
     name='skew',
-    version=__version__,
+    version=open(os.path.join('skew', '_version')).read(),
     description='Unique IDs to find and inspect cloud resources.',
     long_description=open('README.md').read(),
     author='Mitch Garnaat',

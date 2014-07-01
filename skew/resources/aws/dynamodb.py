@@ -13,10 +13,10 @@
 
 import jmespath
 
-import skew.arn.resources
+import skew.resources.resource
 
 
-class Table(skew.arn.resources.Resource):
+class Table(skew.resources.resource.Resource):
 
     class Meta(object):
         service = 'dynamodb'

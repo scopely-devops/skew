@@ -13,10 +13,10 @@
 
 import jmespath
 
-import skew.arn.resources
+import skew.resources.resource
 
 
-class AutoScalingGroup(skew.arn.resources.Resource):
+class AutoScalingGroup(skew.resources.resource.Resource):
 
     class Meta(object):
         service = 'autoscaling'

@@ -11,10 +11,10 @@
 # ANY KIND, either express or implied. See the License for the specific
 # language governing permissions and limitations under the License.
 
-import skew.arn.resources
+import skew.resources.resource
 
 
-class DBInstance(skew.arn.resources.Resource):
+class DBInstance(skew.resources.resource.Resource):
 
     class Meta(object):
         service = 'rds'
@@ -28,7 +28,7 @@ class DBInstance(skew.arn.resources.Resource):
         dimension = 'DBInstanceIdentifier'
 
 
-class DBSecurityGroup(skew.arn.resources.Resource):
+class DBSecurityGroup(skew.resources.resource.Resource):
 
     class Meta(object):
         service = 'rds'
