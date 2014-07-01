@@ -11,10 +11,10 @@
 # ANY KIND, either express or implied. See the License for the specific
 # language governing permissions and limitations under the License.
 
-import skew.arn.resources
+import skew.resources.resource
 
 
-class Instance(skew.arn.resources.Resource):
+class Instance(skew.resources.resource.Resource):
 
     class Meta(object):
         service = 'ec2'
@@ -32,7 +32,7 @@ class Instance(skew.arn.resources.Resource):
         return self.data['ImageId']
 
 
-class SecurityGroup(skew.arn.resources.Resource):
+class SecurityGroup(skew.resources.resource.Resource):
 
     class Meta(object):
         service = 'ec2'

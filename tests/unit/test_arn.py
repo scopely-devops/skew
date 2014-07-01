@@ -18,7 +18,7 @@ import mock
 import botocore.session
 
 from skew import scan
-from skew.arn.resources import Resource
+from skew.resources.resource import Resource
 from skew.arn.endpoint import Endpoint
 
 

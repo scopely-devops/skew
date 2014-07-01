@@ -17,35 +17,8 @@ import datetime
 import jmespath
 
 from skew.arn.endpoint import Endpoint
-from skew.utils import DynamicLoader
 
 LOG = logging.getLogger(__name__)
-
-
-def _keyfn(cls):
-    key = None
-    if getattr(cls, 'Meta', None):
-        key = cls.Meta.type
-    return key
-
-loader = DynamicLoader(_keyfn, __file__)
-
-
-def find_resource_class(resource_type):
-    return loader.find_class(resource_type)
-
-
-def all_resource_types():
-    return loader.all_keys()
-
-
-def all_resources_for_service(service_name):
-    return [name for name, cls in loader.all_items()
-            if cls.Meta.service == service_name]
-
-
-def all_resource_classes():
-    return loader.all_classes()
 
 
 class MetricData(object):

@@ -11,10 +11,10 @@
 # ANY KIND, either express or implied. See the License for the specific
 # language governing permissions and limitations under the License.
 
-import skew.arn.resources
+import skew.resources.resource
 
 
-class LoadBalancer(skew.arn.resources.Resource):
+class LoadBalancer(skew.resources.resource.Resource):
 
     class Meta(object):
         service = 'elb'
