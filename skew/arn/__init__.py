@@ -32,6 +32,16 @@ resource_events = {
 }
 
 
+_region_names = ['us-east-1',
+                 'us-west-1',
+                 'us-west-2',
+                 'eu-west-1',
+                 'ap-southeast-1',
+                 'ap-southeast-2',
+                 'ap-northeast-1',
+                 'sa-east-1']
+
+
 class ARN(object):
     """
     An enumerator for ARN-like SKU's.  Pass in an ARN pattern and
@@ -104,7 +114,7 @@ class ARN(object):
         for service_name in service_matcher:
             LOG.debug('service_name: %s', service_name)
             service = self._session.get_service(service_name)
-            region_matcher = Matcher(service.region_names,
+            region_matcher = Matcher(_region_names,
                                      self._groups['region'])
             for region in region_matcher:
                 LOG.debug('region_name: %s', region)
