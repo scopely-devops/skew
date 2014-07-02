@@ -16,7 +16,7 @@ import logging
 
 import botocore.session
 
-import skew.arn.resources
+import skew.resources
 from skew.arn.endpoint import Endpoint
 from skew.utils import Matcher
 
@@ -30,6 +30,16 @@ LOG = logging.getLogger(__name__)
 resource_events = {
     'resource-create': '.%s.%s.%s.%s.%s.%s'
 }
+
+
+_region_names = ['us-east-1',
+                 'us-west-1',
+                 'us-west-2',
+                 'eu-west-1',
+                 'ap-southeast-1',
+                 'ap-southeast-2',
+                 'ap-northeast-1',
+                 'sa-east-1']
 
 
 class ARN(object):
@@ -55,7 +65,6 @@ class ARN(object):
     def __init__(self, arn_expression, group_dict):
         self.name = arn_expression
         self._groups = group_dict
-        skew.arn.resources.loader.load_classes()
         self._session = botocore.session.get_session()
         self._account_map = self._build_account_map()
         for event_name in resource_events:
@@ -105,7 +114,7 @@ class ARN(object):
         for service_name in service_matcher:
             LOG.debug('service_name: %s', service_name)
             service = self._session.get_service(service_name)
-            region_matcher = Matcher(service.region_names,
+            region_matcher = Matcher(_region_names,
                                      self._groups['region'])
             for region in region_matcher:
                 LOG.debug('region_name: %s', region)
@@ -117,8 +126,7 @@ class ARN(object):
 
     def _enumerate_resources(self, service, service_name, region,
                              account, resource_re):
-        all_resources = skew.arn.resources.all_resources_for_service(
-            service_name)
+        all_resources = skew.resources.all_types('aws', service_name)
         LOG.debug('all_resources: %s', all_resources)
         if '/' in resource_re:
             resource_type, resource_id = resource_re.split('/', 1)
@@ -131,13 +139,13 @@ class ARN(object):
         endpoint = Endpoint(service, region, account)
         for resource_type in resource_matcher:
             kwargs = {}
-            resource_cls = skew.arn.resources.find_resource_class(
-                resource_type)
+            resource_path = '.'.join(['aws', service_name, resource_type])
+            resource_cls = skew.resources.find_resource_class(resource_path)
             if resource_id and resource_id != '*':
-                filter_name = resource_cls.Config.get('filter_name')
+                filter_name = resource_cls.Meta.filter_name
                 if filter_name:
                     kwargs[filter_name] = [resource_id]
-            enum_op, path = resource_cls.Config['enum_spec']
+            enum_op, path = resource_cls.Meta.enum_spec
             data = endpoint.call(enum_op, query=path, **kwargs)
             for d in data:
                 resource = resource_cls(endpoint, d)

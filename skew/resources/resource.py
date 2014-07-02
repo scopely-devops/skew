@@ -17,35 +17,8 @@ import datetime
 import jmespath
 
 from skew.arn.endpoint import Endpoint
-from skew.utils import DynamicLoader
 
 LOG = logging.getLogger(__name__)
-
-
-def _keyfn(cls):
-    key = None
-    if getattr(cls, 'Config', None):
-        key = cls.Config['type']
-    return key
-
-loader = DynamicLoader(_keyfn, __file__)
-
-
-def find_resource_class(resource_type):
-    return loader.find_class(resource_type)
-
-
-def all_resource_types():
-    return loader.all_keys()
-
-
-def all_resources_for_service(service_name):
-    return [name for name, cls in loader.all_items()
-            if cls.Config['service'] == service_name]
-
-
-def all_resource_classes():
-    return loader.all_classes()
 
 
 class MetricData(object):
@@ -85,7 +58,8 @@ class Resource(object):
       parameter to use to specify this list of id's.
     """
 
-    Config = {'type': 'resource'}
+    class Meta(object):
+        type = 'resource'
 
     def __init__(self, endpoint, data):
         self._endpoint = endpoint
@@ -94,12 +68,12 @@ class Resource(object):
         if data is None:
             data = {}
         self.data = data
-        if 'id' in self.Config and isinstance(self.data, dict):
-            self._id = self.data.get(self.Config['id'], '')
+        if hasattr(self.Meta, 'id') and isinstance(self.data, dict):
+            self._id = self.data.get(self.Meta.id, '')
         else:
             self._id = ''
         self._cloudwatch = None
-        if self.Config.get('dimension'):
+        if hasattr(self.Meta, 'dimension'):
             cloudwatch = self._endpoint.service.session.get_service(
                 'cloudwatch')
             self._cloudwatch = Endpoint(
@@ -119,7 +93,7 @@ class Resource(object):
 
     @property
     def resourcetype(self):
-        return self.Config.get('type')
+        return self.Meta.type
 
     @property
     def parent(self):
@@ -128,7 +102,7 @@ class Resource(object):
     @property
     def name(self):
         if not self._name:
-            self._name = jmespath.search(self.Config['name'], self.data)
+            self._name = jmespath.search(self.Meta.name, self.data)
         return self._name
 
     @property
@@ -138,7 +112,7 @@ class Resource(object):
     @property
     def date(self):
         if not self._date:
-            self._date = jmespath.search(self.Config['date'], self.data)
+            self._date = jmespath.search(self.Meta.date, self.data)
         return self._date
 
     @property
@@ -147,7 +121,7 @@ class Resource(object):
             if self._cloudwatch:
                 data = self._cloudwatch.call(
                     'ListMetrics',
-                    dimensions=[{'Name': self.Config['dimension'],
+                    dimensions=[{'Name': self.Meta.dimension,
                                  'Value': self._id}])
                 self._metrics = jmespath.search('Metrics', data)
             else:

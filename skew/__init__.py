@@ -11,16 +11,18 @@
 # ANY KIND, either express or implied. See the License for the specific
 # language governing permissions and limitations under the License.
 
-__version__ = '0.1.0'
-
+import os
 import re
+
+__version__ = open(os.path.join(os.path.dirname(__file__), '_version')).read()
+
 
 from skew.arn import ARN
 
 
-def lookup(sku):
+def scan(sku):
     """
-    Look up a SKU.
+    Scan (i.e. look up) a SKU.
 
     The main interface into the skew library.  Pass in a SKU and we try
     to look it up and return the appropriate data.

@@ -11,19 +11,18 @@
 # ANY KIND, either express or implied. See the License for the specific
 # language governing permissions and limitations under the License.
 
-import skew.arn.resources
+import skew.resources.resource
 
 
-class LoadBalancer(skew.arn.resources.Resource):
+class LoadBalancer(skew.resources.resource.Resource):
 
-    Config = {
-        'service': 'elb',
-        'type': 'loadbalancer',
-        'enum_spec': ('DescribeLoadBalancers', 'LoadBalancerDescriptions'),
-        'detail_spec': None,
-        'id': 'LoadBalancerName',
-        'filter_name': 'load_balancer_names',
-        'name': 'DNSName',
-        'date': 'CreatedTime',
-        'dimension': 'LoadBalancerName'
-    }
+    class Meta(object):
+        service = 'elb'
+        type = 'loadbalancer'
+        enum_spec = ('DescribeLoadBalancers', 'LoadBalancerDescriptions')
+        detail_spec = None
+        id = 'LoadBalancerName'
+        filter_name = 'load_balancer_names'
+        name = 'DNSName'
+        date = 'CreatedTime'
+        dimension = 'LoadBalancerName'
