@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 
-try:
-    from setuptools import setup
-except ImportError:
-    from distutils.core import setup
+from setuptools import setup, find_packages
 
 import os
 
@@ -25,7 +22,8 @@ setup(
     author='Mitch Garnaat',
     author_email='mitch@garnaat.com',
     url='https://github.com/scopely-devops/skew',
-    packages=packages,
+    packages=find_packages(exclude=['tests*']),
+    package_data={'skew': ['_version']},
     package_dir={'skew': 'skew'},
     install_requires=requires,
     license=open("LICENSE").read(),
