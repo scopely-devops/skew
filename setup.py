@@ -12,7 +12,7 @@ packages = [
 ]
 
 requires = [
-    'botocore>=0.54.0',
+    'botocore==0.55.0',
     'jmespath>=0.4.1'
 ]
 
