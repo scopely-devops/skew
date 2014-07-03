@@ -76,6 +76,7 @@ class TestARN(unittest.TestCase):
     # bogus attribute on each object and then we will look for them
     # in the test method to verify that its getting called.
     def _my_callback(self, event_name, resource, **kwargs):
+        self.assertIn('123456789012', event_name)
         resource.__foobar__ = 'fiebaz'
 
     @httpretty.activate

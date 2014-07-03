@@ -4,10 +4,6 @@ from setuptools import setup, find_packages
 
 import os
 
-packages = [
-    'skew',
-]
-
 requires = [
     'botocore==0.55.0',
     'jmespath>=0.4.1'
