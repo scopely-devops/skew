@@ -119,6 +119,7 @@ class ARN(object):
             for region in region_matcher:
                 LOG.debug('region_name: %s', region)
                 for account in account_matcher:
+                    self._session.profile = self._account_map[account]
                     for resource in self._enumerate_resources(
                             service, service_name, region, account,
                             self._groups['resource']):
