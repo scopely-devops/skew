@@ -11,10 +11,10 @@
 # ANY KIND, either express or implied. See the License for the specific
 # language governing permissions and limitations under the License.
 
-import skew.resources.resource
+from skew.resources.aws import AWSResource
 
 
-class Instance(skew.resources.resource.Resource):
+class Instance(AWSResource):
 
     class Meta(object):
         service = 'ec2'
@@ -32,7 +32,7 @@ class Instance(skew.resources.resource.Resource):
         return self.data['ImageId']
 
 
-class SecurityGroup(skew.resources.resource.Resource):
+class SecurityGroup(AWSResource):
 
     class Meta(object):
         service = 'ec2'

@@ -11,10 +11,10 @@
 # ANY KIND, either express or implied. See the License for the specific
 # language governing permissions and limitations under the License.
 
-import skew.resources.resource
+from skew.resources.aws import AWSResource
 
 
-class HostedZone(skew.resources.resource.Resource):
+class HostedZone(AWSResource):
 
     class Meta(object):
         service = 'route53'

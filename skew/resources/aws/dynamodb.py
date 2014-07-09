@@ -11,12 +11,17 @@
 # ANY KIND, either express or implied. See the License for the specific
 # language governing permissions and limitations under the License.
 
+import logging
+
 import jmespath
 
-import skew.resources.resource
+from skew.resources.aws import AWSResource
 
 
-class Table(skew.resources.resource.Resource):
+LOG = logging.getLogger(__name__)
+
+
+class Table(AWSResource):
 
     class Meta(object):
         service = 'dynamodb'
@@ -28,6 +33,11 @@ class Table(skew.resources.resource.Resource):
         name = 'TableName'
         date = 'CreationDateTime'
         dimension = 'TableName'
+
+    @classmethod
+    def filter(cls, resource_id, data):
+        LOG.debug('%s == %s', resource_id, data)
+        return resource_id == data
 
     def __init__(self, endpoint, data):
         super(Table, self).__init__(endpoint, data)
