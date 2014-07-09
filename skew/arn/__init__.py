@@ -114,8 +114,22 @@ class ARN(object):
         for service_name in service_matcher:
             LOG.debug('service_name: %s', service_name)
             service = self._session.get_service(service_name)
-            region_matcher = Matcher(_region_names,
-                                     self._groups['region'])
+            #
+            # Kind of a hack. Botocore can no longer tell you all of
+            # the regions a service is available in and if you ask for
+            # an endpoint for a service like IAM (which has a universal
+            # endpoint) in us-west-2 or whatever, it just returns the
+            # universal endpoint and we get duplicate resources.
+            # So this just checks to see if the service has a universal
+            # endpoint and then forces the list of available regions
+            # to be only us-east-1.
+            #
+            if service.global_endpoint:
+                region_matcher = Matcher(['us-east-1'],
+                                         self._groups['region'])
+            else:
+                region_matcher = Matcher(_region_names,
+                                         self._groups['region'])
             for region in region_matcher:
                 LOG.debug('region_name: %s', region)
                 for account in account_matcher:
