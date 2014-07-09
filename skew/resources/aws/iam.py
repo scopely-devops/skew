@@ -11,10 +11,15 @@
 # ANY KIND, either express or implied. See the License for the specific
 # language governing permissions and limitations under the License.
 
-import skew.resources.resource
+import logging
+
+from skew.resources.aws import AWSResource
 
 
-class Group(skew.resources.resource.Resource):
+LOG = logging.getLogger(__name__)
+
+
+class Group(AWSResource):
 
     class Meta(object):
         service = 'iam'
@@ -27,8 +32,13 @@ class Group(skew.resources.resource.Resource):
         date = 'CreateDate'
         dimension = None
 
+    @classmethod
+    def filter(cls, resource_id, data):
+        LOG.debug('%s == %s', resource_id, data)
+        return resource_id == data['GroupName']
 
-class User(skew.resources.resource.Resource):
+
+class User(AWSResource):
 
     class Meta(object):
         service = 'iam'
@@ -40,3 +50,8 @@ class User(skew.resources.resource.Resource):
         name = 'UserName'
         date = 'CreateDate'
         dimension = None
+
+    @classmethod
+    def filter(cls, resource_id, data):
+        LOG.debug('%s == %s', resource_id, data)
+        return resource_id == data['UserName']

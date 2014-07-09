@@ -71,6 +71,21 @@ class TestARN(unittest.TestCase):
         self.assertEqual(users[0].name, 'foo')
         self.assertEqual(users[3].date, '2013-08-08T21:50:58Z')
 
+    @httpretty.activate
+    def test_iam_user_filtering(self):
+        # Set up the HTTP mocking
+        host = 'https://iam.amazonaws.com/'
+        body = get_response_body('iam_user.xml')
+        httpretty.register_uri(httpretty.POST, host,
+                               body=body,
+                               status=200)
+        # Run the test
+        arn = scan('arn:aws:iam:us-east-1:123456789012:user/bar')
+        users = list(arn)
+        self.assertEqual(len(users), 1)
+        self.assertEqual(users[0].data['UserName'], 'bar')
+        self.assertEqual(users[0].name, 'bar')
+
     # This callback will be associated with an event that gets fired
     # when new EC2 Instance resources are created.  It will store a
     # bogus attribute on each object and then we will look for them
@@ -174,6 +189,35 @@ class TestARN(unittest.TestCase):
         self.assertEqual(t.date, 1368642593.791)
 
     @httpretty.activate
+    def test_dynamodb_filtering(self):
+        # Set up the HTTP mocking
+        content_type = 'application/x-amz-json-1.0'
+        host = 'https://dynamodb.us-east-1.amazonaws.com/'
+        body1 = get_response_body('dynamodb_tables.json')
+        body2 = get_response_body('table_one.json')
+        body3 = get_response_body('table_two.json')
+        httpretty.register_uri(httpretty.POST, host,
+                               responses=[
+                                   httpretty.Response(
+                                       body=body1, status=200,
+                                       content_type=content_type),
+                                   httpretty.Response(
+                                       body=body2, status=200,
+                                       content_type=content_type),
+                                   httpretty.Response(
+                                       body=body3, status=200,
+                                       content_type=content_type),
+                               ])
+        # Run the test
+        arn = scan('arn:aws:dynamodb:us-east-1:123456789012:table/foo')
+        # Fetch all Table resources
+        tables = list(arn)
+        self.assertEqual(len(tables), 1)
+        t = tables[0]
+        self.assertEqual(t.name, 'foo')
+        self.assertEqual(t.date, 1368642592.791)
+
+    @httpretty.activate
     def test_autoscale_group(self):
         # Set up the HTTP mocking
         host = 'https://autoscaling.us-east-1.amazonaws.com/'
@@ -215,5 +259,3 @@ class TestARN(unittest.TestCase):
                          'arn:aws:ec2:us-east-1:123456789012:foo/bar')
         self.assertEqual(resource.metrics, [])
         self.assertEqual(resource.find_metric('foobar'), None)
-        with self.assertRaises(ValueError) as cm:
-            resource.get_metric_data('foobar', days=1)

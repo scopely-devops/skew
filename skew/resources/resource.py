@@ -12,51 +12,12 @@
 # language governing permissions and limitations under the License.
 
 import logging
-import datetime
-
 import jmespath
-
-from skew.arn.endpoint import Endpoint
 
 LOG = logging.getLogger(__name__)
 
 
-class MetricData(object):
-
-    def __init__(self, data, period):
-        self.data = data
-        self.period = period
-
-
 class Resource(object):
-    """
-    Each Resource class defines a Config variable at the class level.  This
-    is a dictionary that gives the specifics about which service the resource
-    belongs to and how to enumerate the resource.
-
-    Each entry in the dictionary we define:
-
-    * service - The AWS service in which this resource is defined.
-    * enum_spec - The enumeration configuration.  This is a tuple consisting
-      of the name of the operation to call to enumerate the resources and
-      a jmespath query that will be run against the result of the operation
-      to retrieve the list of resources.
-    * detail_spec - Some services provide only summary information in the
-      list or describe method and require you to make another request to get
-      the detailed info for a specific resource.  If that is the case, this
-      would contain a tuple consisting of the operation to call for the
-      details, the parameter name to pass in to identify the desired
-      resource and the jmespath filter to apply to the results to get
-      the details.
-    * id - The name of the field within the resource data that uniquely
-      identifies the resource.
-    * dimension - The CloudWatch dimension for this resource.  A value
-      of None indicates that this resource is not monitored by CloudWatch.
-    * filter_name - By default, the enumerator returns all resources of a
-      given type.  But you can also tell it to filter the results by
-      passing in a list of id's.  This parameter tells it the name of the
-      parameter to use to specify this list of id's.
-    """
 
     class Meta(object):
         type = 'resource'
@@ -72,13 +33,7 @@ class Resource(object):
             self._id = self.data.get(self.Meta.id, '')
         else:
             self._id = ''
-        self._cloudwatch = None
-        if hasattr(self.Meta, 'dimension'):
-            cloudwatch = self._endpoint.service.session.get_service(
-                'cloudwatch')
-            self._cloudwatch = Endpoint(
-                cloudwatch, self._region, self._account)
-        self._metrics = None
+        self._metrics = list()
         self._name = None
         self._date = None
 
@@ -118,14 +73,7 @@ class Resource(object):
     @property
     def metrics(self):
         if self._metrics is None:
-            if self._cloudwatch:
-                data = self._cloudwatch.call(
-                    'ListMetrics',
-                    dimensions=[{'Name': self.Meta.dimension,
-                                 'Value': self._id}])
-                self._metrics = jmespath.search('Metrics', data)
-            else:
-                self._metrics = []
+            self._metrics = []
         return self._metrics
 
     @property
@@ -137,13 +85,6 @@ class Resource(object):
             if m['MetricName'] == metric_name:
                 return m
         return None
-
-    def _total_seconds(self, delta):
-        # python2.6 does not have timedelta.total_seconds() so we have
-        # to calculate this ourselves.  This is straight from the
-        # datetime docs.
-        return ((delta.microseconds + (delta.seconds + delta.days * 24 * 3600)
-                 * 10 ** 6) / 10 ** 6)
 
     def get_metric_data(self, metric_name, days=None, hours=1, minutes=None,
                         statistics=None, period=None):
@@ -179,30 +120,7 @@ class Resource(object):
             * Maximum
             * Minimum
         """
-        if not statistics:
-            statistics = ['Average']
-        if days:
-            delta = datetime.timedelta(days=days)
-        elif hours:
-            delta = datetime.timedelta(hours=hours)
-        else:
-            delta = datetime.timedelta(minutes=minutes)
-        if not period:
-            period = max(60, self._total_seconds(delta) // 1440)
-        metric = self.find_metric(metric_name)
-        if metric and self._cloudwatch:
-            end = datetime.datetime.utcnow()
-            start = end - delta
-            data = self._cloudwatch.call(
-                'GetMetricStatistics',
-                dimensions=metric['Dimensions'],
-                namespace=metric['Namespace'],
-                metric_name=metric['MetricName'],
-                start_time=start.isoformat(), end_time=end.isoformat(),
-                statistics=statistics, period=period)
-            return MetricData(jmespath.search('Datapoints', data), period)
-        else:
-            raise ValueError('Metric (%s) not available' % metric_name)
+        pass
 
     def summary(self, metric_name):
         return self.get_metric_data(

@@ -13,10 +13,10 @@
 
 import jmespath
 
-import skew.resources.resource
+from skew.resources.aws import AWSResource
 
 
-class AutoScalingGroup(skew.resources.resource.Resource):
+class AutoScalingGroup(AWSResource):
 
     class Meta(object):
         service = 'autoscaling'

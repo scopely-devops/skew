@@ -156,13 +156,29 @@ class ARN(object):
             kwargs = {}
             resource_path = '.'.join(['aws', service_name, resource_type])
             resource_cls = skew.resources.find_resource_class(resource_path)
+            do_client_side_filtering = False
             if resource_id and resource_id != '*':
+                # If we are looking for a specific resource and the
+                # API provides a way to filter on a specific resource
+                # id then let's insert the right parameter to do the filtering.
+                # If the API does not support that, we will have to filter
+                # after we get all of the results.
                 filter_name = resource_cls.Meta.filter_name
                 if filter_name:
                     kwargs[filter_name] = [resource_id]
+                else:
+                    do_client_side_filtering = True
             enum_op, path = resource_cls.Meta.enum_spec
             data = endpoint.call(enum_op, query=path, **kwargs)
             for d in data:
+                LOG.debug(d)
+                if do_client_side_filtering:
+                    # If the API does not support filtering, the resource
+                    # class should provide a filter method that will
+                    # return True if the returned data matches the
+                    # resource ID we are looking for.
+                    if not resource_cls.filter(resource_id, d):
+                        continue
                 resource = resource_cls(endpoint, d)
                 self._fire_event('resource-create', self._groups['provider'],
                                  service_name, region, account,

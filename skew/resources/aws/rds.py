@@ -11,10 +11,10 @@
 # ANY KIND, either express or implied. See the License for the specific
 # language governing permissions and limitations under the License.
 
-import skew.resources.resource
+from skew.resources.aws import AWSResource
 
 
-class DBInstance(skew.resources.resource.Resource):
+class DBInstance(AWSResource):
 
     class Meta(object):
         service = 'rds'
@@ -28,7 +28,7 @@ class DBInstance(skew.resources.resource.Resource):
         dimension = 'DBInstanceIdentifier'
 
 
-class DBSecurityGroup(skew.resources.resource.Resource):
+class DBSecurityGroup(AWSResource):
 
     class Meta(object):
         service = 'rds'
