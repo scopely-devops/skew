@@ -36,3 +36,26 @@ class AutoScalingGroup(AWSResource):
     @property
     def arn(self):
         return self._arn_query.search(self.data)
+
+
+class LaunchConfiguration(AWSResource):
+
+    class Meta(object):
+        service = 'autoscaling'
+        type = 'launchConfigurationName'
+        name = 'LaunchConfigurationName'
+        date = 'CreatedTime'
+        dimension = 'AutoScalingGroupName'
+        enum_spec = ('DescribeLaunchConfigurations', 'LaunchConfigurations')
+        detail_spec = None
+        id = 'LaunchConfigurationName'
+        filter_name = 'launch_configuration_names'
+
+    def __init__(self, endpoint, data):
+        super(LaunchConfiguration, self).__init__(endpoint, data)
+        self._arn_query = jmespath.compile('LaunchConfigurationARN')
+
+    @property
+    def arn(self):
+        return self._arn_query.search(self.data)
+        

@@ -44,3 +44,32 @@ class SecurityGroup(AWSResource):
         name = 'GroupName'
         date = None
         dimension = None
+
+
+class KeyPair(AWSResource):
+
+    class Meta(object):
+        service = 'ec2'
+        type = 'key-pair'
+        enum_spec = ('DescribeKeyPairs', 'KeyPairs')
+        detail_spec = None
+        id = 'KeyName'
+        filter_name = 'key_names'
+        name = 'KeyName'
+        date = None
+        dimension = None
+
+
+class Address(AWSResource):
+
+    class Meta(object):
+        service = 'ec2'
+        type = 'address'
+        enum_spec = ('DescribeAddresses', 'Addresses')
+        detail_spec = None
+        id = 'PublicIp'
+        filter_name = 'public-ips'
+        name = 'PublicIp'
+        date = None
+        dimension = None
+        
