@@ -17,8 +17,11 @@ import importlib
 # of the Python class representing that resource.
 ResourceTypes = {
     'aws.autoscaling.autoScalingGroup': 'aws.autoscaling.AutoScalingGroup',
+    'aws.autoscaling.launchConfigurationName': 'aws.autoscaling.LaunchConfiguration',
     'aws.cloudwatch.alarm': 'aws.cloudwatch.Alarm',
     'aws.dynamodb.table': 'aws.dynamodb.Table',
+    'aws.ec2.address': 'aws.ec2.Address',
+    'aws.ec2.key-pair': 'aws.ec2.KeyPair',
     'aws.ec2.instance': 'aws.ec2.Instance',
     'aws.ec2.security-group': 'aws.ec2.SecurityGroup',
     'aws.elb.loadbalancer': 'aws.elb.LoadBalancer',
