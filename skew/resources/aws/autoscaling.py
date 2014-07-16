@@ -58,4 +58,3 @@ class LaunchConfiguration(AWSResource):
     @property
     def arn(self):
         return self._arn_query.search(self.data)
-        

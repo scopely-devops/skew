@@ -72,4 +72,3 @@ class Address(AWSResource):
         name = 'PublicIp'
         date = None
         dimension = None
-        

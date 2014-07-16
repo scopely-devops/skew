@@ -30,3 +30,17 @@ class HostedZone(AWSResource):
     @property
     def id(self):
         return self._id.split('/')[-1]
+
+
+class ResourceRecordSet(AWSResource):
+
+    class Meta(object):
+        service = 'route53'
+        type = 'rrset'
+        enum_spec = ('ListResourceRecordSets', 'ResourceRecordSets')
+        detail_spec = None
+        id = 'Name'
+        filter_name = None
+        name = 'Name'
+        date = None
+        dimension = None
