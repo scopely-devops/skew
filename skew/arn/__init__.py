@@ -109,8 +109,11 @@ class ARN(object):
     def __iter__(self):
         service_matcher = Matcher(self._session.get_available_services(),
                                   self._groups['service'])
-        account_matcher = Matcher(self._account_map.keys(),
-                                  self._groups['account'])
+        if self._account_map:
+            account_matcher = Matcher(self._account_map.keys(),
+                                      self._groups['account'])
+        else:
+            account_matcher = [self._groups['account']]
         for service_name in service_matcher:
             LOG.debug('service_name: %s', service_name)
             service = self._session.get_service(service_name)
@@ -133,7 +136,8 @@ class ARN(object):
             for region in region_matcher:
                 LOG.debug('region_name: %s', region)
                 for account in account_matcher:
-                    self._session.profile = self._account_map[account]
+                    if self._account_map:
+                        self._session.profile = self._account_map[account]
                     for resource in self._enumerate_resources(
                             service, service_name, region, account,
                             self._groups['resource']):
