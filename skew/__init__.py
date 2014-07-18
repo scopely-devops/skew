@@ -17,7 +17,7 @@ import re
 __version__ = open(os.path.join(os.path.dirname(__file__), '_version')).read()
 
 
-from skew.arn import ARN
+from skew.arn import ARNEnumerator
 
 
 def scan(sku):
@@ -39,7 +39,7 @@ def scan(sku):
     but since there is currently only one (ARN) let's not over-complicate
     things.
     """
-    regex = re.compile(ARN.RegEx)
+    regex = re.compile(ARNEnumerator.RegEx)
     r = regex.search(sku)
     if r:
-        return ARN(sku, r.groupdict())
+        return ARNEnumerator(sku, r.groupdict())

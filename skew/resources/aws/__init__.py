@@ -13,20 +13,16 @@
 
 import logging
 import datetime
+from collections import namedtuple
 
 import jmespath
+import botocore.session
 
+from skew.resources import find_resource_class
 from skew.resources.resource import Resource
 from skew.arn.endpoint import Endpoint
 
 LOG = logging.getLogger(__name__)
-
-
-class MetricData(object):
-
-    def __init__(self, data, period):
-        self.data = data
-        self.period = period
 
 
 class AWSResource(Resource):
@@ -78,7 +74,7 @@ class AWSResource(Resource):
         else:
             self._id = ''
         self._cloudwatch = None
-        if hasattr(self.Meta, 'dimension'):
+        if hasattr(self.Meta, 'dimension') and self.Meta.dimension:
             cloudwatch = self._endpoint.service.session.get_service(
                 'cloudwatch')
             self._cloudwatch = Endpoint(
@@ -177,6 +173,27 @@ class AWSResource(Resource):
                 metric_name=metric['MetricName'],
                 start_time=start.isoformat(), end_time=end.isoformat(),
                 statistics=statistics, period=period)
-            return MetricData(jmespath.search('Datapoints', data), period)
+            return jmespath.search('Datapoints', data)
         else:
             raise ValueError('Metric (%s) not available' % metric_name)
+
+
+ArnComponents = namedtuple('ArnComponents',
+                           ['scheme', 'provider', 'service', 'region',
+                            'account', 'resource'])
+
+
+def resource_from_arn(arn, data):
+    session = botocore.session.get_session()
+    parts = ArnComponents(*arn.split(':', 6))
+    service = session.get_service(parts.service)
+    if ':' in parts.resource:
+        resource_type, resource_id = parts.resource.split(':')
+    elif '/' in parts.resource:
+        resource_type, resource_id = parts.resource.split('/')
+    else:
+        resource_type = parts.resource
+    endpoint = Endpoint(service, parts.region, parts.account)
+    resource_path = '.'.join(['aws', parts.service, resource_type])
+    resource_cls = find_resource_class(resource_path)
+    return resource_cls(endpoint, data)
