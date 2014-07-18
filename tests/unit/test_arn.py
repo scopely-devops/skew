@@ -149,10 +149,9 @@ class TestARN(unittest.TestCase):
                           'NetworkIn',
                           'DiskWriteBytes'])
         # Fetch metric data
-        metric = instance.get_metric_data('CPUUtilization')
-        self.assertEqual(metric.period, 60)
-        self.assertEqual(len(metric.data), 12)
-        self.assertEqual(metric.data[-1]['Average'], 0.0)
+        metric_data = instance.get_metric_data('CPUUtilization')
+        self.assertEqual(len(metric_data), 12)
+        self.assertEqual(metric_data[-1]['Average'], 0.0)
         self.assertEqual(instance.date, '2013-04-25T23:41:15.000Z')
         self.assertEqual(instance.name, 'foo.bar.com')
 
