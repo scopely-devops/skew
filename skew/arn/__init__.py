@@ -42,7 +42,7 @@ _region_names = ['us-east-1',
                  'sa-east-1']
 
 
-class ARN(object):
+class ARNEnumerator(object):
     """
     An enumerator for ARN-like SKU's.  Pass in an ARN pattern and
     the resulting ARN object will be an iterator which will return
