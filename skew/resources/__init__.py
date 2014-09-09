@@ -29,6 +29,7 @@ ResourceTypes = {
     'aws.iam.user': 'aws.iam.User',
     'aws.rds.dbinstance': 'aws.rds.DBInstance',
     'aws.rds.dbsecuritygroup': 'aws.rds.DBSecurityGroup',
+    'aws.redshift.cluster': 'aws.redshift.Cluster',
     'aws.route53.hostedzone': 'aws.route53.HostedZone',
     # 'aws.route53.rrset': 'aws.route53.ResourceRecordSet'
 }
