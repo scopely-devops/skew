@@ -137,6 +137,8 @@ class ARNEnumerator(object):
                 LOG.debug('region_name: %s', region)
                 for account in account_matcher:
                     if self._account_map:
+                        # HACK - workaround for bug in botocore
+                        self._session._credentials = None
                         self._session.profile = self._account_map[account]
                     for resource in self._enumerate_resources(
                             service, service_name, region, account,
@@ -146,6 +148,7 @@ class ARNEnumerator(object):
     def _enumerate_resources(self, service, service_name, region,
                              account, resource_re):
         all_resources = skew.resources.all_types('aws', service_name)
+        LOG.debug('account: %s', account)
         LOG.debug('all_resources: %s', all_resources)
         if '/' in resource_re:
             resource_type, resource_id = resource_re.split('/', 1)
