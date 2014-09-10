@@ -31,15 +31,28 @@ resource_events = {
     'resource-create': '.%s.%s.%s.%s.%s.%s'
 }
 
+_all_region_names = ['us-east-1',
+                     'us-west-1',
+                     'us-west-2',
+                     'eu-west-1',
+                     'ap-southeast-1',
+                     'ap-southeast-2',
+                     'ap-northeast-1',
+                     'sa-east-1']
 
-_region_names = ['us-east-1',
-                 'us-west-1',
-                 'us-west-2',
-                 'eu-west-1',
-                 'ap-southeast-1',
-                 'ap-southeast-2',
-                 'ap-northeast-1',
-                 'sa-east-1']
+_region_names_limited = ['us-east-1',
+                         'us-west-2',
+                         'eu-west-1',
+                         'ap-southeast-1',
+                         'ap-southeast-2',
+                         'ap-northeast-1']
+
+_region_names = {
+    'redshift': _region_names_limited,
+    'glacier': _region_names_limited,
+    'kinesis': _region_names_limited,
+    'all': _all_region_names}
+
 
 
 class ARNEnumerator(object):
@@ -91,6 +104,9 @@ class ARNEnumerator(object):
         LOG.debug('firing event: %s', event)
         self._session.emit(event, **kwargs)
 
+    def get_region_names(self, service_name):
+        return _region_names.get(service_name, _region_names['all'])
+
     def _build_account_map(self):
         """
         Builds up a dictionary mapping account IDs to profile names.
@@ -131,7 +147,8 @@ class ARNEnumerator(object):
                 region_matcher = Matcher(['us-east-1'],
                                          self._groups['region'])
             else:
-                region_matcher = Matcher(_region_names,
+                region_names = self.get_region_names(service_name)
+                region_matcher = Matcher(region_names,
                                          self._groups['region'])
             for region in region_matcher:
                 LOG.debug('region_name: %s', region)
