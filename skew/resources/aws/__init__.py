@@ -82,6 +82,7 @@ class AWSResource(Resource):
         self._metrics = None
         self._name = None
         self._date = None
+        self._tags = None
 
     def __repr__(self):
         return self.arn
@@ -104,6 +105,24 @@ class AWSResource(Resource):
             else:
                 self._metrics = []
         return self._metrics
+
+    @property
+    def tags(self):
+        """
+        Convert the ugly Tags JSON into a real dictionary and
+        memoize the result.
+        """
+        if self._tags is None:
+            self._tags = {}
+            if 'Tags' in self.data:
+                for kvpair in self.data['Tags']:
+                    if kvpair['Key'] in self._tags:
+                        if not isinstance(self._tags[kvpair['Key']], list):
+                            self._tags[kvpair['Key']] = [self._tags[kvpair['Key']]]
+                        self._tags[kvpair['Key'].append(kvpair['Value'])]
+                    else:
+                        self._tags[kvpair['Key']] = kvpair['Value']
+        return self._tags
 
     def find_metric(self, metric_name):
         for m in self.metrics:
