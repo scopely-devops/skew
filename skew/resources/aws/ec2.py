@@ -23,6 +23,7 @@ class Instance(AWSResource):
         detail_spec = None
         id = 'InstanceId'
         filter_name = 'instance_ids'
+        filter_type = 'list'
         name = 'PublicDnsName'
         date = 'LaunchTime'
         dimension = 'InstanceId'
@@ -41,6 +42,7 @@ class SecurityGroup(AWSResource):
         detail_spec = None
         id = 'GroupId'
         filter_name = 'group_names'
+        filter_type = 'list'
         name = 'GroupName'
         date = None
         dimension = None
@@ -69,6 +71,7 @@ class Address(AWSResource):
         detail_spec = None
         id = 'PublicIp'
         filter_name = 'public-ips'
+        filter_type = 'list'
         name = 'PublicIp'
         date = None
         dimension = None

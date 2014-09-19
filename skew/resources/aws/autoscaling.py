@@ -28,6 +28,7 @@ class AutoScalingGroup(AWSResource):
         detail_spec = None
         id = 'AutoScalingGroupName'
         filter_name = 'auto_scaling_group_names'
+        filter_type = 'list'
 
     def __init__(self, endpoint, data):
         super(AutoScalingGroup, self).__init__(endpoint, data)
@@ -50,6 +51,7 @@ class LaunchConfiguration(AWSResource):
         detail_spec = None
         id = 'LaunchConfigurationName'
         filter_name = 'launch_configuration_names'
+        filter_type = 'list'
 
     def __init__(self, endpoint, data):
         super(LaunchConfiguration, self).__init__(endpoint, data)

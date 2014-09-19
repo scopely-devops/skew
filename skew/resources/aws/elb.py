@@ -23,6 +23,7 @@ class LoadBalancer(AWSResource):
         detail_spec = None
         id = 'LoadBalancerName'
         filter_name = 'load_balancer_names'
+        filter_type = 'list'
         name = 'DNSName'
         date = 'CreatedTime'
         dimension = 'LoadBalancerName'

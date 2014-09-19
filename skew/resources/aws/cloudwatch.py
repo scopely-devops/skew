@@ -22,6 +22,7 @@ class Alarm(AWSResource):
         enum_spec = ('DescribeAlarms', 'MetricAlarms')
         id = 'AlarmArn'
         filter_name = 'alarm_names'
+        filter_type = 'list'
         detail_spec = None
         name = 'AlarmName'
         date = 'AlarmConfigurationUpdatedTimestamp'
