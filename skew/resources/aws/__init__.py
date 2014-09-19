@@ -137,7 +137,8 @@ class AWSResource(Resource):
         return ((delta.microseconds + (delta.seconds + delta.days * 24 * 3600)
                  * 10 ** 6) / 10 ** 6)
 
-    def get_metric_data(self, metric_name, days=None, hours=1, minutes=None,
+    def get_metric_data(self, metric_name=None, metric=None,
+                        days=None, hours=1, minutes=None,
                         statistics=None, period=None):
         """
         Get metric data for this resource.  You can specify the time
@@ -181,7 +182,8 @@ class AWSResource(Resource):
             delta = datetime.timedelta(minutes=minutes)
         if not period:
             period = max(60, self._total_seconds(delta) // 1440)
-        metric = self.find_metric(metric_name)
+        if not metric:
+            metric = self.find_metric(metric_name)
         if metric and self._cloudwatch:
             end = datetime.datetime.utcnow()
             start = end - delta

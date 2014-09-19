@@ -23,6 +23,7 @@ class Cluster(AWSResource):
         detail_spec = None
         id = 'ClusterIdentifier'
         filter_name = 'cluster_identifier'
+        filter_type = 'scalar'
         name = 'ClusterIdentifier'
         date = 'ClusterCreateTime'
         dimension = 'ClusterIdentifier'

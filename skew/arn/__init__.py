@@ -189,7 +189,10 @@ class ARNEnumerator(object):
                 # after we get all of the results.
                 filter_name = resource_cls.Meta.filter_name
                 if filter_name:
-                    kwargs[filter_name] = [resource_id]
+                    if resource_cls.Meta.filter_type == 'list':
+                        kwargs[filter_name] = [resource_id]
+                    else:
+                        kwargs[filter_name] = resource_id
                 else:
                     do_client_side_filtering = True
             enum_op, path = resource_cls.Meta.enum_spec
