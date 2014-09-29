@@ -64,3 +64,72 @@ To find all DynamoDB tables in all US regions for the account ID 234567890123
 you would use:
 
     arn = scan('arn:aws:dynamodb:us-.*:234567890123:table/*')
+
+CloudWatch Metrics
+------------------
+
+In addition to making the metadata about a particular AWS resource available
+to you, ``skew`` also tries to make it easy to access the available CloudWatch
+metrics for a given resource.
+
+For example, assume that you had did a ``scan`` on the original ARN above
+and had the resource associated with that instance available as the variable
+``instance``.  You could do the following:
+
+    >>> instance.metric_names
+	['CPUUtilization',
+     'NetworkOut',
+     'StatusCheckFailed',
+     'StatusCheckFailed_System',
+     'NetworkIn',
+     'DiskWriteOps',
+     'DiskReadBytes',
+     'DiskReadOps',
+     'StatusCheckFailed_Instance',
+     'DiskWriteBytes']
+	 >>>
+
+The ``metric_names`` attribute returns the list of available CloudWatch metrics
+for this resource.  The retrieve the metric data for one of these:
+
+    >>> instance.get_metric_data('CPUUtilization')
+	[{u'Average': 0.134, u'Timestamp': '2014-09-29T14:04:00Z', u'Unit': 'Percent'},
+     {u'Average': 0.066, u'Timestamp': '2014-09-29T13:54:00Z', u'Unit': 'Percent'},
+     {u'Average': 0.066, u'Timestamp': '2014-09-29T14:09:00Z', u'Unit': 'Percent'},
+     {u'Average': 0.134, u'Timestamp': '2014-09-29T13:34:00Z', u'Unit': 'Percent'},
+     {u'Average': 0.066, u'Timestamp': '2014-09-29T14:19:00Z', u'Unit': 'Percent'},
+     {u'Average': 0.068, u'Timestamp': '2014-09-29T13:44:00Z', u'Unit': 'Percent'},
+     {u'Average': 0.134, u'Timestamp': '2014-09-29T14:14:00Z', u'Unit': 'Percent'},
+     {u'Average': 0.066, u'Timestamp': '2014-09-29T13:29:00Z', u'Unit': 'Percent'},
+     {u'Average': 0.132, u'Timestamp': '2014-09-29T13:59:00Z', u'Unit': 'Percent'},
+     {u'Average': 0.134, u'Timestamp': '2014-09-29T13:49:00Z', u'Unit': 'Percent'},
+     {u'Average': 0.134, u'Timestamp': '2014-09-29T13:39:00Z', u'Unit': 'Percent'}]
+    >>>
+
+You can also customize the data returned rather than using the default settings:
+
+    >>> instance.get_metric_data('CPUUtilization', hours=8, statistics=['Average', 'Minimum', 'Maximum'])
+	[{u'Average': 0.132,
+      u'Maximum': 0.33,
+      u'Minimum': 0.0,
+      u'Timestamp': '2014-09-29T10:54:00Z',
+      u'Unit': 'Percent'},
+     {u'Average': 0.134,
+      u'Maximum': 0.34,
+      u'Minimum': 0.0,
+      u'Timestamp': '2014-09-29T14:04:00Z',
+      u'Unit': 'Percent'},
+	  ...,
+     {u'Average': 0.066,
+      u'Maximum': 0.33,
+      u'Minimum': 0.0,
+      u'Timestamp': '2014-09-29T08:34:00Z',
+      u'Unit': 'Percent'},
+     {u'Average': 0.134,
+      u'Maximum': 0.34,
+      u'Minimum': 0.0,
+      u'Timestamp': '2014-09-29T08:04:00Z',
+      u'Unit': 'Percent'}]
+    >>>
+	  
+	  
