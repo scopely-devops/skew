@@ -144,8 +144,8 @@ class TestARN(unittest.TestCase):
         self.assertEqual(instance.date, '2013-04-25T23:41:15.000Z')
         self.assertEqual(instance.name, 'foo.bar.com')
         # Fetch tags
-        self.assertEqual(instance.tags.keys(), ['Name'])
-        self.assertEqual(instance.tags.values(), ['foo'])
+        self.assertEqual(list(instance.tags.keys()), ['Name'])
+        self.assertEqual(list(instance.tags.values()), ['foo'])
 
     @httpretty.activate
     def test_dynamodb_table(self):
