@@ -1,4 +1,4 @@
-botocore==0.62.0
+botocore==0.63.0
 jmespath==0.4.1
 mock==1.0.1
 httpretty==0.8.0

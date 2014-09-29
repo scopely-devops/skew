@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 import os
 
 requires = [
-    'botocore==0.62.0',
+    'botocore==0.63.0',
     'jmespath>=0.4.1'
 ]
 

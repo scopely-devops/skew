@@ -1,4 +1,4 @@
-# Copyright (c) 2014 Mitch Garnaat http://garnaat.org/
+# Copyright (c) 2014 Scopely, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"). You
 # may not use this file except in compliance with the License. A copy of
@@ -15,19 +15,8 @@ import os
 
 import httpretty
 import mock
-import botocore.session
 
 from skew import scan
-from skew.resources.resource import Resource
-from skew.arn.endpoint import Endpoint
-
-
-class FooResource(Resource):
-
-    class Meta(object):
-        service = 'ec2'
-        type = 'foo'
-        id = 'bar'
 
 
 def get_response_body(name):
@@ -154,6 +143,9 @@ class TestARN(unittest.TestCase):
         self.assertEqual(metric_data[-1]['Average'], 0.0)
         self.assertEqual(instance.date, '2013-04-25T23:41:15.000Z')
         self.assertEqual(instance.name, 'foo.bar.com')
+        # Fetch tags
+        self.assertEqual(list(instance.tags.keys()), ['Name'])
+        self.assertEqual(list(instance.tags.values()), ['foo'])
 
     @httpretty.activate
     def test_dynamodb_table(self):
@@ -247,14 +239,3 @@ class TestARN(unittest.TestCase):
                          'UserLevel-ReadCapacityUnitsLimit-foo')
         self.assertEqual(alarms[1].data['AlarmName'],
                          'UserLevel-WriteCapacityUnitsLimit-bar')
-
-    def test_resource(self):
-        session = botocore.session.get_session()
-        service = session.get_service('ec2')
-        endpoint = Endpoint(service, 'us-east-1', '123456789012')
-        resource = FooResource(endpoint, data={'bar': 'bar'})
-        self.assertEqual(resource.id, 'bar')
-        self.assertEqual(resource.__repr__(),
-                         'arn:aws:ec2:us-east-1:123456789012:foo/bar')
-        self.assertEqual(resource.metrics, [])
-        self.assertEqual(resource.find_metric('foobar'), None)

@@ -1,15 +1,17 @@
 skew
 ====
 
+[![Build Status](https://travis-ci.org/scopely-devops/skew.svg?branch=develop)](https://travis-ci.org/scopely-devops/skew)
+
 **Skew** is a package for identifying and enumerating cloud resources.
 The name is a homonym for SKU (Stock Keeping Unit).  Skew allows you to
 define different SKU ``schemes`` which are a particular encoding of a
 SKU.  Skew then allows you to use this scheme pattern and regular expressions
-based on the scheme patter to identify and enumerate a resource or set
+based on the scheme pattern to identify and enumerate a resource or set
 of resources.
 
-At the moment, the the only available ``scheme`` is the ``ARN'.  Skew uses the
-basic structure of
+At the moment, the the only available ``scheme`` is the ``ARN`` scheme.
+The ``ARN`` scheme uses the basic structure of
 [Amazon Resource Names](http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html) (ARNs) to assign a unique identifier to every AWS
 resource.
 
@@ -45,7 +47,7 @@ ARN above:
 	for resource in arn:
 	    print(resource.data)
 
-The call to lookup returns an ARN object which implements the
+The call to ``scan`` returns an ARN object which implements the
 [iterator pattern](https://docs.python.org/2/library/stdtypes.html#iterator-types)
 and returns a ``Resource`` object for each AWS resource that matches the
 ARN pattern provided.  The ``Resource`` object contains all of the data
@@ -64,3 +66,72 @@ To find all DynamoDB tables in all US regions for the account ID 234567890123
 you would use:
 
     arn = scan('arn:aws:dynamodb:us-.*:234567890123:table/*')
+
+CloudWatch Metrics
+------------------
+
+In addition to making the metadata about a particular AWS resource available
+to you, ``skew`` also tries to make it easy to access the available CloudWatch
+metrics for a given resource.
+
+For example, assume that you had did a ``scan`` on the original ARN above
+and had the resource associated with that instance available as the variable
+``instance``.  You could do the following:
+
+    >>> instance.metric_names
+	['CPUUtilization',
+     'NetworkOut',
+     'StatusCheckFailed',
+     'StatusCheckFailed_System',
+     'NetworkIn',
+     'DiskWriteOps',
+     'DiskReadBytes',
+     'DiskReadOps',
+     'StatusCheckFailed_Instance',
+     'DiskWriteBytes']
+	 >>>
+
+The ``metric_names`` attribute returns the list of available CloudWatch metrics
+for this resource.  The retrieve the metric data for one of these:
+
+    >>> instance.get_metric_data('CPUUtilization')
+	[{u'Average': 0.134, u'Timestamp': '2014-09-29T14:04:00Z', u'Unit': 'Percent'},
+     {u'Average': 0.066, u'Timestamp': '2014-09-29T13:54:00Z', u'Unit': 'Percent'},
+     {u'Average': 0.066, u'Timestamp': '2014-09-29T14:09:00Z', u'Unit': 'Percent'},
+     {u'Average': 0.134, u'Timestamp': '2014-09-29T13:34:00Z', u'Unit': 'Percent'},
+     {u'Average': 0.066, u'Timestamp': '2014-09-29T14:19:00Z', u'Unit': 'Percent'},
+     {u'Average': 0.068, u'Timestamp': '2014-09-29T13:44:00Z', u'Unit': 'Percent'},
+     {u'Average': 0.134, u'Timestamp': '2014-09-29T14:14:00Z', u'Unit': 'Percent'},
+     {u'Average': 0.066, u'Timestamp': '2014-09-29T13:29:00Z', u'Unit': 'Percent'},
+     {u'Average': 0.132, u'Timestamp': '2014-09-29T13:59:00Z', u'Unit': 'Percent'},
+     {u'Average': 0.134, u'Timestamp': '2014-09-29T13:49:00Z', u'Unit': 'Percent'},
+     {u'Average': 0.134, u'Timestamp': '2014-09-29T13:39:00Z', u'Unit': 'Percent'}]
+    >>>
+
+You can also customize the data returned rather than using the default settings:
+
+    >>> instance.get_metric_data('CPUUtilization', hours=8, statistics=['Average', 'Minimum', 'Maximum'])
+	[{u'Average': 0.132,
+      u'Maximum': 0.33,
+      u'Minimum': 0.0,
+      u'Timestamp': '2014-09-29T10:54:00Z',
+      u'Unit': 'Percent'},
+     {u'Average': 0.134,
+      u'Maximum': 0.34,
+      u'Minimum': 0.0,
+      u'Timestamp': '2014-09-29T14:04:00Z',
+      u'Unit': 'Percent'},
+	  ...,
+     {u'Average': 0.066,
+      u'Maximum': 0.33,
+      u'Minimum': 0.0,
+      u'Timestamp': '2014-09-29T08:34:00Z',
+      u'Unit': 'Percent'},
+     {u'Average': 0.134,
+      u'Maximum': 0.34,
+      u'Minimum': 0.0,
+      u'Timestamp': '2014-09-29T08:04:00Z',
+      u'Unit': 'Percent'}]
+    >>>
+	  
+	  
