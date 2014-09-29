@@ -7,11 +7,11 @@ skew
 The name is a homonym for SKU (Stock Keeping Unit).  Skew allows you to
 define different SKU ``schemes`` which are a particular encoding of a
 SKU.  Skew then allows you to use this scheme pattern and regular expressions
-based on the scheme patter to identify and enumerate a resource or set
+based on the scheme pattern to identify and enumerate a resource or set
 of resources.
 
-At the moment, the the only available ``scheme`` is the ``ARN'.  Skew uses the
-basic structure of
+At the moment, the the only available ``scheme`` is the ``ARN`` scheme.
+The ``ARN`` scheme uses the basic structure of
 [Amazon Resource Names](http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html) (ARNs) to assign a unique identifier to every AWS
 resource.
 
@@ -47,7 +47,7 @@ ARN above:
 	for resource in arn:
 	    print(resource.data)
 
-The call to lookup returns an ARN object which implements the
+The call to ``scan`` returns an ARN object which implements the
 [iterator pattern](https://docs.python.org/2/library/stdtypes.html#iterator-types)
 and returns a ``Resource`` object for each AWS resource that matches the
 ARN pattern provided.  The ``Resource`` object contains all of the data
