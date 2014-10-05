@@ -25,6 +25,7 @@ ResourceTypes = {
     'aws.ec2.instance': 'aws.ec2.Instance',
     'aws.ec2.security-group': 'aws.ec2.SecurityGroup',
     'aws.elb.loadbalancer': 'aws.elb.LoadBalancer',
+    'aws.ec2.volume': 'aws.ec2.Volume',
     'aws.iam.group': 'aws.iam.Group',
     'aws.iam.user': 'aws.iam.User',
     'aws.rds.dbinstance': 'aws.rds.DBInstance',
