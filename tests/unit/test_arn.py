@@ -139,8 +139,8 @@ class TestARN(unittest.TestCase):
                           'DiskWriteBytes'])
         # Fetch metric data
         metric_data = instance.get_metric_data('CPUUtilization')
-        self.assertEqual(len(metric_data), 12)
-        self.assertEqual(metric_data[-1]['Average'], 0.0)
+        self.assertEqual(len(metric_data.data), 12)
+        self.assertEqual(metric_data.data[-1]['Average'], 0.0)
         self.assertEqual(instance.date, '2013-04-25T23:41:15.000Z')
         self.assertEqual(instance.name, 'foo.bar.com')
         # Fetch tags

@@ -25,6 +25,20 @@ from skew.arn.endpoint import Endpoint
 LOG = logging.getLogger(__name__)
 
 
+class MetricData(object):
+    """
+    This is a simple object that allows us to compose both the returned
+    data from a call to ``get_metrics_data`` as well as the period that
+    was used when getting the data from CloudWatch.  Since the period
+    may be calculated by ``get_metrics_data`` rather than passed explicitly
+    the user would otherwise not how what the period value was.
+    """
+
+    def __init__(self, data, period):
+        self.data = data
+        self.period = period
+
+
 class AWSResource(Resource):
     """
     Each Resource class defines a Config variable at the class level.  This
@@ -171,6 +185,10 @@ class AWSResource(Resource):
             * SampleCount
             * Maximum
             * Minimum
+
+        :returns: A ``MetricData`` object that contains both the CloudWatch
+            data as well as the ``period`` used since this value may have
+            been calculated by skew.
         """
         if not statistics:
             statistics = ['Average']
@@ -194,7 +212,8 @@ class AWSResource(Resource):
                 metric_name=metric['MetricName'],
                 start_time=start.isoformat(), end_time=end.isoformat(),
                 statistics=statistics, period=period)
-            return jmespath.search('Datapoints', data)
+            return MetricData(jmespath.search('Datapoints', data),
+                              period)
         else:
             raise ValueError('Metric (%s) not available' % metric_name)
 
