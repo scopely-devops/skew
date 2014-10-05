@@ -27,3 +27,4 @@ class LoadBalancer(AWSResource):
         name = 'DNSName'
         date = 'CreatedTime'
         dimension = 'LoadBalancerName'
+        tags_spec = ('DescribeTags' , 'TagDescriptions[].Tags[]')
