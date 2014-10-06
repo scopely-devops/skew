@@ -90,3 +90,10 @@ class Volume(AWSResource):
         name = 'volumeID'
         date = 'createTime'
         dimension = 'VolumeId'
+
+    @property
+    def parent(self):
+      if len(self.data['Attachments']):
+        return self.data['Attachments'][0]['InstanceId']
+      else:
+        return None

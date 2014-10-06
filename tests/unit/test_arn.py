@@ -239,3 +239,23 @@ class TestARN(unittest.TestCase):
                          'UserLevel-ReadCapacityUnitsLimit-foo')
         self.assertEqual(alarms[1].data['AlarmName'],
                          'UserLevel-WriteCapacityUnitsLimit-bar')
+
+    @httpretty.activate
+    def test_ec2_volume(self):
+        # Set up the HTTP mocking
+        host = 'https://ec2.us-east-1.amazonaws.com/'
+        body = get_response_body('ec2_volumes.xml')
+        httpretty.register_uri(httpretty.POST, host,
+                               body=body,
+                               status=200)
+        # Run the test
+        arn = scan('arn:aws:ec2:us-east-1:123456789012:volume/*')
+        vols = list(arn)
+        self.assertEqual(len(vols), 2)
+        print vols[0].data
+        self.assertEqual(vols[0].data['VolumeId'], 'vol-27d4da72')
+        self.assertEqual(vols[0].parent, 'i-734d643c')
+        self.assertEqual(vols[0].tags['Owner'], 'bob')
+        self.assertEqual(vols[1].data['Size'], 10)
+        self.assertEqual(vols[1].parent, None)
+
