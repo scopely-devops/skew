@@ -239,3 +239,48 @@ class TestARN(unittest.TestCase):
                          'UserLevel-ReadCapacityUnitsLimit-foo')
         self.assertEqual(alarms[1].data['AlarmName'],
                          'UserLevel-WriteCapacityUnitsLimit-bar')
+
+    @httpretty.activate
+    def test_ec2_volume(self):
+        # Set up the HTTP mocking
+        host = 'https://ec2.us-east-1.amazonaws.com/'
+        body = get_response_body('ec2_volumes.xml')
+        httpretty.register_uri(httpretty.POST, host,
+                               body=body,
+                               status=200)
+        # Run the test
+        arn = scan('arn:aws:ec2:us-east-1:123456789012:volume/*')
+        vols = list(arn)
+        self.assertEqual(len(vols), 2)
+        self.assertEqual(vols[0].data['VolumeId'], 'vol-27d4da72')
+        self.assertEqual(vols[0].parent, 'i-734d643c')
+        self.assertEqual(vols[0].tags['Owner'], 'bob')
+        self.assertEqual(vols[1].data['Size'], 10)
+        self.assertEqual(vols[1].parent, None)
+
+    @httpretty.activate
+    def test_load_balancers(self):
+        # Set up the HTTP mocking
+        host = 'https://elasticloadbalancing.us-east-1.amazonaws.com/'
+        body1 = get_response_body('elb.xml')
+        body2 = get_response_body('elb_tags.xml')
+        httpretty.register_uri(httpretty.POST, host,
+                               responses=[
+                                   httpretty.Response(
+                                       body=body1, status=200),
+                                   httpretty.Response(
+                                       body=body2, status=200)])
+        # Run the test
+        arn = scan('arn:aws:elb:us-east-1:123456789012:*')
+        elbs = list(arn)
+        self.assertEqual(len(elbs), 2)
+        elb=elbs[0]
+        self.assertEqual(elb.data['LoadBalancerName'], 'proxy')
+        self.assertEqual(len(elb.data['Instances']), 2)
+        self.assertEqual(elb.data['Instances'][0]['InstanceId'], 'i-123eb1c6')
+        self.assertEqual(elb.data['ListenerDescriptions'][0]['Listener']['LoadBalancerPort'], 3128)
+
+        self.assertEqual(len(elb.tags),4)
+        self.assertEqual(elb.tags['Environment'],'PRODUCTION')
+        self.assertEqual(elb.tags['Owner'],'bob')
+

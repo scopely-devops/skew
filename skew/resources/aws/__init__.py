@@ -124,10 +124,25 @@ class AWSResource(Resource):
     def tags(self):
         """
         Convert the ugly Tags JSON into a real dictionary and
-        memoize the result.
+        memorize the result.
         """
         if self._tags is None:
             self._tags = {}
+
+            if hasattr(self.Meta,'tags_spec'):
+              method,path=self.Meta.tags_spec
+              kwargs={}
+              filter_name = self.Meta.filter_name
+              if filter_name:
+                  if self.Meta.filter_type == 'list':
+                      kwargs[filter_name] = [self._id]
+                  else:
+                      kwargs[filter_name] = self._id
+              self.data['Tags'] = self._endpoint.call(
+                  method,
+                  query=path,
+                  **kwargs)
+
             if 'Tags' in self.data:
                 for kvpair in self.data['Tags']:
                     if kvpair['Key'] in self._tags:
