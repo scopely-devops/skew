@@ -32,6 +32,20 @@ class HostedZone(AWSResource):
         return self._id.split('/')[-1]
 
 
+class HealthCheck(AWSResource):
+
+    class Meta(object):
+        service = 'route53'
+        type = 'healthcheck'
+        enum_spec = ('ListHealthChecks', 'HealthChecks')
+        detail_spec = ('GetHealthCheck', 'id', None)
+        id = 'Id'
+        filter_name = None
+        name = None
+        date = None
+        dimension = None
+
+
 class ResourceRecordSet(AWSResource):
 
     class Meta(object):

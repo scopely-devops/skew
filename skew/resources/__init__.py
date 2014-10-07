@@ -32,7 +32,7 @@ ResourceTypes = {
     'aws.rds.dbsecuritygroup': 'aws.rds.DBSecurityGroup',
     'aws.redshift.cluster': 'aws.redshift.Cluster',
     'aws.route53.hostedzone': 'aws.route53.HostedZone',
-    # 'aws.route53.rrset': 'aws.route53.ResourceRecordSet'
+    'aws.route53.healthcheck': 'aws.route53.HealthCheck',
 }
 
 
