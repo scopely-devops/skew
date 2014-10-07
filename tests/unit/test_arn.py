@@ -274,13 +274,11 @@ class TestARN(unittest.TestCase):
         arn = scan('arn:aws:elb:us-east-1:123456789012:*')
         elbs = list(arn)
         self.assertEqual(len(elbs), 2)
-        elb=elbs[0]
+        elb = elbs[0]
         self.assertEqual(elb.data['LoadBalancerName'], 'proxy')
         self.assertEqual(len(elb.data['Instances']), 2)
         self.assertEqual(elb.data['Instances'][0]['InstanceId'], 'i-123eb1c6')
         self.assertEqual(elb.data['ListenerDescriptions'][0]['Listener']['LoadBalancerPort'], 3128)
-
-        self.assertEqual(len(elb.tags),4)
-        self.assertEqual(elb.tags['Environment'],'PRODUCTION')
-        self.assertEqual(elb.tags['Owner'],'bob')
-
+        self.assertEqual(len(elb.tags), 4)
+        self.assertEqual(elb.tags['Environment'], 'PRODUCTION')
+        self.assertEqual(elb.tags['Owner'], 'bob')
