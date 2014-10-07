@@ -20,9 +20,10 @@ class DBInstance(AWSResource):
         service = 'rds'
         type = 'dbinstance'
         enum_spec = ('DescribeDBInstances', 'DBInstances')
+        tags_spec = ('ListTagsForResource', 'TagList', 'resource_name', 'arn')
         detail_spec = None
         id = 'DBInstanceIdentifier'
-        filter_name = 'db_instance_identfier'
+        filter_name = 'db_instance_identifier'
         filter_type = 'scalar'
         name = 'Endpoint.Address'
         date = 'InstanceCreateTime'

@@ -52,6 +52,17 @@ class AWSResource(Resource):
       of the name of the operation to call to enumerate the resources and
       a jmespath query that will be run against the result of the operation
       to retrieve the list of resources.
+    * tags_spec - Some AWS resources return the tags for the resource in
+      the enumeration operation (e.g. DescribeInstances) while others
+      require a second operation to retrieve the tags.  If a second
+      operation is required the ``tags_spec`` describes how to make the
+      call.  It is a tuple consisting of:
+      * operation name
+      * jmespath query to find the tags in the response
+      * the name of the parameter to send to identify the specific resource
+        (this is not always the same as filter_name, e.g. RDS)
+      * the value of the parameter to send to identify the specific resource
+        (this is not always the same as the id, e.g. RDS)
     * detail_spec - Some services provide only summary information in the
       list or describe method and require you to make another request to get
       the detailed info for a specific resource.  If that is the case, this
@@ -127,19 +138,22 @@ class AWSResource(Resource):
         memorize the result.
         """
         if self._tags is None:
+            LOG.debug('need to build tags')
             self._tags = {}
 
             if hasattr(self.Meta, 'tags_spec'):
-                method, path = self.Meta.tags_spec
+                LOG.debug('have a tags_spec')
+                method, path, param_name, param_value = self.Meta.tags_spec
                 kwargs = {}
-                filter_name = self.Meta.filter_name
-                if filter_name:
-                    if self.Meta.filter_type == 'list':
-                        kwargs[filter_name] = [self._id]
-                    else:
-                        kwargs[filter_name] = self._id
+                filter_type = getattr(self.Meta, 'filter_type', None)
+                if filter_type == 'list':
+                    kwargs = {param_name: [getattr(self, param_value)]}
+                else:
+                    kwargs = {param_name: getattr(self, param_value)}
+                LOG.debug('fetching tags')
                 self.data['Tags'] = self._endpoint.call(
                     method, query=path, **kwargs)
+                LOG.debug(self.data['Tags'])
 
             if 'Tags' in self.data:
                 for kvpair in self.data['Tags']:
