@@ -93,7 +93,7 @@ class Volume(AWSResource):
 
     @property
     def parent(self):
-      if len(self.data['Attachments']):
-        return self.data['Attachments'][0]['InstanceId']
-      else:
-        return None
+        if len(self.data['Attachments']):
+            return self.data['Attachments'][0]['InstanceId']
+        else:
+            return None

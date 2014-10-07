@@ -129,19 +129,17 @@ class AWSResource(Resource):
         if self._tags is None:
             self._tags = {}
 
-            if hasattr(self.Meta,'tags_spec'):
-              method,path=self.Meta.tags_spec
-              kwargs={}
-              filter_name = self.Meta.filter_name
-              if filter_name:
-                  if self.Meta.filter_type == 'list':
-                      kwargs[filter_name] = [self._id]
-                  else:
-                      kwargs[filter_name] = self._id
-              self.data['Tags'] = self._endpoint.call(
-                  method,
-                  query=path,
-                  **kwargs)
+            if hasattr(self.Meta, 'tags_spec'):
+                method, path = self.Meta.tags_spec
+                kwargs = {}
+                filter_name = self.Meta.filter_name
+                if filter_name:
+                    if self.Meta.filter_type == 'list':
+                        kwargs[filter_name] = [self._id]
+                    else:
+                        kwargs[filter_name] = self._id
+                self.data['Tags'] = self._endpoint.call(
+                    method, query=path, **kwargs)
 
             if 'Tags' in self.data:
                 for kvpair in self.data['Tags']:
