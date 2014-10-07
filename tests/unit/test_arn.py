@@ -282,3 +282,49 @@ class TestARN(unittest.TestCase):
         self.assertEqual(len(elb.tags), 4)
         self.assertEqual(elb.tags['Environment'], 'PRODUCTION')
         self.assertEqual(elb.tags['Owner'], 'bob')
+
+    @httpretty.activate
+    def test_rds_dbinstance(self):
+        # Set up the HTTP mocking
+        host = 'https://rds.amazonaws.com/'
+        body1 = get_response_body('rds_one_instance.xml')
+        body2 = get_response_body('rds_tags.xml')
+        httpretty.register_uri(httpretty.POST, host,
+                               responses=[
+                                   httpretty.Response(body=body1, status=200),
+                                   httpretty.Response(body=body1, status=200),
+                                   httpretty.Response(body=body2, status=200),
+                               ])
+        # Run the test
+        arn = scan('arn:aws:rds:us-east-1:123456789012:db/*')
+        # Fetch all DB resources
+        dbs = list(arn)
+        self.assertEqual(len(dbs), 1)
+        # Fetch a single instance
+        arn = scan('arn:aws:rds:us-east-1:123456789012:db/foobar')
+        dbs = list(arn)
+        self.assertEqual(len(dbs), 1)
+        db = dbs[0]
+        # Fetch tags
+        self.assertEqual(db.tags['Allocation'], 'research')
+        self.assertEqual(db.tags['Name'], 'foobar')
+
+    @httpretty.activate
+    def test_rds_security_group(self):
+        # Set up the HTTP mocking
+        host = 'https://rds.amazonaws.com/'
+        body1 = get_response_body('rds_secgrp.xml')
+        httpretty.register_uri(httpretty.POST, host,
+                               responses=[
+                                   httpretty.Response(body=body1, status=200),
+                                   httpretty.Response(body=body1, status=200),
+                               ])
+        # Run the test
+        arn = scan('arn:aws:rds:us-east-1:123456789012:secgrp/*')
+        # Fetch all resources
+        secgrps = list(arn)
+        self.assertEqual(len(secgrps), 1)
+        # Fetch a single resource
+        arn = scan('arn:aws:rds:us-east-1:123456789012:secgrp/foo')
+        secgrps = list(arn)
+        self.assertEqual(len(secgrps), 1)
