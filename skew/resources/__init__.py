@@ -25,13 +25,14 @@ ResourceTypes = {
     'aws.ec2.instance': 'aws.ec2.Instance',
     'aws.ec2.security-group': 'aws.ec2.SecurityGroup',
     'aws.elb.loadbalancer': 'aws.elb.LoadBalancer',
+    'aws.ec2.volume': 'aws.ec2.Volume',
     'aws.iam.group': 'aws.iam.Group',
     'aws.iam.user': 'aws.iam.User',
-    'aws.rds.dbinstance': 'aws.rds.DBInstance',
-    'aws.rds.dbsecuritygroup': 'aws.rds.DBSecurityGroup',
+    'aws.rds.db': 'aws.rds.DBInstance',
+    'aws.rds.secgrp': 'aws.rds.DBSecurityGroup',
     'aws.redshift.cluster': 'aws.redshift.Cluster',
     'aws.route53.hostedzone': 'aws.route53.HostedZone',
-    # 'aws.route53.rrset': 'aws.route53.ResourceRecordSet'
+    'aws.route53.healthcheck': 'aws.route53.HealthCheck',
 }
 
 

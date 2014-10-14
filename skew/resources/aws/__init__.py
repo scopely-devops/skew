@@ -25,6 +25,20 @@ from skew.arn.endpoint import Endpoint
 LOG = logging.getLogger(__name__)
 
 
+class MetricData(object):
+    """
+    This is a simple object that allows us to compose both the returned
+    data from a call to ``get_metrics_data`` as well as the period that
+    was used when getting the data from CloudWatch.  Since the period
+    may be calculated by ``get_metrics_data`` rather than passed explicitly
+    the user would otherwise not how what the period value was.
+    """
+
+    def __init__(self, data, period):
+        self.data = data
+        self.period = period
+
+
 class AWSResource(Resource):
     """
     Each Resource class defines a Config variable at the class level.  This
@@ -38,6 +52,17 @@ class AWSResource(Resource):
       of the name of the operation to call to enumerate the resources and
       a jmespath query that will be run against the result of the operation
       to retrieve the list of resources.
+    * tags_spec - Some AWS resources return the tags for the resource in
+      the enumeration operation (e.g. DescribeInstances) while others
+      require a second operation to retrieve the tags.  If a second
+      operation is required the ``tags_spec`` describes how to make the
+      call.  It is a tuple consisting of:
+      * operation name
+      * jmespath query to find the tags in the response
+      * the name of the parameter to send to identify the specific resource
+        (this is not always the same as filter_name, e.g. RDS)
+      * the value of the parameter to send to identify the specific resource
+        (this is not always the same as the id, e.g. RDS)
     * detail_spec - Some services provide only summary information in the
       list or describe method and require you to make another request to get
       the detailed info for a specific resource.  If that is the case, this
@@ -110,10 +135,26 @@ class AWSResource(Resource):
     def tags(self):
         """
         Convert the ugly Tags JSON into a real dictionary and
-        memoize the result.
+        memorize the result.
         """
         if self._tags is None:
+            LOG.debug('need to build tags')
             self._tags = {}
+
+            if hasattr(self.Meta, 'tags_spec'):
+                LOG.debug('have a tags_spec')
+                method, path, param_name, param_value = self.Meta.tags_spec
+                kwargs = {}
+                filter_type = getattr(self.Meta, 'filter_type', None)
+                if filter_type == 'list':
+                    kwargs = {param_name: [getattr(self, param_value)]}
+                else:
+                    kwargs = {param_name: getattr(self, param_value)}
+                LOG.debug('fetching tags')
+                self.data['Tags'] = self._endpoint.call(
+                    method, query=path, **kwargs)
+                LOG.debug(self.data['Tags'])
+
             if 'Tags' in self.data:
                 for kvpair in self.data['Tags']:
                     if kvpair['Key'] in self._tags:
@@ -171,6 +212,10 @@ class AWSResource(Resource):
             * SampleCount
             * Maximum
             * Minimum
+
+        :returns: A ``MetricData`` object that contains both the CloudWatch
+            data as well as the ``period`` used since this value may have
+            been calculated by skew.
         """
         if not statistics:
             statistics = ['Average']
@@ -194,7 +239,8 @@ class AWSResource(Resource):
                 metric_name=metric['MetricName'],
                 start_time=start.isoformat(), end_time=end.isoformat(),
                 statistics=statistics, period=period)
-            return jmespath.search('Datapoints', data)
+            return MetricData(jmespath.search('Datapoints', data),
+                              period)
         else:
             raise ValueError('Metric (%s) not available' % metric_name)
 

@@ -139,8 +139,8 @@ class TestARN(unittest.TestCase):
                           'DiskWriteBytes'])
         # Fetch metric data
         metric_data = instance.get_metric_data('CPUUtilization')
-        self.assertEqual(len(metric_data), 12)
-        self.assertEqual(metric_data[-1]['Average'], 0.0)
+        self.assertEqual(len(metric_data.data), 12)
+        self.assertEqual(metric_data.data[-1]['Average'], 0.0)
         self.assertEqual(instance.date, '2013-04-25T23:41:15.000Z')
         self.assertEqual(instance.name, 'foo.bar.com')
         # Fetch tags
@@ -239,3 +239,92 @@ class TestARN(unittest.TestCase):
                          'UserLevel-ReadCapacityUnitsLimit-foo')
         self.assertEqual(alarms[1].data['AlarmName'],
                          'UserLevel-WriteCapacityUnitsLimit-bar')
+
+    @httpretty.activate
+    def test_ec2_volume(self):
+        # Set up the HTTP mocking
+        host = 'https://ec2.us-east-1.amazonaws.com/'
+        body = get_response_body('ec2_volumes.xml')
+        httpretty.register_uri(httpretty.POST, host,
+                               body=body,
+                               status=200)
+        # Run the test
+        arn = scan('arn:aws:ec2:us-east-1:123456789012:volume/*')
+        vols = list(arn)
+        self.assertEqual(len(vols), 2)
+        self.assertEqual(vols[0].data['VolumeId'], 'vol-27d4da72')
+        self.assertEqual(vols[0].parent, 'i-734d643c')
+        self.assertEqual(vols[0].tags['Owner'], 'bob')
+        self.assertEqual(vols[1].data['Size'], 10)
+        self.assertEqual(vols[1].parent, None)
+
+    @httpretty.activate
+    def test_load_balancers(self):
+        # Set up the HTTP mocking
+        host = 'https://elasticloadbalancing.us-east-1.amazonaws.com/'
+        body1 = get_response_body('elb.xml')
+        body2 = get_response_body('elb_tags.xml')
+        httpretty.register_uri(httpretty.POST, host,
+                               responses=[
+                                   httpretty.Response(
+                                       body=body1, status=200),
+                                   httpretty.Response(
+                                       body=body2, status=200)])
+        # Run the test
+        arn = scan('arn:aws:elb:us-east-1:123456789012:*')
+        elbs = list(arn)
+        self.assertEqual(len(elbs), 2)
+        elb = elbs[0]
+        self.assertEqual(elb.data['LoadBalancerName'], 'proxy')
+        self.assertEqual(len(elb.data['Instances']), 2)
+        self.assertEqual(elb.data['Instances'][0]['InstanceId'], 'i-123eb1c6')
+        self.assertEqual(elb.data['ListenerDescriptions'][0]['Listener']['LoadBalancerPort'], 3128)
+        self.assertEqual(len(elb.tags), 4)
+        self.assertEqual(elb.tags['Environment'], 'PRODUCTION')
+        self.assertEqual(elb.tags['Owner'], 'bob')
+
+    @httpretty.activate
+    def test_rds_dbinstance(self):
+        # Set up the HTTP mocking
+        host = 'https://rds.amazonaws.com/'
+        body1 = get_response_body('rds_one_instance.xml')
+        body2 = get_response_body('rds_tags.xml')
+        httpretty.register_uri(httpretty.POST, host,
+                               responses=[
+                                   httpretty.Response(body=body1, status=200),
+                                   httpretty.Response(body=body1, status=200),
+                                   httpretty.Response(body=body2, status=200),
+                               ])
+        # Run the test
+        arn = scan('arn:aws:rds:us-east-1:123456789012:db/*')
+        # Fetch all DB resources
+        dbs = list(arn)
+        self.assertEqual(len(dbs), 1)
+        # Fetch a single instance
+        arn = scan('arn:aws:rds:us-east-1:123456789012:db/foobar')
+        dbs = list(arn)
+        self.assertEqual(len(dbs), 1)
+        db = dbs[0]
+        # Fetch tags
+        self.assertEqual(db.tags['Allocation'], 'research')
+        self.assertEqual(db.tags['Name'], 'foobar')
+
+    @httpretty.activate
+    def test_rds_security_group(self):
+        # Set up the HTTP mocking
+        host = 'https://rds.amazonaws.com/'
+        body1 = get_response_body('rds_secgrp.xml')
+        httpretty.register_uri(httpretty.POST, host,
+                               responses=[
+                                   httpretty.Response(body=body1, status=200),
+                                   httpretty.Response(body=body1, status=200),
+                               ])
+        # Run the test
+        arn = scan('arn:aws:rds:us-east-1:123456789012:secgrp/*')
+        # Fetch all resources
+        secgrps = list(arn)
+        self.assertEqual(len(secgrps), 1)
+        # Fetch a single resource
+        arn = scan('arn:aws:rds:us-east-1:123456789012:secgrp/foo')
+        secgrps = list(arn)
+        self.assertEqual(len(secgrps), 1)

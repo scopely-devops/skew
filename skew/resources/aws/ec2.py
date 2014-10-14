@@ -75,3 +75,25 @@ class Address(AWSResource):
         name = 'PublicIp'
         date = None
         dimension = None
+
+
+class Volume(AWSResource):
+
+    class Meta(object):
+        service = 'ec2'
+        type = 'volume'
+        enum_spec = ('DescribeVolumes', 'Volumes')
+        detail_spec = None
+        id = 'VolumeId'
+        filter_name = 'volume_ids'
+        filter_type = 'list'
+        name = 'volumeID'
+        date = 'createTime'
+        dimension = 'VolumeId'
+
+    @property
+    def parent(self):
+        if len(self.data['Attachments']):
+            return self.data['Attachments'][0]['InstanceId']
+        else:
+            return None
