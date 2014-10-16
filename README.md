@@ -134,4 +134,8 @@ You can also customize the data returned rather than using the default settings:
       u'Unit': 'Percent'}]
     >>>
 	  
-	  
+More Examples
+-------------
+
+[Find Unattached Volumes](https://gist.github.com/garnaat/73804a6b0bd506ee6075)
+[Audit Security Groups](https://gist.github.com/garnaat/4123f1aefe7d65df9b48)
