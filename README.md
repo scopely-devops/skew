@@ -140,3 +140,5 @@ More Examples
 [Find Unattached Volumes](https://gist.github.com/garnaat/73804a6b0bd506ee6075)
 
 [Audit Security Groups](https://gist.github.com/garnaat/4123f1aefe7d65df9b48)
+
+[Find Untagged Instances](https://gist.github.com/garnaat/11004f5661b4798d27c7)
