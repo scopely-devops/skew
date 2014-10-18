@@ -36,10 +36,10 @@ Skew will look through all of the profiles defined in your config file and
 keep track of all of the ones that have an ``account_id`` associated with
 them.
 
-The main point of skew is to identify AWS resources or sets of resources and
-to quickly and easily return the data associated with those resources.
-For example, if you wanted to return the data associated with the example
-ARN above:
+The main purpose of skew is to identify resources or sets of resources 
+across services, regions, and accounts and to quickly and easily return the
+data associated with those resources. For example, if you wanted to return
+the data associated with the example ARN above:
 
     from skew import scan
 
