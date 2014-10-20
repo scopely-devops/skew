@@ -21,6 +21,11 @@ class Resource(object):
 
     class Meta(object):
         type = 'resource'
+        dimensions = None
+        tags_spec = None
+        id = None
+        date = None
+        name = None
 
     def __init__(self, endpoint, data):
         self._endpoint = endpoint
