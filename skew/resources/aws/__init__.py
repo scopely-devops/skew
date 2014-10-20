@@ -160,7 +160,7 @@ class AWSResource(Resource):
                     if kvpair['Key'] in self._tags:
                         if not isinstance(self._tags[kvpair['Key']], list):
                             self._tags[kvpair['Key']] = [self._tags[kvpair['Key']]]
-                        self._tags[kvpair['Key'].append(kvpair['Value'])]
+                        self._tags[kvpair['Key']].append(kvpair['Value'])
                     else:
                         self._tags[kvpair['Key']] = kvpair['Value']
         return self._tags

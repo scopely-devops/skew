@@ -21,7 +21,7 @@ class Resource(object):
 
     class Meta(object):
         type = 'resource'
-        dimensions = None
+        dimension = None
         tags_spec = None
         id = None
         date = None
