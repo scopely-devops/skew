@@ -328,3 +328,59 @@ class TestARN(unittest.TestCase):
         arn = scan('arn:aws:rds:us-east-1:123456789012:secgrp/foo')
         secgrps = list(arn)
         self.assertEqual(len(secgrps), 1)
+
+    @httpretty.activate
+    def test_kinesis_streams(self):
+        # Set up the HTTP mocking
+        content_type = 'application/x-amz-json-1.1'
+        host = 'https://kinesis.us-east-1.amazonaws.com/'
+        body1 = get_response_body('kinesis_streams.json')
+        httpretty.register_uri(httpretty.POST, host,
+                               responses=[
+                                   httpretty.Response(
+                                       body=body1, status=200,
+                                       content_type=content_type),
+                               ])
+        # Run the test
+        arn = scan('arn:aws:kinesis:us-east-1:123456789012:stream/*')
+        # Fetch all stream resources
+        tables = list(arn)
+        self.assertEqual(len(tables), 4)
+        t = tables[0]
+        self.assertEqual(t.name, 'foo')
+        self.assertEqual(t.id, 'foo')
+        t = tables[1]
+        self.assertEqual(t.name, 'bar')
+        self.assertEqual(t.id, 'bar')
+
+    @httpretty.activate
+    def test_sqs_queues(self):
+        # Set up the HTTP mocking
+        host = 'https://queue.amazonaws.com/'
+        body1 = get_response_body('sqs_queues.xml')
+        httpretty.register_uri(httpretty.POST, host,
+                               responses=[
+                                   httpretty.Response(
+                                       body=body1, status=200)
+                               ])
+        # Run the test
+        arn = scan('arn:aws:sqs:us-east-1:123456789012:queue/*')
+        # Fetch all queue resources
+        queues = list(arn)
+        self.assertEqual(len(queues), 4)
+        q = queues[0]
+        self.assertEqual(q.id, 'foo')
+        self.assertEqual(
+            q.name, 'https://queue.amazonaws.com/123456789012/foo')
+        q = queues[1]
+        self.assertEqual(
+            q.name, 'https://queue.amazonaws.com/123456789012/bar')
+        self.assertEqual(q.id, 'bar')
+        q = queues[2]
+        self.assertEqual(
+            q.name, 'https://queue.amazonaws.com/123456789012/fie')
+        self.assertEqual(q.id, 'fie')
+        q = queues[3]
+        self.assertEqual(
+            q.name, 'https://queue.amazonaws.com/123456789012/baz')
+        self.assertEqual(q.id, 'baz')

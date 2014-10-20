@@ -12,8 +12,8 @@ requires = [
 
 setup(
     name='skew',
-    version=open(os.path.join('skew', '_version')).read(),
-    description='Unique IDs to find and inspect cloud resources.',
+    version=open(os.path.join('skew', '_version')).read().strip(),
+    description='A flat address space for all your AWS resources.',
     long_description=open('README.md').read(),
     author='Mitch Garnaat',
     author_email='mitch@garnaat.com',

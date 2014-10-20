@@ -87,7 +87,7 @@ class Volume(AWSResource):
         id = 'VolumeId'
         filter_name = 'volume_ids'
         filter_type = 'list'
-        name = 'volumeID'
+        name = 'VolumeId'
         date = 'createTime'
         dimension = 'VolumeId'
 
@@ -95,5 +95,27 @@ class Volume(AWSResource):
     def parent(self):
         if len(self.data['Attachments']):
             return self.data['Attachments'][0]['InstanceId']
+        else:
+            return None
+
+
+class Snapshot(AWSResource):
+
+    class Meta(object):
+        service = 'ec2'
+        type = 'snapshot'
+        enum_spec = ('DescribeSnapshots', 'Snapshots')
+        detail_spec = None
+        id = 'SnapshotId'
+        filter_name = 'snapshot_ids'
+        filter_type = 'list'
+        name = 'SnapshotId'
+        date = 'StartTime'
+        dimension = None
+
+    @property
+    def parent(self):
+        if self.data['VolumeId']:
+            return self.data['VolumeId']
         else:
             return None
