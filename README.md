@@ -135,7 +135,33 @@ You can also customize the data returned rather than using the default settings:
       u'Timestamp': '2014-09-29T08:04:00Z',
       u'Unit': 'Percent'}]
     >>>
-	  
+
+Filtering Data
+--------------
+
+Each resource that is retrieved is a Python dictionary.  Some of these (e.g.
+an EC2 Instance) can be quite large and complex.  Skew allows you to filter
+the data returned by applying a [jmespath](http://jmespath.org) query to
+the resulting data.  If you aren't familiar with jmespath, check it out.
+Its a very powerful query language for JSON data and has full support in
+Python as well as a number of other languages such as Ruby, PHP, and
+Javascript.  It is also the query language used in the
+[AWSCLI](https://aws.amazon.com/cli/) so if you are familiar with the
+``--query`` option there, you can use the same thing with skew.
+
+To specify a query to be applied to results of a scan, simply append
+the query to the end of the ARN, separated by a ``|`` (pipe) character.
+For example:
+
+    arn:aws:ec2:us-west-2:123456789012:instance/i-12345678|InstanceType
+
+Would retrieve the data for this particular EC2 instance and would then
+filter the returned data through the (very) simple jmespath query to which
+retrieves the value of the attribute ``InstanceType`` within the data.  The
+filtered data is available as the ``filtered_data`` attribute of the
+Resource object.  The full, unfiltered data is still available as the
+``data`` attribute.
+
 More Examples
 -------------
 

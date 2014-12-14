@@ -87,13 +87,18 @@ class AWSResource(Resource):
     def filter(cls, resource_id, data):
         pass
 
-    def __init__(self, endpoint, data):
+    def __init__(self, endpoint, data, query=None):
         self._endpoint = endpoint
         self._region = endpoint.region
         self._account = endpoint.account
+        self._query = query
         if data is None:
             data = {}
         self.data = data
+        if self._query:
+            self.filtered_data = self._query.search(self.data)
+        else:
+            self.filtered_data = None
         if hasattr(self.Meta, 'id') and isinstance(self.data, dict):
             self._id = self.data.get(self.Meta.id, '')
         else:

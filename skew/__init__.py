@@ -12,12 +12,11 @@
 # language governing permissions and limitations under the License.
 
 import os
-import re
 
 __version__ = open(os.path.join(os.path.dirname(__file__), '_version')).read()
 
 
-from skew.arn import ARNEnumerator
+from skew.arn import ARN
 
 
 def scan(sku):
@@ -39,7 +38,4 @@ def scan(sku):
     but since there is currently only one (ARN) let's not over-complicate
     things.
     """
-    regex = re.compile(ARNEnumerator.RegEx)
-    r = regex.search(sku)
-    if r:
-        return ARNEnumerator(sku, r.groupdict())
+    return ARN(sku)

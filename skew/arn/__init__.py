@@ -13,12 +13,14 @@
 # limitations under the License.
 
 import logging
+from itertools import izip_longest
+import re
 
 import botocore.session
+import jmespath
 
 import skew.resources
 from skew.arn.endpoint import Endpoint
-from skew.utils import Matcher
 
 LOG = logging.getLogger(__name__)
 
@@ -31,152 +33,84 @@ resource_events = {
     'resource-create': '.%s.%s.%s.%s.%s.%s'
 }
 
-_all_region_names = ['us-east-1',
-                     'us-west-1',
-                     'us-west-2',
-                     'eu-west-1',
-                     'ap-southeast-1',
-                     'ap-southeast-2',
-                     'ap-northeast-1',
-                     'sa-east-1']
 
-_region_names_limited = ['us-east-1',
-                         'us-west-2',
-                         'eu-west-1',
-                         'ap-southeast-1',
-                         'ap-southeast-2',
-                         'ap-northeast-1']
+class ARNComponent(object):
 
-_region_names = {
-    'redshift': _region_names_limited,
-    'glacier': _region_names_limited,
-    'kinesis': _region_names_limited,
-    'all': _all_region_names}
-
-
-
-class ARNEnumerator(object):
-    """
-    An enumerator for ARN-like SKU's.  Pass in an ARN pattern and
-    the resulting ARN object will be an iterator which will return
-    all resources which match the pattern.
-    """
-
-    RegEx = ('(?P<scheme>arn):(?P<provider>\w*?):(?P<service>\*|\w*?):'
-             '(?P<region>\*|[a-z0-9\-]*):(?P<account>.?|\*|[0-9]{12}):'
-             '(?P<resource>.*)')
-    """
-    The regular expression which defines the type of SKU's this
-    class is able to handle.  The basic form of the ARN is shown
-    below:
-
-    arn:aws:service:region:account:resource
-    arn:aws:service:region:account:resourcetype/resource
-    arn:aws:service:region:account:resourcetype:resource
-    """
-
-    def __init__(self, arn_expression, group_dict):
-        self.name = arn_expression
-        self._groups = group_dict
-        self._session = botocore.session.get_session()
-        self._account_map = self._build_account_map()
-        for event_name in resource_events:
-            self._session.register_event(
-                event_name, resource_events[event_name])
+    def __init__(self, pattern, arn):
+        self._pattern = pattern
+        self._arn = arn
 
     def __repr__(self):
-        return self.name
+        return self._pattern
 
-    def debug(self, logger_name='skew'):
-        self._session.set_debug_logger(logger_name)
+    @property
+    def choices(self):
+        return self._get_choices()
 
-    def register_for_event(self, event, cb):
-        self._session.register(event, cb)
+    @property
+    def pattern(self):
+        return self._pattern
 
-    def _fire_event(self, event_name, *fmtargs, **kwargs):
-        """
-        Each time a resource is enumerated, we fire an event of the
-        form:
+    @pattern.setter
+    def pattern(self, pattern):
+        self._pattern = pattern
 
-        resource-create.aws.<service>.<region>.<account>.<resource_type>.<id>
-        """
-        event = self._session.create_event(event_name, *fmtargs)
-        LOG.debug('firing event: %s', event)
-        self._session.emit(event, **kwargs)
+    def match(self, pattern):
+        matches = []
+        regex = pattern
+        if regex == '*':
+            regex = '.*'
+        regex = re.compile(regex)
+        for choice in self.choices:
+            if regex.search(choice):
+                matches.append(choice)
+        return matches
 
-    def get_region_names(self, service_name):
-        return _region_names.get(service_name, _region_names['all'])
+    @property
+    def matches(self):
+        return self.match(self._pattern)
 
-    def _build_account_map(self):
-        """
-        Builds up a dictionary mapping account IDs to profile names.
-        Any profile which includes an ``account_name`` variable is
-        included.
-        """
-        account_map = {}
-        for profile in self._session.available_profiles:
-            self._session.profile = profile
-            config = self._session.get_scoped_config()
-            account_id = config.get('account_id')
-            if account_id:
-                account_map[account_id] = profile
-        return account_map
+    def complete(self, prefix=''):
+        return [c for c in self.choices if c.startswith(prefix)]
 
-    def __iter__(self):
-        service_matcher = Matcher(self._session.get_available_services(),
-                                  self._groups['service'])
-        if self._account_map:
-            account_matcher = Matcher(self._account_map.keys(),
-                                      self._groups['account'])
+
+class Resource(ARNComponent):
+
+    def _split_resource(self, resource):
+        if '/' in resource:
+            resource_type, resource_id = resource.split('/', 1)
+        elif ':' in resource:
+            resource_type, resource_id = resource.split(':', 1)
         else:
-            account_matcher = [self._groups['account']]
-        for service_name in service_matcher:
-            LOG.debug('service_name: %s', service_name)
-            service = self._session.get_service(service_name)
-            #
-            # Kind of a hack. Botocore can no longer tell you all of
-            # the regions a service is available in and if you ask for
-            # an endpoint for a service like IAM (which has a universal
-            # endpoint) in us-west-2 or whatever, it just returns the
-            # universal endpoint and we get duplicate resources.
-            # So this just checks to see if the service has a universal
-            # endpoint and then forces the list of available regions
-            # to be only us-east-1.
-            #
-            if service.global_endpoint:
-                region_matcher = Matcher(['us-east-1'],
-                                         self._groups['region'])
-            else:
-                region_names = self.get_region_names(service_name)
-                region_matcher = Matcher(region_names,
-                                         self._groups['region'])
-            for region in region_matcher:
-                LOG.debug('region_name: %s', region)
-                for account in account_matcher:
-                    if self._account_map:
-                        # HACK - workaround for bug in botocore
-                        self._session._credentials = None
-                        self._session.profile = self._account_map[account]
-                    for resource in self._enumerate_resources(
-                            service, service_name, region, account,
-                            self._groups['resource']):
-                        yield resource
-
-    def _enumerate_resources(self, service, service_name, region,
-                             account, resource_re):
-        all_resources = skew.resources.all_types('aws', service_name)
-        LOG.debug('account: %s', account)
-        LOG.debug('all_resources: %s', all_resources)
-        if '/' in resource_re:
-            resource_type, resource_id = resource_re.split('/', 1)
-        elif ':' in resource_re:
-            resource_type, resource_id = resource_re.split(':', 1)
-        else:
-            resource_type = resource_re
+            resource_type = resource
             resource_id = None
-        resource_matcher = Matcher(all_resources, resource_type)
+        return (resource_type, resource_id)
+
+    def match(self, pattern):
+        resource_type, _ = self._split_resource(pattern)
+        return super(Resource, self).match(resource_type)
+
+    def _get_choices(self):
+        all_resources = skew.resources.all_types(
+            self._arn.provider.pattern, self._arn.service.pattern)
+        if not all_resources:
+            all_resources = ['*']
+        return all_resources
+
+    def enumerate(self, values):
+        _, provider, service_name, region, account = values
+        service = self._arn.session.get_service(service_name)
         endpoint = Endpoint(service, region, account)
-        for resource_type in resource_matcher:
+        if '/' in self.pattern:
+            resource_type, resource_id = self.pattern.split('/', 1)
+        elif ':' in self.pattern:
+            resource_type, resource_id = self.pattern.split(':', 1)
+        else:
+            resource_type = self.pattern
+            resource_id = None
+        LOG.debug('resource_type=%s, resource_id=%s',
+                  resource_type, resource_id)
+        for resource_type in self.matches:
             kwargs = {}
             resource_path = '.'.join(['aws', service_name, resource_type])
             resource_cls = skew.resources.find_resource_class(resource_path)
@@ -197,8 +131,8 @@ class ARNEnumerator(object):
                     do_client_side_filtering = True
             enum_op, path = resource_cls.Meta.enum_spec
             data = endpoint.call(enum_op, query=path, **kwargs)
+            LOG.debug(data)
             for d in data:
-                LOG.debug(d)
                 if do_client_side_filtering:
                     # If the API does not support filtering, the resource
                     # class should provide a filter method that will
@@ -206,8 +140,184 @@ class ARNEnumerator(object):
                     # resource ID we are looking for.
                     if not resource_cls.filter(resource_id, d):
                         continue
-                resource = resource_cls(endpoint, d)
-                self._fire_event('resource-create', self._groups['provider'],
-                                 service_name, region, account,
-                                 resource_type, resource.id, resource=resource)
+                resource = resource_cls(endpoint, d, self._arn.query)
+                self._arn.fire_event(
+                    'resource-create', self._arn.provider,
+                    service_name, region, account,
+                    resource_type, resource.id, resource=resource)
                 yield resource
+
+
+class Account(ARNComponent):
+
+    def __init__(self, pattern, arn):
+        self._account_map = self._build_account_map(arn.session)
+        super(Account, self).__init__(pattern, arn)
+
+    def _build_account_map(self, session):
+        """
+        Builds up a dictionary mapping account IDs to profile names.
+        Any profile which includes an ``account_name`` variable is
+        included.
+        """
+        account_map = {}
+        for profile in session.available_profiles:
+            session.profile = profile
+            config = session.get_scoped_config()
+            account_id = config.get('account_id')
+            if account_id:
+                account_map[account_id] = profile
+        return account_map
+
+    def _get_choices(self):
+        return list(self._account_map.keys())
+
+    def enumerate(self, values):
+        for match in self.matches:
+            values.append(match)
+            for resource in self._arn.resource.enumerate(values):
+                yield resource
+            values.pop()
+
+
+_region_names_limited = ['us-east-1',
+                         'us-west-2',
+                         'eu-west-1',
+                         'ap-southeast-1',
+                         'ap-southeast-2',
+                         'ap-northeast-1']
+
+
+class Region(ARNComponent):
+
+    _all_region_names = ['us-east-1',
+                         'us-west-1',
+                         'us-west-2',
+                         'eu-west-1',
+                         'ap-southeast-1',
+                         'ap-southeast-2',
+                         'ap-northeast-1',
+                         'sa-east-1']
+
+    _service_region_map = {
+        'redshift': _region_names_limited,
+        'glacier': _region_names_limited,
+        'kinesis': _region_names_limited}
+
+    def _get_choices(self):
+        return self._service_region_map.get(
+            self._arn.service, self._all_region_names)
+
+    def enumerate(self, values):
+        for match in self.matches:
+            values.append(match)
+            for account in self._arn.account.enumerate(values):
+                yield account
+            values.pop()
+
+
+class Service(ARNComponent):
+
+    def _get_choices(self):
+        return self._arn.session.get_available_services()
+
+    def enumerate(self, values):
+        for match in self.matches:
+            values.append(match)
+            for region in self._arn.region.enumerate(values):
+                yield region
+            values.pop()
+
+
+class Provider(ARNComponent):
+
+    def _get_choices(self):
+        return ['aws']
+
+    def enumerate(self, values):
+        for match in self.matches:
+            values.append(match)
+            for service in self._arn.service.enumerate(values):
+                yield service
+            values.pop()
+
+
+class Scheme(ARNComponent):
+
+    def _get_choices(self):
+        return ['arn']
+
+    def enumerate(self):
+        for match in self.matches:
+            for provider in self._arn.provider.enumerate([match]):
+                yield provider
+
+
+class ARN(object):
+
+    ComponentClasses = [Scheme, Provider, Service, Region, Account, Resource]
+
+    def __init__(self, arn_string='arn:aws:*:*:*:*'):
+        self.session = botocore.session.get_session()
+        self.query = None
+        self._components = None
+        self._build_components_from_string(arn_string)
+        for event_name in resource_events:
+            self.session.register_event(
+                event_name, resource_events[event_name])
+
+    def __repr__(self):
+        return ':'.join([str(c) for c in self._components])
+
+    def debug(self, logger_name='skew'):
+        self.session.set_debug_logger(logger_name)
+
+    def _build_components_from_string(self, arn_string):
+        if '|' in arn_string:
+            arn_string, query = arn_string.split('|')
+            self.query = jmespath.compile(query)
+        pairs = izip_longest(
+            self.ComponentClasses, arn_string.split(':', 6), fillvalue='*')
+        self._components = [c(n, self) for c, n in pairs]
+
+    def register_for_event(self, event, cb):
+        self.session.register(event, cb)
+
+    def fire_event(self, event_name, *fmtargs, **kwargs):
+        """
+        Each time a resource is enumerated, we fire an event of the
+        form:
+
+        resource-create.aws.<service>.<region>.<account>.<resource_type>.<id>
+        """
+        event = self.session.create_event(event_name, *fmtargs)
+        LOG.debug('firing event: %s', event)
+        self.session.emit(event, **kwargs)
+
+    @property
+    def scheme(self):
+        return self._components[0]
+
+    @property
+    def provider(self):
+        return self._components[1]
+
+    @property
+    def service(self):
+        return self._components[2]
+
+    @property
+    def region(self):
+        return self._components[3]
+
+    @property
+    def account(self):
+        return self._components[4]
+
+    @property
+    def resource(self):
+        return self._components[5]
+
+    def __iter__(self):
+        for scheme in self.scheme.enumerate():
+            yield scheme
