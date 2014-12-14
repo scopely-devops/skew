@@ -13,8 +13,12 @@
 # limitations under the License.
 
 import logging
-from itertools import izip_longest
 import re
+
+try:
+    from itertools import izip_longest
+except ImportError:
+    pass
 
 import botocore.session
 import jmespath
