@@ -6,8 +6,8 @@ import os
 
 requires = [
     'botocore==0.77.0',
-    'jmespath>=0.5.0'
-]
+    'jmespath>=0.5.0',
+    'python-dateutil>=2.1,<3.0.0']
 
 
 setup(
