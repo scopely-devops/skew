@@ -15,6 +15,8 @@ import os
 
 import httpretty
 import mock
+import datetime
+from dateutil.tz import tzlocal, tzutc
 
 from skew import scan
 
@@ -58,7 +60,9 @@ class TestARN(unittest.TestCase):
         self.assertEqual(len(users), 4)
         self.assertEqual(users[0].data['UserName'], 'foo')
         self.assertEqual(users[0].name, 'foo')
-        self.assertEqual(users[3].date, '2013-08-08T21:50:58Z')
+        ts = datetime.datetime(
+            2013, 8, 8, 21, 50, 58, tzinfo=tzutc())
+        self.assertEqual(users[3].date, ts)
 
     @httpretty.activate
     def test_iam_user_filtering(self):
@@ -141,11 +145,28 @@ class TestARN(unittest.TestCase):
         metric_data = instance.get_metric_data('CPUUtilization')
         self.assertEqual(len(metric_data.data), 12)
         self.assertEqual(metric_data.data[-1]['Average'], 0.0)
-        self.assertEqual(instance.date, '2013-04-25T23:41:15.000Z')
+        ts = datetime.datetime(
+            2013, 4, 25, 23, 41, 15, tzinfo=tzutc())
+        self.assertEqual(instance.date, ts)
         self.assertEqual(instance.name, 'foo.bar.com')
         # Fetch tags
         self.assertEqual(list(instance.tags.keys()), ['Name'])
         self.assertEqual(list(instance.tags.values()), ['foo'])
+
+    @httpretty.activate
+    def test_jmespath_query(self):
+        # Set up the HTTP mocking
+        host = 'https://ec2.us-east-1.amazonaws.com/'
+        body = get_response_body('one_instance.xml')
+        httpretty.register_uri(httpretty.POST, host,
+                               body=body)
+        # Run the test
+        arn = scan('arn:aws:ec2:us-east-1:123456789012:instance/*|InstanceType')
+        # Fetch all Instance resources
+        instances = list(arn)
+        self.assertEqual(len(instances), 1)
+        # Check to see if filtered data is there
+        self.assertEqual(instances[0].filtered_data, 'c1.medium')
 
     @httpretty.activate
     def test_dynamodb_table(self):
@@ -173,11 +194,15 @@ class TestARN(unittest.TestCase):
         tables = list(arn)
         self.assertEqual(len(tables), 2)
         t = tables[0]
+        ts = datetime.datetime(
+            2013, 5, 15, 11, 29, 52, 791000, tzlocal())
         self.assertEqual(t.name, 'foo')
-        self.assertEqual(t.date, 1368642592.791)
+        self.assertEqual(t.date, ts)
         t = tables[1]
+        ts = datetime.datetime(
+            2013, 5, 15, 11, 29, 53, 791000, tzlocal())
         self.assertEqual(t.name, 'bar')
-        self.assertEqual(t.date, 1368642593.791)
+        self.assertEqual(t.date, ts)
 
     @httpretty.activate
     def test_dynamodb_filtering(self):
@@ -206,7 +231,9 @@ class TestARN(unittest.TestCase):
         self.assertEqual(len(tables), 1)
         t = tables[0]
         self.assertEqual(t.name, 'foo')
-        self.assertEqual(t.date, 1368642592.791)
+        ts = datetime.datetime(
+            2013, 5, 15, 11, 29, 52, 791000, tzinfo=tzlocal())
+        self.assertEqual(t.date, ts)
 
     @httpretty.activate
     def test_autoscale_group(self):

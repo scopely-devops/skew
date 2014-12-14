@@ -28,8 +28,8 @@ class Queue(AWSResource):
         date = None
         dimension = 'QueueName'
 
-    def __init__(self, endpoint, data):
-        super(Queue, self).__init__(endpoint, data)
+    def __init__(self, endpoint, data, query=None):
+        super(Queue, self).__init__(endpoint, data, query)
         self.data = {self.Meta.id: data,
                      'QueueName': data.split('/')[-1]}
         self._id = self.data['QueueName']

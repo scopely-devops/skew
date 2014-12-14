@@ -30,8 +30,8 @@ class AutoScalingGroup(AWSResource):
         filter_name = 'auto_scaling_group_names'
         filter_type = 'list'
 
-    def __init__(self, endpoint, data):
-        super(AutoScalingGroup, self).__init__(endpoint, data)
+    def __init__(self, endpoint, data, query=None):
+        super(AutoScalingGroup, self).__init__(endpoint, data, query)
         self._arn_query = jmespath.compile('AutoScalingGroupARN')
 
     @property
@@ -53,8 +53,8 @@ class LaunchConfiguration(AWSResource):
         filter_name = 'launch_configuration_names'
         filter_type = 'list'
 
-    def __init__(self, endpoint, data):
-        super(LaunchConfiguration, self).__init__(endpoint, data)
+    def __init__(self, endpoint, data, query=None):
+        super(LaunchConfiguration, self).__init__(endpoint, data, query)
         self._arn_query = jmespath.compile('LaunchConfigurationARN')
 
     @property
