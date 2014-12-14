@@ -15,11 +15,7 @@
 import logging
 import re
 
-try:
-    from itertools import izip_longest
-except ImportError:
-    pass
-
+from six.moves import zip_longest
 import botocore.session
 import jmespath
 
@@ -280,7 +276,7 @@ class ARN(object):
         if '|' in arn_string:
             arn_string, query = arn_string.split('|')
             self.query = jmespath.compile(query)
-        pairs = izip_longest(
+        pairs = zip_longest(
             self.ComponentClasses, arn_string.split(':', 6), fillvalue='*')
         self._components = [c(n, self) for c, n in pairs]
 
