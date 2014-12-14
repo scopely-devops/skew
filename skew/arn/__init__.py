@@ -43,6 +43,9 @@ class ARNComponent(object):
     def __repr__(self):
         return self._pattern
 
+    def _get_choices(self):
+        return []
+
     @property
     def choices(self):
         return self._get_choices()
@@ -101,18 +104,12 @@ class Resource(ARNComponent):
         _, provider, service_name, region, account = values
         service = self._arn.session.get_service(service_name)
         endpoint = Endpoint(service, region, account)
-        if '/' in self.pattern:
-            resource_type, resource_id = self.pattern.split('/', 1)
-        elif ':' in self.pattern:
-            resource_type, resource_id = self.pattern.split(':', 1)
-        else:
-            resource_type = self.pattern
-            resource_id = None
+        resource_type, resource_id = self._split_resource(self.pattern)
         LOG.debug('resource_type=%s, resource_id=%s',
                   resource_type, resource_id)
         for resource_type in self.matches:
             kwargs = {}
-            resource_path = '.'.join(['aws', service_name, resource_type])
+            resource_path = '.'.join([provider, service_name, resource_type])
             resource_cls = skew.resources.find_resource_class(resource_path)
             do_client_side_filtering = False
             if resource_id and resource_id != '*':
