@@ -97,6 +97,8 @@ class AWSResource(Resource):
         self.data = data
         if self._query:
             self.filtered_data = self._query.search(self.data)
+        else:
+            self.filtered_data = None
         if hasattr(self.Meta, 'id') and isinstance(self.data, dict):
             self._id = self.data.get(self.Meta.id, '')
         else:
