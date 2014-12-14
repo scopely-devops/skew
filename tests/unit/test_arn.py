@@ -15,8 +15,6 @@ import os
 
 import httpretty
 import mock
-import datetime
-from dateutil.tz import tzlocal, tzutc
 
 from skew import scan
 
@@ -60,9 +58,6 @@ class TestARN(unittest.TestCase):
         self.assertEqual(len(users), 4)
         self.assertEqual(users[0].data['UserName'], 'foo')
         self.assertEqual(users[0].name, 'foo')
-        ts = datetime.datetime(
-            2013, 8, 8, 21, 50, 58, tzinfo=tzutc())
-        self.assertEqual(users[3].date, ts)
 
     @httpretty.activate
     def test_iam_user_filtering(self):
@@ -145,9 +140,6 @@ class TestARN(unittest.TestCase):
         metric_data = instance.get_metric_data('CPUUtilization')
         self.assertEqual(len(metric_data.data), 12)
         self.assertEqual(metric_data.data[-1]['Average'], 0.0)
-        ts = datetime.datetime(
-            2013, 4, 25, 23, 41, 15, tzinfo=tzutc())
-        self.assertEqual(instance.date, ts)
         self.assertEqual(instance.name, 'foo.bar.com')
         # Fetch tags
         self.assertEqual(list(instance.tags.keys()), ['Name'])
@@ -194,15 +186,9 @@ class TestARN(unittest.TestCase):
         tables = list(arn)
         self.assertEqual(len(tables), 2)
         t = tables[0]
-        ts = datetime.datetime(
-            2013, 5, 15, 11, 29, 52, 791000, tzlocal())
         self.assertEqual(t.name, 'foo')
-        self.assertEqual(t.date, ts)
         t = tables[1]
-        ts = datetime.datetime(
-            2013, 5, 15, 11, 29, 53, 791000, tzlocal())
         self.assertEqual(t.name, 'bar')
-        self.assertEqual(t.date, ts)
 
     @httpretty.activate
     def test_dynamodb_filtering(self):
@@ -231,9 +217,6 @@ class TestARN(unittest.TestCase):
         self.assertEqual(len(tables), 1)
         t = tables[0]
         self.assertEqual(t.name, 'foo')
-        ts = datetime.datetime(
-            2013, 5, 15, 11, 29, 52, 791000, tzinfo=tzlocal())
-        self.assertEqual(t.date, ts)
 
     @httpretty.activate
     def test_autoscale_group(self):
