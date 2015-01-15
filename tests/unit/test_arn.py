@@ -74,14 +74,6 @@ class TestARN(unittest.TestCase):
         self.assertEqual(users[0].data['UserName'], 'bar')
         self.assertEqual(users[0].name, 'bar')
 
-    # This callback will be associated with an event that gets fired
-    # when new EC2 Instance resources are created.  It will store a
-    # bogus attribute on each object and then we will look for them
-    # in the test method to verify that its getting called.
-    def _my_callback(self, event_name, resource, **kwargs):
-        self.assertIn('123456789012', event_name)
-        resource.__foobar__ = 'fiebaz'
-
     @httpretty.activate
     def test_ec2_instance(self):
         # Set up the HTTP mocking
@@ -105,15 +97,9 @@ class TestARN(unittest.TestCase):
                                ])
         # Run the test
         arn = scan('arn:aws:ec2:us-east-1:123456789012:instance/*')
-        # Register our local event handler
-        arn.register_for_event('resource-create.aws.ec2.*.*.instance.*',
-                               self._my_callback)
         # Fetch all Instance resources
         instances = list(arn)
         self.assertEqual(len(instances), 2)
-        # Check to see if our callback got called
-        for i in instances:
-            self.assertEqual(getattr(i, '__foobar__'), 'fiebaz')
         # Fetch non-existant resource
         arn = scan('arn:aws:ec2:us-east-1:123456789012:instance/i-decafbad')
         instances = list(arn)
