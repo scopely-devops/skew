@@ -264,7 +264,7 @@ class ARN(object):
     def debug(self):
         self.set_logger('skew', logging.DEBUG)
 
-    def set_logger(self, logger_name, level=logging.INFO):
+    def set_logger(self, logger_name, level=logging.DEBUG):
         """
         Convenience function to quickly configure full debug output
         to go to the console.
@@ -276,10 +276,7 @@ class ARN(object):
         ch.setLevel(level)
 
         # create formatter
-        if level == logging.INFO:
-            formatter = logging.Formatter(InfoFmtString)
-        else:
-            formatter = logging.Formatter(DebugFmtString)
+        formatter = logging.Formatter(DebugFmtString)
 
         # add formatter to ch
         ch.setFormatter(formatter)
