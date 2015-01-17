@@ -154,6 +154,8 @@ class Account(ARNComponent):
         session = botocore.session.get_session()
         account_map = {}
         for profile in session.available_profiles:
+            if profile == '_path':
+                continue
             session.profile = profile
             config = session.get_scoped_config()
             account_id = config.get('account_id')
