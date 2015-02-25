@@ -19,7 +19,7 @@ class HostedZone(AWSResource):
     class Meta(object):
         service = 'route53'
         type = 'hostedzone'
-        enum_spec = ('ListHostedZones', 'HostedZones')
+        enum_spec = ('ListHostedZones', 'HostedZones', None)
         detail_spec = ('GetHostedZone', 'id', None)
         id = 'Id'
         filter_name = None
@@ -37,7 +37,7 @@ class HealthCheck(AWSResource):
     class Meta(object):
         service = 'route53'
         type = 'healthcheck'
-        enum_spec = ('ListHealthChecks', 'HealthChecks')
+        enum_spec = ('ListHealthChecks', 'HealthChecks', None)
         detail_spec = ('GetHealthCheck', 'id', None)
         id = 'Id'
         filter_name = None
@@ -51,7 +51,7 @@ class ResourceRecordSet(AWSResource):
     class Meta(object):
         service = 'route53'
         type = 'rrset'
-        enum_spec = ('ListResourceRecordSets', 'ResourceRecordSets')
+        enum_spec = ('ListResourceRecordSets', 'ResourceRecordSets', None)
         detail_spec = None
         id = 'Name'
         filter_name = None

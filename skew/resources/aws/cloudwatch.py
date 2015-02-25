@@ -19,7 +19,7 @@ class Alarm(AWSResource):
     class Meta(object):
         service = 'cloudwatch'
         type = 'alarm'
-        enum_spec = ('DescribeAlarms', 'MetricAlarms')
+        enum_spec = ('DescribeAlarms', 'MetricAlarms', None)
         id = 'AlarmArn'
         filter_name = 'alarm_names'
         filter_type = 'list'

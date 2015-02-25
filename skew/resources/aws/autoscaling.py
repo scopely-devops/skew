@@ -24,7 +24,7 @@ class AutoScalingGroup(AWSResource):
         name = 'AutoScalingGroupName'
         date = 'CreatedTime'
         dimension = 'AutoScalingGroupName'
-        enum_spec = ('DescribeAutoScalingGroups', 'AutoScalingGroups')
+        enum_spec = ('DescribeAutoScalingGroups', 'AutoScalingGroups', None)
         detail_spec = None
         id = 'AutoScalingGroupName'
         filter_name = 'auto_scaling_group_names'
@@ -47,7 +47,8 @@ class LaunchConfiguration(AWSResource):
         name = 'LaunchConfigurationName'
         date = 'CreatedTime'
         dimension = 'AutoScalingGroupName'
-        enum_spec = ('DescribeLaunchConfigurations', 'LaunchConfigurations')
+        enum_spec = (
+            'DescribeLaunchConfigurations', 'LaunchConfigurations', None)
         detail_spec = None
         id = 'LaunchConfigurationName'
         filter_name = 'launch_configuration_names'

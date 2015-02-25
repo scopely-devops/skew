@@ -160,7 +160,9 @@ class Resource(ARNComponent):
                         kwargs[filter_name] = resource_id
                 else:
                     do_client_side_filtering = True
-            enum_op, path = resource_cls.Meta.enum_spec
+            enum_op, path, extra_args = resource_cls.Meta.enum_spec
+            if extra_args:
+                kwargs.update(extra_args)
             data = endpoint.call(enum_op, query=path, **kwargs)
             LOG.debug(data)
             for d in data:

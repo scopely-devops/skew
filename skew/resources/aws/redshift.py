@@ -19,7 +19,7 @@ class Cluster(AWSResource):
     class Meta(object):
         service = 'redshift'
         type = 'cluster'
-        enum_spec = ('DescribeClusters', 'Clusters')
+        enum_spec = ('DescribeClusters', 'Clusters', None)
         detail_spec = None
         id = 'ClusterIdentifier'
         filter_name = 'cluster_identifier'

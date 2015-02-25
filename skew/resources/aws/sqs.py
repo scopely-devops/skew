@@ -19,7 +19,7 @@ class Queue(AWSResource):
     class Meta(object):
         service = 'sqs'
         type = 'queue'
-        enum_spec = ('ListQueues', 'QueueUrls')
+        enum_spec = ('ListQueues', 'QueueUrls', None)
         detail_spec = ('GetQueueAttributes', 'queue_url', 'QueueUrl')
         id = 'QueueUrl'
         filter_name = 'queue_name_prefix'

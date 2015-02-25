@@ -24,7 +24,7 @@ class Group(AWSResource):
     class Meta(object):
         service = 'iam'
         type = 'group'
-        enum_spec = ('ListGroups', 'Groups')
+        enum_spec = ('ListGroups', 'Groups', None)
         detail_spec = None
         id = 'GroupName'
         name = 'GroupName'
@@ -43,7 +43,7 @@ class User(AWSResource):
     class Meta(object):
         service = 'iam'
         type = 'user'
-        enum_spec = ('ListUsers', 'Users')
+        enum_spec = ('ListUsers', 'Users', None)
         detail_spec = None
         id = 'UserName'
         filter_name = None
