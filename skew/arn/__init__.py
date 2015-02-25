@@ -29,44 +29,56 @@ DebugFmtString = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 class ARNComponent(object):
 
     def __init__(self, pattern, arn):
-        self._pattern = pattern
+        self.pattern = pattern
         self._arn = arn
 
     def __repr__(self):
-        return self._pattern
+        return self.pattern
 
-    def _get_choices(self):
+    def choices(self, context=None):
+        """
+        This method is responsible for returning all of the possible
+        choices for the value of this component.
+
+        The ``context`` can be a list of values of the components
+        that precede this component.  The value of one or more of
+        those previous components could affect the possible
+        choices for this component.
+
+        If no ``context`` is provided this method should return
+        all possible choices.
+        """
         return []
 
-    @property
-    def choices(self):
-        return self._get_choices()
+    def match(self, pattern, context=None):
+        """
+        This method returns a (possibly empty) list of strings that
+        match the regular expression ``pattern`` provided.  You can
+        also provide a ``context`` as described above.
 
-    @property
-    def pattern(self):
-        return self._pattern
-
-    @pattern.setter
-    def pattern(self, pattern):
-        self._pattern = pattern
-
-    def match(self, pattern):
+        This method calls ``choices`` to get a list of all possible
+        choices and then filters the list by performing a regular
+        expression search on each choice using the supplied ``pattern``.
+        """
         matches = []
         regex = pattern
         if regex == '*':
             regex = '.*'
         regex = re.compile(regex)
-        for choice in self.choices:
+        for choice in self.choices(context):
             if regex.search(choice):
                 matches.append(choice)
         return matches
 
-    @property
-    def matches(self):
-        return self.match(self._pattern)
+    def matches(self, context=None):
+        """
+        This is a convenience method to return all possible matches
+        filtered by the current value of the ``pattern`` attribute.
+        """
+        return self.match(self.pattern, context)
 
-    def complete(self, prefix=''):
-        return [c for c in self.choices if c.startswith(prefix)]
+    def complete(self, prefix='', context=None):
+        return [c for c in self.choices(context) if c.startswith(prefix)]
 
 
 class Resource(ARNComponent):
@@ -81,31 +93,55 @@ class Resource(ARNComponent):
             resource_id = None
         return (resource_type, resource_id)
 
-    def match(self, pattern):
+    def match(self, pattern, context=None):
         resource_type, _ = self._split_resource(pattern)
         return super(Resource, self).match(resource_type)
 
-    def _get_choices(self):
+    def choices(self, context=None):
+        if context:
+            service = context[2]
+        else:
+            service = self._arn.service.pattern
         all_resources = skew.resources.all_types(
-            self._arn.provider.pattern, self._arn.service.pattern)
+            self._arn.provider.pattern, service)
         if not all_resources:
             all_resources = ['*']
         return all_resources
 
-    def enumerate(self, values):
-        _, provider, service_name, region, account = values
-        LOG.debug('enumerate, account=%s', account)
-        profile = self._arn.account.map_account_to_profile(account)
-        LOG.debug('enumerate, profile=%s', profile)
+    def _get_botocore_session(self, profile):
+        LOG.debug('Getting botocore session')
         session = botocore.session.get_session()
         session.profile = profile
-        LOG.debug('enumerate, access_key=%s', session.get_credentials().access_key)
+        config = session.get_scoped_config()
+        LOG.debug(config)
+        if 'role_arn' in config:
+            LOG.debug('Using AssumeRole to get actual credentials')
+            role_arn = config.get('role_arn')
+            source_profile = config.get('source_profile')
+            session.profile = source_profile
+            sts = session.create_client('sts')
+            response = sts.assume_role(
+                RoleArn=role_arn, RoleSessionName='skew')
+            LOG.debug(response)
+            session = botocore.session.get_session()
+            session.profile = profile
+            session.set_credentials(
+                response['Credentials']['AccessKeyId'],
+                response['Credentials']['SecretAccessKey'],
+                response['Credentials']['SessionToken'])
+        return session
+
+    def enumerate(self, context):
+        LOG.debug('Resource.enumerate %s', context)
+        _, provider, service_name, region, account = context
+        profile = self._arn.account.map_account_to_profile(account)
+        session = self._get_botocore_session(profile)
         service = session.get_service(service_name)
         endpoint = Endpoint(service, region, account)
         resource_type, resource_id = self._split_resource(self.pattern)
         LOG.debug('resource_type=%s, resource_id=%s',
                   resource_type, resource_id)
-        for resource_type in self.matches:
+        for resource_type in self.matches(context):
             kwargs = {}
             resource_path = '.'.join([provider, service_name, resource_type])
             resource_cls = skew.resources.find_resource_class(resource_path)
@@ -154,41 +190,47 @@ class Account(ARNComponent):
         session = botocore.session.get_session()
         account_map = {}
         for profile in session.available_profiles:
-            session.profile = profile
-            config = session.get_scoped_config()
-            account_id = config.get('account_id')
-            if account_id:
-                account_map[account_id] = profile
+            # For some reason botocore is returning a _path value
+            # in the call to available_profiles.  Its value is a
+            # a string file path but we are interested only in
+            # the profiles.
+            if not profile.startswith('_'):
+                session.profile = profile
+                config = session.get_scoped_config()
+                account_id = config.get('account_id')
+                if account_id:
+                    account_map[account_id] = profile
         return account_map
 
-    def _get_choices(self):
+    def choices(self, context=None):
         return list(self._account_map.keys())
 
     def map_account_to_profile(self, account):
         return self._account_map[account]
 
-    def enumerate(self, values):
-        for match in self.matches:
-            values.append(match)
-            for resource in self._arn.resource.enumerate(values):
+    def enumerate(self, context):
+        LOG.debug('Account.enumerate %s', context)
+        for match in self.matches(context):
+            context.append(match)
+            for resource in self._arn.resource.enumerate(context):
                 yield resource
-            values.pop()
-
-
-_region_names_limited = ['us-east-1',
-                         'us-west-2',
-                         'eu-west-1',
-                         'ap-southeast-1',
-                         'ap-southeast-2',
-                         'ap-northeast-1']
+            context.pop()
 
 
 class Region(ARNComponent):
+
+    _region_names_limited = ['us-east-1',
+                             'us-west-2',
+                             'eu-west-1',
+                             'ap-southeast-1',
+                             'ap-southeast-2',
+                             'ap-northeast-1']
 
     _all_region_names = ['us-east-1',
                          'us-west-1',
                          'us-west-2',
                          'eu-west-1',
+                         'eu-central-1',
                          'ap-southeast-1',
                          'ap-southeast-2',
                          'ap-northeast-1',
@@ -199,54 +241,67 @@ class Region(ARNComponent):
         'glacier': _region_names_limited,
         'kinesis': _region_names_limited}
 
-    def _get_choices(self):
+    def choices(self, context=None):
+        if context:
+            service = context[2]
+        else:
+            service = self._arn.service
         return self._service_region_map.get(
-            self._arn.service, self._all_region_names)
+            service, self._all_region_names)
 
-    def enumerate(self, values):
-        for match in self.matches:
-            values.append(match)
-            for account in self._arn.account.enumerate(values):
+    def enumerate(self, context):
+        LOG.debug('Region.enumerate %s', context)
+        for match in self.matches(context):
+            context.append(match)
+            for account in self._arn.account.enumerate(context):
                 yield account
-            values.pop()
+            context.pop()
 
 
 class Service(ARNComponent):
 
-    def _get_choices(self):
-        session = botocore.session.get_session()
-        return session.get_available_services()
+    def choices(self, context=None):
+        if context:
+            provider = context[1]
+        else:
+            provider = self._arn.provider.pattern
+        return skew.resources.all_services(provider)
 
-    def enumerate(self, values):
-        for match in self.matches:
-            values.append(match)
-            for region in self._arn.region.enumerate(values):
+    def enumerate(self, context):
+        LOG.debug('Service.enumerate %s', context)
+        for match in self.matches(context):
+            context.append(match)
+            for region in self._arn.region.enumerate(context):
                 yield region
-            values.pop()
+            context.pop()
 
 
 class Provider(ARNComponent):
 
-    def _get_choices(self):
+    def choices(self, context=None):
         return ['aws']
 
-    def enumerate(self, values):
-        for match in self.matches:
-            values.append(match)
-            for service in self._arn.service.enumerate(values):
+    def enumerate(self, context):
+        LOG.debug('Provider.enumerate %s', context)
+        for match in self.matches(context):
+            context.append(match)
+            for service in self._arn.service.enumerate(context):
                 yield service
-            values.pop()
+            context.pop()
 
 
 class Scheme(ARNComponent):
 
-    def _get_choices(self):
+    def choices(self, context=None):
         return ['arn']
 
-    def enumerate(self):
-        for match in self.matches:
-            for provider in self._arn.provider.enumerate([match]):
+    def enumerate(self, context):
+        LOG.debug('Scheme.enumerate %s', context)
+        for match in self.matches(context):
+            context.append(match)
+            for provider in self._arn.provider.enumerate(context):
                 yield provider
+            context.pop()
 
 
 class ARN(object):
@@ -317,5 +372,6 @@ class ARN(object):
         return self._components[5]
 
     def __iter__(self):
-        for scheme in self.scheme.enumerate():
+        context = []
+        for scheme in self.scheme.enumerate(context):
             yield scheme
