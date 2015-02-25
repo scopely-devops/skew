@@ -19,7 +19,7 @@ class Instance(AWSResource):
     class Meta(object):
         service = 'ec2'
         type = 'instance'
-        enum_spec = ('DescribeInstances', 'Reservations[].Instances[]')
+        enum_spec = ('DescribeInstances', 'Reservations[].Instances[]', None)
         detail_spec = None
         id = 'InstanceId'
         filter_name = 'instance_ids'
@@ -38,7 +38,7 @@ class SecurityGroup(AWSResource):
     class Meta(object):
         service = 'ec2'
         type = 'security-group'
-        enum_spec = ('DescribeSecurityGroups', 'SecurityGroups')
+        enum_spec = ('DescribeSecurityGroups', 'SecurityGroups', None)
         detail_spec = None
         id = 'GroupId'
         filter_name = 'group_names'
@@ -53,7 +53,7 @@ class KeyPair(AWSResource):
     class Meta(object):
         service = 'ec2'
         type = 'key-pair'
-        enum_spec = ('DescribeKeyPairs', 'KeyPairs')
+        enum_spec = ('DescribeKeyPairs', 'KeyPairs', None)
         detail_spec = None
         id = 'KeyName'
         filter_name = 'key_names'
@@ -67,7 +67,7 @@ class Address(AWSResource):
     class Meta(object):
         service = 'ec2'
         type = 'address'
-        enum_spec = ('DescribeAddresses', 'Addresses')
+        enum_spec = ('DescribeAddresses', 'Addresses', None)
         detail_spec = None
         id = 'PublicIp'
         filter_name = 'public-ips'
@@ -82,7 +82,7 @@ class Volume(AWSResource):
     class Meta(object):
         service = 'ec2'
         type = 'volume'
-        enum_spec = ('DescribeVolumes', 'Volumes')
+        enum_spec = ('DescribeVolumes', 'Volumes', None)
         detail_spec = None
         id = 'VolumeId'
         filter_name = 'volume_ids'
@@ -104,7 +104,8 @@ class Snapshot(AWSResource):
     class Meta(object):
         service = 'ec2'
         type = 'snapshot'
-        enum_spec = ('DescribeSnapshots', 'Snapshots')
+        enum_spec = (
+            'DescribeSnapshots', 'Snapshots', {'OwnerIds': ['self']})
         detail_spec = None
         id = 'SnapshotId'
         filter_name = 'snapshot_ids'
@@ -119,3 +120,27 @@ class Snapshot(AWSResource):
             return self.data['VolumeId']
         else:
             return None
+
+
+class Image(AWSResource):
+
+    class Meta(object):
+        service = 'ec2'
+        type = 'image'
+        enum_spec = (
+            'DescribeImages', 'Images', {'Owners': ['self']})
+        detail_spec = None
+        id = 'ImageId'
+        filter_name = 'image_ids'
+        filter_type = 'list'
+        name = 'ImageId'
+        date = 'StartTime'
+        dimension = None
+
+    @property
+    def parent(self):
+        if self.data['VolumeId']:
+            return self.data['VolumeId']
+        else:
+            return None
+            

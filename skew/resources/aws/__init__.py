@@ -49,9 +49,11 @@ class AWSResource(Resource):
 
     * service - The AWS service in which this resource is defined.
     * enum_spec - The enumeration configuration.  This is a tuple consisting
-      of the name of the operation to call to enumerate the resources and
+      of the name of the operation to call to enumerate the resources,
       a jmespath query that will be run against the result of the operation
-      to retrieve the list of resources.
+      to retrieve the list of resources, and a dictionary containing any
+      extra arguments you want to pass in the enumeration call.  This
+      can be None if no additional arguments are required.
     * tags_spec - Some AWS resources return the tags for the resource in
       the enumeration operation (e.g. DescribeInstances) while others
       require a second operation to retrieve the tags.  If a second
@@ -260,9 +262,9 @@ def resource_from_arn(arn, data):
     parts = ArnComponents(*arn.split(':', 6))
     service = session.get_service(parts.service)
     if ':' in parts.resource:
-        resource_type, resource_id = parts.resource.split(':')
+        resource_type, _ = parts.resource.split(':')
     elif '/' in parts.resource:
-        resource_type, resource_id = parts.resource.split('/')
+        resource_type, _ = parts.resource.split('/')
     else:
         resource_type = parts.resource
     endpoint = Endpoint(service, parts.region, parts.account)
