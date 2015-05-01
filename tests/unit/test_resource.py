@@ -60,4 +60,4 @@ class TestResource(unittest.TestCase):
 
     def test_all_services(self):
         all_providers = skew.resources.all_services('aws')
-        self.assertEqual(len(all_providers), 11)
+        self.assertEqual(len(all_providers), 12)

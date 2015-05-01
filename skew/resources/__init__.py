@@ -37,6 +37,7 @@ ResourceTypes = {
     'aws.redshift.cluster': 'aws.redshift.Cluster',
     'aws.route53.hostedzone': 'aws.route53.HostedZone',
     'aws.route53.healthcheck': 'aws.route53.HealthCheck',
+    'aws.s3.bucket': 'aws.s3.Bucket'
 }
 
 
