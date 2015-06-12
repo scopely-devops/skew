@@ -380,3 +380,30 @@ class TestARN(unittest.TestCase):
         self.assertEqual(
             q.name, 'https://queue.amazonaws.com/123456789012/baz')
         self.assertEqual(q.id, 'baz')
+
+    @httpretty.activate
+    def test_s3_bucket_list(self):
+        # Set up the HTTP mocking
+        host = 'https://s3.amazonaws.com/'
+        bucket = 'https://samples.s3.amazonaws.com'
+        body1 = get_response_body('s3_bucket_list.xml')
+        body2 = get_response_body('s3_bucket_keys.xml')
+        httpretty.register_uri(httpretty.GET, host,
+                               body=body1,
+                               status=200)
+        httpretty.register_uri(httpretty.GET, bucket,
+                               body=body2,
+                               status=200)
+        # Run the test
+        arn = scan('arn:aws:s3:us-east-1:123456789012:*')
+        buckets = list(arn)
+        self.assertEqual(len(buckets), 2)
+        self.assertEqual(buckets[0].id, 'quotes')
+        self.assertEqual(buckets[1].id, 'samples')
+
+        keys = list(buckets[1])
+        self.assertEqual(len(keys), 3)
+
+        key_names = [x['Key'] for x in keys]
+        key_list = ['my-image.jpg', 'my-second-image.jpg', 'my-third-image.jpg']
+        self.assertEqual(sorted(key_names), sorted(key_list))
