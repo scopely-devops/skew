@@ -1,4 +1,5 @@
 # Copyright (c) 2014 Scopely, Inc.
+# Copyright (c) 2015 Mitch Garnaat
 #
 # Licensed under the Apache License, Version 2.0 (the "License"). You
 # may not use this file except in compliance with the License. A copy of
@@ -18,9 +19,9 @@ from collections import namedtuple
 import jmespath
 import botocore.session
 
+import skew.awsclient
 from skew.resources import find_resource_class
 from skew.resources.resource import Resource
-from skew.arn.endpoint import Endpoint
 
 LOG = logging.getLogger(__name__)
 
@@ -89,10 +90,8 @@ class AWSResource(Resource):
     def filter(cls, resource_id, data):
         pass
 
-    def __init__(self, endpoint, data, query=None):
-        self._endpoint = endpoint
-        self._region = endpoint.region
-        self._account = endpoint.account
+    def __init__(self, client, data, query=None):
+        self._client = client
         self._query = query
         if data is None:
             data = {}
@@ -107,10 +106,9 @@ class AWSResource(Resource):
             self._id = ''
         self._cloudwatch = None
         if hasattr(self.Meta, 'dimension') and self.Meta.dimension:
-            cloudwatch = self._endpoint.service.session.get_service(
-                'cloudwatch')
-            self._cloudwatch = Endpoint(
-                cloudwatch, self._region, self._account)
+            self._cloudwatch = skew.awsclient.get_awsclient(
+                'cloudwatch', self._client.region_name,
+                self._client.account_id)
         self._metrics = None
         self._name = None
         self._date = None
@@ -122,16 +120,17 @@ class AWSResource(Resource):
     @property
     def arn(self):
         return 'arn:aws:%s:%s:%s:%s/%s' % (
-            self._endpoint.service.endpoint_prefix,
-            self._region, self._account, self.resourcetype, self.id)
+            self._client.service_name,
+            self._client.region_name,
+            self._client.account_id, self.resourcetype, self.id)
 
     @property
     def metrics(self):
         if self._metrics is None:
             if self._cloudwatch:
                 data = self._cloudwatch.call(
-                    'ListMetrics',
-                    dimensions=[{'Name': self.Meta.dimension,
+                    'list_metrics',
+                    Dimensions=[{'Name': self.Meta.dimension,
                                  'Value': self._id}])
                 self._metrics = jmespath.search('Metrics', data)
             else:
@@ -240,12 +239,12 @@ class AWSResource(Resource):
             end = datetime.datetime.utcnow()
             start = end - delta
             data = self._cloudwatch.call(
-                'GetMetricStatistics',
-                dimensions=metric['Dimensions'],
-                namespace=metric['Namespace'],
-                metric_name=metric['MetricName'],
-                start_time=start.isoformat(), end_time=end.isoformat(),
-                statistics=statistics, period=period)
+                'get_metric_statistics',
+                Dimensions=metric['Dimensions'],
+                Namespace=metric['Namespace'],
+                MetricName=metric['MetricName'],
+                StartTime=start.isoformat(), EndTime=end.isoformat(),
+                Statistics=statistics, Period=period)
             return MetricData(jmespath.search('Datapoints', data),
                               period)
         else:

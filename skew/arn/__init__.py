@@ -1,4 +1,5 @@
 # Copyright 2014 Scopely, Inc.
+# Copyright (c) 2015 Mitch Garnaat
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,11 +17,11 @@ import logging
 import re
 
 from six.moves import zip_longest
-import botocore.session
 import jmespath
 
 import skew.resources
-from skew.arn.endpoint import Endpoint
+import skew.awsclient
+from skew.config import get_config
 
 LOG = logging.getLogger(__name__)
 DebugFmtString = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
@@ -108,36 +109,11 @@ class Resource(ARNComponent):
             all_resources = ['*']
         return all_resources
 
-    def _get_botocore_session(self, profile):
-        LOG.debug('Getting botocore session')
-        session = botocore.session.get_session()
-        session.profile = profile
-        config = session.get_scoped_config()
-        LOG.debug(config)
-        if 'role_arn' in config:
-            LOG.debug('Using AssumeRole to get actual credentials')
-            role_arn = config.get('role_arn')
-            source_profile = config.get('source_profile')
-            session.profile = source_profile
-            sts = session.create_client('sts')
-            response = sts.assume_role(
-                RoleArn=role_arn, RoleSessionName='skew')
-            LOG.debug(response)
-            session = botocore.session.get_session()
-            session.profile = profile
-            session.set_credentials(
-                response['Credentials']['AccessKeyId'],
-                response['Credentials']['SecretAccessKey'],
-                response['Credentials']['SessionToken'])
-        return session
-
     def enumerate(self, context):
         LOG.debug('Resource.enumerate %s', context)
         _, provider, service_name, region, account = context
-        profile = self._arn.account.map_account_to_profile(account)
-        session = self._get_botocore_session(profile)
-        service = session.get_service(service_name)
-        endpoint = Endpoint(service, region, account)
+        client = skew.awsclient.get_awsclient(
+            service_name, region, account)
         resource_type, resource_id = self._split_resource(self.pattern)
         LOG.debug('resource_type=%s, resource_id=%s',
                   resource_type, resource_id)
@@ -163,7 +139,7 @@ class Resource(ARNComponent):
             enum_op, path, extra_args = resource_cls.Meta.enum_spec
             if extra_args:
                 kwargs.update(extra_args)
-            data = endpoint.call(enum_op, query=path, **kwargs)
+            data = client.call(enum_op, query=path, **kwargs)
             LOG.debug(data)
             for d in data:
                 if do_client_side_filtering:
@@ -173,42 +149,18 @@ class Resource(ARNComponent):
                     # resource ID we are looking for.
                     if not resource_cls.filter(resource_id, d):
                         continue
-                resource = resource_cls(endpoint, d, self._arn.query)
+                resource = resource_cls(client, d, self._arn.query)
                 yield resource
 
 
 class Account(ARNComponent):
 
     def __init__(self, pattern, arn):
-        self._account_map = self._build_account_map()
+        self._accounts = get_config()['accounts']
         super(Account, self).__init__(pattern, arn)
 
-    def _build_account_map(self):
-        """
-        Builds up a dictionary mapping account IDs to profile names.
-        Any profile which includes an ``account_name`` variable is
-        included.
-        """
-        session = botocore.session.get_session()
-        account_map = {}
-        for profile in session.available_profiles:
-            # For some reason botocore is returning a _path value
-            # in the call to available_profiles.  Its value is a
-            # a string file path but we are interested only in
-            # the profiles.
-            if not profile.startswith('_'):
-                session.profile = profile
-                config = session.get_scoped_config()
-                account_id = config.get('account_id')
-                if account_id:
-                    account_map[account_id] = profile
-        return account_map
-
     def choices(self, context=None):
-        return list(self._account_map.keys())
-
-    def map_account_to_profile(self, account):
-        return self._account_map[account]
+        return list(self._accounts.keys())
 
     def enumerate(self, context):
         LOG.debug('Account.enumerate %s', context)

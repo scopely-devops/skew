@@ -1,4 +1,5 @@
 # Copyright (c) 2014 Scopely, Inc.
+# Copyright (c) 2015 Mitch Garnaat
 #
 # Licensed under the Apache License, Version 2.0 (the "License"). You
 # may not use this file except in compliance with the License. A copy of
@@ -19,7 +20,8 @@ class LoadBalancer(AWSResource):
     class Meta(object):
         service = 'elb'
         type = 'loadbalancer'
-        enum_spec = ('DescribeLoadBalancers', 'LoadBalancerDescriptions', None)
+        enum_spec = ('describe_load_balancers',
+                     'LoadBalancerDescriptions', None)
         detail_spec = None
         id = 'LoadBalancerName'
         filter_name = 'load_balancer_names'
@@ -27,5 +29,5 @@ class LoadBalancer(AWSResource):
         name = 'DNSName'
         date = 'CreatedTime'
         dimension = 'LoadBalancerName'
-        tags_spec = ('DescribeTags', 'TagDescriptions[].Tags[]',
+        tags_spec = ('describe_tags', 'TagDescriptions[].Tags[]',
                      'load_balancer_names', 'id')

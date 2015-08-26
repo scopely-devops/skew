@@ -1,0 +1,23 @@
+[
+    {
+        "AvailabilityZone": "us-west-2a", 
+        "Attachments": [
+            {
+                "AttachTime": "2015-08-25T22:03:22+00:00", 
+                "InstanceId": "i-f993163f", 
+                "VolumeId": "vol-ea3e1724", 
+                "State": "attached", 
+                "DeleteOnTermination": true, 
+                "Device": "/dev/sda1"
+            }
+        ], 
+        "Encrypted": false, 
+        "VolumeType": "gp2", 
+        "VolumeId": "vol-ea3e1724", 
+        "State": "in-use", 
+        "Iops": 24, 
+        "SnapshotId": "snap-bd9c25fb", 
+        "CreateTime": "2015-08-25T22:03:22.153000+00:00", 
+        "Size": 8
+    }
+]

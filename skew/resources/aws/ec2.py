@@ -1,4 +1,5 @@
 # Copyright (c) 2014 Scopely, Inc.
+# Copyright (c) 2015 Mitch Garnaat
 #
 # Licensed under the Apache License, Version 2.0 (the "License"). You
 # may not use this file except in compliance with the License. A copy of
@@ -19,7 +20,7 @@ class Instance(AWSResource):
     class Meta(object):
         service = 'ec2'
         type = 'instance'
-        enum_spec = ('DescribeInstances', 'Reservations[].Instances[]', None)
+        enum_spec = ('describe_instances', 'Reservations[].Instances[]', None)
         detail_spec = None
         id = 'InstanceId'
         filter_name = 'instance_ids'
@@ -38,7 +39,7 @@ class SecurityGroup(AWSResource):
     class Meta(object):
         service = 'ec2'
         type = 'security-group'
-        enum_spec = ('DescribeSecurityGroups', 'SecurityGroups', None)
+        enum_spec = ('describe_security_groups', 'SecurityGroups', None)
         detail_spec = None
         id = 'GroupId'
         filter_name = 'group_names'
@@ -53,7 +54,7 @@ class KeyPair(AWSResource):
     class Meta(object):
         service = 'ec2'
         type = 'key-pair'
-        enum_spec = ('DescribeKeyPairs', 'KeyPairs', None)
+        enum_spec = ('describe_key_pairs', 'KeyPairs', None)
         detail_spec = None
         id = 'KeyName'
         filter_name = 'key_names'
@@ -67,7 +68,7 @@ class Address(AWSResource):
     class Meta(object):
         service = 'ec2'
         type = 'address'
-        enum_spec = ('DescribeAddresses', 'Addresses', None)
+        enum_spec = ('describe_addresses', 'Addresses', None)
         detail_spec = None
         id = 'PublicIp'
         filter_name = 'public-ips'
@@ -82,7 +83,7 @@ class Volume(AWSResource):
     class Meta(object):
         service = 'ec2'
         type = 'volume'
-        enum_spec = ('DescribeVolumes', 'Volumes', None)
+        enum_spec = ('describe_volumes', 'Volumes', None)
         detail_spec = None
         id = 'VolumeId'
         filter_name = 'volume_ids'
@@ -105,7 +106,7 @@ class Snapshot(AWSResource):
         service = 'ec2'
         type = 'snapshot'
         enum_spec = (
-            'DescribeSnapshots', 'Snapshots', {'OwnerIds': ['self']})
+            'describe_snapshots', 'Snapshots', {'OwnerIds': ['self']})
         detail_spec = None
         id = 'SnapshotId'
         filter_name = 'snapshot_ids'
@@ -128,7 +129,7 @@ class Image(AWSResource):
         service = 'ec2'
         type = 'image'
         enum_spec = (
-            'DescribeImages', 'Images', {'Owners': ['self']})
+            'describe_images', 'Images', {'Owners': ['self']})
         detail_spec = None
         id = 'ImageId'
         filter_name = 'image_ids'
@@ -143,4 +144,3 @@ class Image(AWSResource):
             return self.data['VolumeId']
         else:
             return None
-            

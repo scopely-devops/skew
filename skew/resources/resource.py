@@ -1,4 +1,5 @@
 # Copyright (c) 2014 Scopely, Inc.
+# Copyright (c) 2015 Mitch Garnaat
 #
 # Licensed under the Apache License, Version 2.0 (the "License"). You
 # may not use this file except in compliance with the License. A copy of
@@ -27,10 +28,8 @@ class Resource(object):
         date = None
         name = None
 
-    def __init__(self, endpoint, data):
-        self._endpoint = endpoint
-        self._region = endpoint.region
-        self._account = endpoint.account
+    def __init__(self, client, data):
+        self._client = client
         if data is None:
             data = {}
         self.data = data
@@ -48,8 +47,10 @@ class Resource(object):
     @property
     def arn(self):
         return 'arn:aws:%s:%s:%s:%s/%s' % (
-            self._endpoint.service.endpoint_prefix,
-            self._region, self._account, self.resourcetype, self.id)
+            self._client.service_name,
+            self._client.region_name,
+            self._client.account_id,
+            self.resourcetype, self.id)
 
     @property
     def resourcetype(self):

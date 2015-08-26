@@ -1,0 +1,94 @@
+[
+    {
+        "IpPermissionsEgress": [
+            {
+                "IpProtocol": "-1", 
+                "IpRanges": [
+                    {
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ], 
+                "UserIdGroupPairs": [], 
+                "PrefixListIds": []
+            }
+        ], 
+        "Description": "default VPC security group", 
+        "IpPermissions": [
+            {
+                "IpProtocol": "-1", 
+                "IpRanges": [], 
+                "UserIdGroupPairs": [
+                    {
+                        "UserId": "123456789012", 
+                        "GroupId": "sg-57a6b432"
+                    }
+                ], 
+                "PrefixListIds": []
+            }
+        ], 
+        "GroupName": "default", 
+        "VpcId": "vpc-2f0c8f4a", 
+        "OwnerId": "123456789012", 
+        "GroupId": "sg-57a6b432"
+    }, 
+    {
+        "IpPermissionsEgress": [
+            {
+                "IpProtocol": "-1", 
+                "IpRanges": [
+                    {
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ], 
+                "UserIdGroupPairs": [], 
+                "PrefixListIds": []
+            }
+        ], 
+        "Description": "Access to Production EC2 instances", 
+        "Tags": [
+            {
+                "Value": "ec2SecurityGroup", 
+                "Key": "aws:cloudformation:logical-id"
+            }, 
+            {
+                "Value": "arn:aws:cloudformation:us-west-2:123456789012:stack/Production-Resources/f945c360-f86d-11e4-9b3b-50d5020578e0", 
+                "Key": "aws:cloudformation:stack-id"
+            }, 
+            {
+                "Value": "Production", 
+                "Key": "Environment"
+            }
+        ], 
+        "IpPermissions": [
+            {
+                "PrefixListIds": [], 
+                "FromPort": 80, 
+                "IpRanges": [], 
+                "ToPort": 80, 
+                "IpProtocol": "tcp", 
+                "UserIdGroupPairs": [
+                    {
+                        "UserId": "123456789012", 
+                        "GroupId": "sg-f1534e94"
+                    }
+                ]
+            }, 
+            {
+                "PrefixListIds": [], 
+                "FromPort": 22, 
+                "IpRanges": [
+                    {
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ], 
+                "ToPort": 22, 
+                "IpProtocol": "tcp", 
+                "UserIdGroupPairs": []
+            }
+        ], 
+        "GroupName": "Production-Resources-ec2SecurityGroup-MIH2Z1M2SV1U", 
+        "VpcId": "vpc-2f0c8f4a", 
+        "OwnerId": "123456789012", 
+        "GroupId": "sg-c0534ea5"
+    }
+]

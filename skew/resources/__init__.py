@@ -1,4 +1,5 @@
 # Copyright (c) 2014 Scopely, Inc.
+# Copyright (c) 2015 Mitch Garnaat
 #
 # Licensed under the Apache License, Version 2.0 (the "License"). You
 # may not use this file except in compliance with the License. A copy of
@@ -30,6 +31,7 @@ ResourceTypes = {
     'aws.elb.loadbalancer': 'aws.elb.LoadBalancer',
     'aws.iam.group': 'aws.iam.Group',
     'aws.iam.user': 'aws.iam.User',
+    'aws.iam.server-certificate': 'aws.iam.ServerCertificate',
     'aws.kinesis.stream': 'aws.kinesis.Stream',
     'aws.sqs.queue': 'aws.sqs.Queue',
     'aws.rds.db': 'aws.rds.DBInstance',

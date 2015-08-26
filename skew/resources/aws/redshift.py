@@ -1,4 +1,5 @@
 # Copyright (c) 2014 Scopely, Inc.
+# Copyright (c) 2015 Mitch Garnaat
 #
 # Licensed under the Apache License, Version 2.0 (the "License"). You
 # may not use this file except in compliance with the License. A copy of
@@ -19,7 +20,7 @@ class Cluster(AWSResource):
     class Meta(object):
         service = 'redshift'
         type = 'cluster'
-        enum_spec = ('DescribeClusters', 'Clusters', None)
+        enum_spec = ('describe_clusters', 'Clusters', None)
         detail_spec = None
         id = 'ClusterIdentifier'
         filter_name = 'cluster_identifier'

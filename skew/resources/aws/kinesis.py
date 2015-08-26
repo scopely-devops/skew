@@ -1,4 +1,5 @@
 # Copyright (c) 2014 Scopely, Inc.
+# Copyright (c) 2015 Mitch Garnaat
 #
 # Licensed under the Apache License, Version 2.0 (the "License"). You
 # may not use this file except in compliance with the License. A copy of
@@ -19,7 +20,7 @@ class Stream(AWSResource):
     class Meta(object):
         service = 'kinesis'
         type = 'stream'
-        enum_spec = ('ListStreams', 'StreamNames', None)
+        enum_spec = ('list_streams', 'StreamNames', None)
         detail_spec = None
         id = 'StreamName'
         filter_name = None
