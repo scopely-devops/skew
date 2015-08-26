@@ -10,11 +10,16 @@ requires = [
     'python-dateutil>=2.1,<3.0.0']
 
 
+here = os.path.dirname(os.path.realpath(__file__))
+with open(os.path.join(here, 'README.rst')) as readme:
+    long_description = readme.read()
+
+
 setup(
     name='skew',
     version=open(os.path.join('skew', '_version')).read().strip(),
     description='A flat address space for all your AWS resources.',
-    long_description=open('README.md').read(),
+    long_description=long_description,
     author='Mitch Garnaat',
     author_email='mitch@garnaat.com',
     url='https://github.com/scopely-devops/skew',
