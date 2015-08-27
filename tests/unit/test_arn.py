@@ -42,39 +42,46 @@ class TestARN(unittest.TestCase):
     def test_ec2_instance(self):
         arn = scan('arn:aws:ec2:us-west-2:123456789012:instance/*')
         # Fetch all Instance resources
-        instances = list(arn)
-        self.assertEqual(len(instances), 2)
+        l = list(arn)
+        self.assertEqual(len(l), 2)
 
     def test_ec2_keypairs(self):
         arn = scan('arn:aws:ec2:*:234567890123:key-pair/*')
-        keys = list(arn)
-        self.assertEqual(len(keys), 2)
+        l = list(arn)
+        self.assertEqual(len(l), 2)
 
     def test_ec2_securitygroup(self):
         arn = scan('arn:aws:ec2:*:123456789012:security-group/*')
-        groups = list(arn)
-        self.assertEqual(len(groups), 10)
+        l = list(arn)
+        self.assertEqual(len(l), 10)
 
     def test_elb_loadbalancer(self):
         arn = scan('arn:aws:elb:us-west-2:123456789012:loadbalancer/*')
-        elbs = list(arn)
-        self.assertEqual(len(elbs), 1)
+        l = list(arn)
+        self.assertEqual(len(l), 1)
         arn = scan('arn:aws:elb:us-west-2:234567890123:loadbalancer/*')
-        elbs = list(arn)
-        self.assertEqual(len(elbs), 5)
+        l = list(arn)
+        self.assertEqual(len(l), 5)
 
     def test_vpcs(self):
         arn = scan('arn:aws:ec2:us-west-2:123456789012:vpc/*')
-        elbs = list(arn)
-        self.assertEqual(len(elbs), 2)
+        l = list(arn)
+        self.assertEqual(len(l), 2)
 
     def test_routetable(self):
         arn = scan('arn:aws:ec2:us-west-2:123456789012:route-table/*')
-        elbs = list(arn)
-        self.assertEqual(len(elbs), 3)
+        l = list(arn)
+        self.assertEqual(len(l), 3)
 
     def test_network_acls(self):
         arn = scan('arn:aws:ec2:us-west-2:123456789012:network-acl/*')
-        elbs = list(arn)
-        self.assertEqual(len(elbs), 4)
-        
+        l = list(arn)
+        self.assertEqual(len(l), 4)
+
+    def test_users(self):
+        arn = scan('arn:aws:iam:us-east-1:234567890123:user/*')
+        l = list(arn)
+        self.assertEqual(len(l), 3)
+        arn = scan('arn:aws:iam:us-east-1:234567890123:user/foo')
+        l = list(arn)
+        self.assertEqual(len(l), 1)
