@@ -7,7 +7,8 @@ import os
 requires = [
     'six>=1.8.0,<2.0.0',
     'botocore==1.1.8',
-    'python-dateutil>=2.1,<3.0.0']
+    'python-dateutil>=2.1,<3.0.0',
+    'PyYAML==3.11']
 
 
 here = os.path.dirname(os.path.realpath(__file__))
