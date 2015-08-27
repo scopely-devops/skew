@@ -60,7 +60,19 @@ class AWSClient(object):
     def profile(self):
         return self._profile
 
-    def _record(self, op_name, data):
+    def _record(self, op_name, kwargs, data):
+        """
+        This is a little hack to enable easier unit testing of the code.
+        Since botocore has its own set of tests, I'm not interested in
+        trying to test it again here.  So, this recording capability allows
+        us to save the data coming back from botocore as JSON files which
+        can then be used by the mocked awsclient in the unit test directory.
+        To enable this, add something like this to your skew config file:
+
+              record_path: ~/projects/skew/skew/tests/unit/data
+
+        and the JSON data files will get stored in this path.
+        """
         if self._record_path:
             path = os.path.expanduser(self._record_path)
             path = os.path.expandvars(path)
@@ -73,7 +85,13 @@ class AWSClient(object):
             path = os.path.join(path, self.account_id)
             if not os.path.isdir(path):
                 os.mkdir(path)
-            path = os.path.join(path, '{}.json'.format(op_name))
+            filename = op_name
+            if kwargs:
+                for k, v in kwargs.items():
+                    if k != 'query':
+                        filename += '_{}_{}'.format(k, v)
+            filename += '.json'
+            path = os.path.join(path, filename)
             with open(path, 'wb') as fp:
                 json.dump(data, fp, indent=4, default=json_encoder,
                           ensure_ascii=False)
@@ -123,7 +141,7 @@ class AWSClient(object):
             data = op(**kwargs)
         if query:
             data = query.search(data)
-        self._record(op_name, data)
+        self._record(op_name, kwargs, data)
         return data
 
 

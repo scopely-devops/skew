@@ -54,13 +54,13 @@ across services, regions, and accounts and to quickly and easily return the
 data associated with those resources. For example, if you wanted to return
 the data associated with the example ARN above:
 
-``python
+```python
 from skew import scan
 
 arn = scan('arn:aws:ec2:us-west-2:123456789012:instance/i-12345678')
 for resource in arn:
     print(resource.data)
-``
+```
 
 The call to `scan` returns an ARN object which implements the
 [iterator pattern](https://docs.python.org/2/library/stdtypes.html#iterator-types)
@@ -72,9 +72,9 @@ Any of the elements of the ARN can be replaced with a regular expression.
 The simplest regular expression is `*` which means all available choices.
 So, for example:
 
-``python
+```python
 arn = scan('arn:aws:ec2:us-east-1:*:instance/*')
-``
+```
 
 would return an iterator for all EC2 instances in the `us-east-1` region
 found in all accounts defined in the config file.
@@ -82,9 +82,9 @@ found in all accounts defined in the config file.
 To find all DynamoDB tables in all US regions for the account ID 234567890123
 you would use:
 
-``python
+```python
 arn = scan('arn:aws:dynamodb:us-.*:234567890123:table/*')
-``
+```
 
 CloudWatch Metrics
 ------------------
@@ -97,7 +97,7 @@ For example, assume that you had did a `scan` on the original ARN above
 and had the resource associated with that instance available as the variable
 `instance`.  You could do the following:
 
-``python
+```python
 >>> instance.metric_names
 ['CPUUtilization',
  'NetworkOut',
@@ -110,12 +110,12 @@ and had the resource associated with that instance available as the variable
  'StatusCheckFailed_Instance',
  'DiskWriteBytes']
 >>>
-``
+```
 
 The `metric_names` attribute returns the list of available CloudWatch metrics
 for this resource.  The retrieve the metric data for one of these:
 
-``python
+```python
 >>> instance.get_metric_data('CPUUtilization')
 [{'Average': 0.134, 'Timestamp': '2014-09-29T14:04:00Z', 'Unit': 'Percent'},
  {'Average': 0.066, 'Timestamp': '2014-09-29T13:54:00Z', 'Unit': 'Percent'},
@@ -129,11 +129,11 @@ for this resource.  The retrieve the metric data for one of these:
  {'Average': 0.134, 'Timestamp': '2014-09-29T13:49:00Z', 'Unit': 'Percent'},
  {'Average': 0.134, 'Timestamp': '2014-09-29T13:39:00Z', 'Unit': 'Percent'}]
 >>>
-``
+```
 
 You can also customize the data returned rather than using the default settings:
 
-``python
+```python
 >>> instance.get_metric_data('CPUUtilization', hours=8, statistics=['Average', 'Minimum', 'Maximum'])
 [{'Average': 0.132,
   'Maximum': 0.33,
@@ -157,7 +157,7 @@ You can also customize the data returned rather than using the default settings:
   'Timestamp': '2014-09-29T08:04:00Z',
   'Unit': 'Percent'}]
 >>>
-``
+```
 
 Filtering Data
 --------------
@@ -176,7 +176,9 @@ To specify a query to be applied to results of a scan, simply append
 the query to the end of the ARN, separated by a `|` (pipe) character.
 For example:
 
-    arn:aws:ec2:us-west-2:123456789012:instance/i-12345678|InstanceType
+```
+arn:aws:ec2:us-west-2:123456789012:instance/i-12345678|InstanceType
+```
 
 Would retrieve the data for this particular EC2 instance and would then
 filter the returned data through the (very) simple jmespath query to which

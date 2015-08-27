@@ -19,9 +19,9 @@ class Bucket(AWSResource):
     class Meta(object):
         service = 's3'
         type = 'bucket'
-        enum_spec = ('ListBuckets', 'Buckets[]', None)
+        enum_spec = ('list_buckets', 'Buckets[]', None)
         detail_spec = (
-            'ListObjects', 'Bucket', 'Contents[]')
+            'list_objects', 'Bucket', 'Contents[]')
         id = 'Name'
         filter_name = None
         name = 'BucketName'

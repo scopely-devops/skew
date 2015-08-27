@@ -44,6 +44,14 @@ class TestARN(unittest.TestCase):
         # Fetch all Instance resources
         l = list(arn)
         self.assertEqual(len(l), 2)
+        # Fetch non-existant resource
+        arn = scan('arn:aws:ec2:us-west-2:123456789012:instance/i-decafbad')
+        l = list(arn)
+        self.assertEqual(len(l), 0)
+        # Fetch a single resource
+        arn = scan('arn:aws:ec2:us-west-2:123456789012:instance/i-30f39af5')
+        l = list(arn)
+        self.assertEqual(len(l), 1)
 
     def test_ec2_keypairs(self):
         arn = scan('arn:aws:ec2:*:234567890123:key-pair/*')
@@ -63,25 +71,30 @@ class TestARN(unittest.TestCase):
         l = list(arn)
         self.assertEqual(len(l), 5)
 
-    def test_vpcs(self):
+    def test_ec2_vpcs(self):
         arn = scan('arn:aws:ec2:us-west-2:123456789012:vpc/*')
         l = list(arn)
         self.assertEqual(len(l), 2)
 
-    def test_routetable(self):
+    def test_ec2_routetable(self):
         arn = scan('arn:aws:ec2:us-west-2:123456789012:route-table/*')
         l = list(arn)
         self.assertEqual(len(l), 3)
 
-    def test_network_acls(self):
+    def test_ec2_network_acls(self):
         arn = scan('arn:aws:ec2:us-west-2:123456789012:network-acl/*')
         l = list(arn)
         self.assertEqual(len(l), 4)
 
-    def test_users(self):
+    def test_iam_users(self):
         arn = scan('arn:aws:iam:us-east-1:234567890123:user/*')
         l = list(arn)
         self.assertEqual(len(l), 3)
         arn = scan('arn:aws:iam:us-east-1:234567890123:user/foo')
         l = list(arn)
         self.assertEqual(len(l), 1)
+
+    def test_s3_buckets(self):
+        arn = scan('arn:aws:s3:us-east-1:234567890123:bucket/*')
+        l = list(arn)
+        self.assertEqual(len(l), 4)
