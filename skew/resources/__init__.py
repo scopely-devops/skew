@@ -32,6 +32,7 @@ ResourceTypes = {
     'aws.ec2.snapshot': 'aws.ec2.Snapshot',
     'aws.ec2.volume': 'aws.ec2.Volume',
     'aws.ec2.vpc': 'aws.ec2.Vpc',
+    'aws.ec2.vpc-peering-connection': 'aws.ec2.VpcPeeringConnection',
     'aws.ec2.subnet': 'aws.ec2.Subnet',
     'aws.elb.loadbalancer': 'aws.elb.LoadBalancer',
     'aws.iam.group': 'aws.iam.Group',

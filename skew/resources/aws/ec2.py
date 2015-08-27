@@ -234,3 +234,19 @@ class NetworkAcl(AWSResource):
         name = 'NetworkAclId'
         date = None
         dimension = None
+
+
+class VpcPeeringConnection(AWSResource):
+
+    class Meta(object):
+        service = 'ec2'
+        type = 'vpc-peering-connection'
+        enum_spec = ('describe_vpc_peering_connection',
+                     'VpcPeeringConnection', None)
+        detail_spec = None
+        id = 'VpcPeeringConnectionId'
+        filter_name = 'VpcPeeringConnectionIds'
+        filter_type = 'list'
+        name = 'VpcPeeringConnectionId'
+        date = None
+        dimension = None
