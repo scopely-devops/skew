@@ -62,3 +62,19 @@ class TestARN(unittest.TestCase):
         arn = scan('arn:aws:elb:us-west-2:234567890123:loadbalancer/*')
         elbs = list(arn)
         self.assertEqual(len(elbs), 5)
+
+    def test_vpcs(self):
+        arn = scan('arn:aws:ec2:us-west-2:123456789012:vpc/*')
+        elbs = list(arn)
+        self.assertEqual(len(elbs), 2)
+
+    def test_routetable(self):
+        arn = scan('arn:aws:ec2:us-west-2:123456789012:route-table/*')
+        elbs = list(arn)
+        self.assertEqual(len(elbs), 3)
+
+    def test_network_acls(self):
+        arn = scan('arn:aws:ec2:us-west-2:123456789012:network-acl/*')
+        elbs = list(arn)
+        self.assertEqual(len(elbs), 4)
+        

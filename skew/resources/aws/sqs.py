@@ -23,7 +23,7 @@ class Queue(AWSResource):
         enum_spec = ('list_queues', 'QueueUrls', None)
         detail_spec = ('get_queue_attributes', 'QueueUrl', 'QueueUrl')
         id = 'QueueUrl'
-        filter_name = 'queue_name_prefix'
+        filter_name = 'QueueNamePrefix'
         filter_type = 'scalar'
         name = 'QueueUrl'
         date = None

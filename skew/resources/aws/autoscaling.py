@@ -28,7 +28,7 @@ class AutoScalingGroup(AWSResource):
         enum_spec = ('describe_auto_scaling_groups', 'AutoScalingGroups', None)
         detail_spec = None
         id = 'AutoScalingGroupName'
-        filter_name = 'auto_scaling_group_names'
+        filter_name = 'AutoScalingGroupNames'
         filter_type = 'list'
 
     def __init__(self, endpoint, data, query=None):
@@ -52,7 +52,7 @@ class LaunchConfiguration(AWSResource):
             'describe_launch_configurations', 'LaunchConfigurations', None)
         detail_spec = None
         id = 'LaunchConfigurationName'
-        filter_name = 'launch_configuration_names'
+        filter_name = 'LaunchConfigurationNames'
         filter_type = 'list'
 
     def __init__(self, endpoint, data, query=None):

@@ -24,7 +24,7 @@ class LoadBalancer(AWSResource):
                      'LoadBalancerDescriptions', None)
         detail_spec = None
         id = 'LoadBalancerName'
-        filter_name = 'load_balancer_names'
+        filter_name = 'LoadBalancerNames'
         filter_type = 'list'
         name = 'DNSName'
         date = 'CreatedTime'

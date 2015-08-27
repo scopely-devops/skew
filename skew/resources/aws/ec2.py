@@ -23,7 +23,7 @@ class Instance(AWSResource):
         enum_spec = ('describe_instances', 'Reservations[].Instances[]', None)
         detail_spec = None
         id = 'InstanceId'
-        filter_name = 'instance_ids'
+        filter_name = 'InstanceIds'
         filter_type = 'list'
         name = 'PublicDnsName'
         date = 'LaunchTime'
@@ -42,7 +42,7 @@ class SecurityGroup(AWSResource):
         enum_spec = ('describe_security_groups', 'SecurityGroups', None)
         detail_spec = None
         id = 'GroupId'
-        filter_name = 'group_names'
+        filter_name = 'GroupNames'
         filter_type = 'list'
         name = 'GroupName'
         date = None
@@ -57,7 +57,7 @@ class KeyPair(AWSResource):
         enum_spec = ('describe_key_pairs', 'KeyPairs', None)
         detail_spec = None
         id = 'KeyName'
-        filter_name = 'key_names'
+        filter_name = 'KeyNames'
         name = 'KeyName'
         date = None
         dimension = None
@@ -71,7 +71,7 @@ class Address(AWSResource):
         enum_spec = ('describe_addresses', 'Addresses', None)
         detail_spec = None
         id = 'PublicIp'
-        filter_name = 'public-ips'
+        filter_name = 'PublicIps'
         filter_type = 'list'
         name = 'PublicIp'
         date = None
@@ -86,7 +86,7 @@ class Volume(AWSResource):
         enum_spec = ('describe_volumes', 'Volumes', None)
         detail_spec = None
         id = 'VolumeId'
-        filter_name = 'volume_ids'
+        filter_name = 'VolumeIds'
         filter_type = 'list'
         name = 'VolumeId'
         date = 'createTime'
@@ -109,7 +109,7 @@ class Snapshot(AWSResource):
             'describe_snapshots', 'Snapshots', {'OwnerIds': ['self']})
         detail_spec = None
         id = 'SnapshotId'
-        filter_name = 'snapshot_ids'
+        filter_name = 'SnapshotIds'
         filter_type = 'list'
         name = 'SnapshotId'
         date = 'StartTime'
@@ -132,7 +132,7 @@ class Image(AWSResource):
             'describe_images', 'Images', {'Owners': ['self']})
         detail_spec = None
         id = 'ImageId'
-        filter_name = 'image_ids'
+        filter_name = 'ImageIds'
         filter_type = 'list'
         name = 'ImageId'
         date = 'StartTime'
@@ -144,3 +144,93 @@ class Image(AWSResource):
             return self.data['VolumeId']
         else:
             return None
+
+
+class Vpc(AWSResource):
+
+    class Meta(object):
+        service = 'ec2'
+        type = 'vpc'
+        enum_spec = ('describe_vpcs', 'Vpcs', None)
+        detail_spec = None
+        id = 'VpcId'
+        filter_name = 'VpcIds'
+        filter_type = 'list'
+        name = 'VpcId'
+        date = None
+        dimension = None
+
+
+class Subnet(AWSResource):
+
+    class Meta(object):
+        service = 'ec2'
+        type = 'subnet'
+        enum_spec = ('describe_subnets', 'Subnets', None)
+        detail_spec = None
+        id = 'SubnetId'
+        filter_name = 'SubnetIds'
+        filter_type = 'list'
+        name = 'SubnetId'
+        date = None
+        dimension = None
+
+
+class CustomerGateway(AWSResource):
+
+    class Meta(object):
+        service = 'ec2'
+        type = 'customer-gateway'
+        enum_spec = ('describe_customer_gateways', 'CustomerGateway', None)
+        detail_spec = None
+        id = 'CustomerGatewayId'
+        filter_name = 'CustomerGatewayIds'
+        filter_type = 'list'
+        name = 'CustomerGatewayId'
+        date = None
+        dimension = None
+
+
+class InternetGateway(AWSResource):
+
+    class Meta(object):
+        service = 'ec2'
+        type = 'internet-gateway'
+        enum_spec = ('describe_internet_gateways', 'InternetGateway', None)
+        detail_spec = None
+        id = 'InternetGatewayId'
+        filter_name = 'InternetGatewayIds'
+        filter_type = 'list'
+        name = 'InternetGatewayId'
+        date = None
+        dimension = None
+
+
+class RouteTable(AWSResource):
+
+    class Meta(object):
+        service = 'ec2'
+        type = 'route-table'
+        enum_spec = ('describe_route_tables', 'RouteTables', None)
+        detail_spec = None
+        id = 'RouteTableId'
+        filter_name = 'RouteTableIds'
+        filter_type = 'list'
+        name = 'RouteTableId'
+        date = None
+        dimension = None
+
+
+class NetworkAcl(AWSResource):
+
+    class Meta(object):
+        service = 'ec2'
+        type = 'network-acl'
+        enum_spec = ('describe_network_acls', 'NetworkAcls', None)
+        detail_spec = None
+        id = 'NetworkAclId'
+        filter_name = 'NetworkAclIds'
+        filter_type = 'list'
+        name = 'NetworkAclId'
+        date = None
+        dimension = None

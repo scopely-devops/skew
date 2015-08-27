@@ -25,7 +25,7 @@ class DBInstance(AWSResource):
                      'resource_name', 'arn')
         detail_spec = None
         id = 'DBInstanceIdentifier'
-        filter_name = 'db_instance_identifier'
+        filter_name = 'DbInstanceIdentifier'
         filter_type = 'scalar'
         name = 'Endpoint.Address'
         date = 'InstanceCreateTime'
@@ -40,7 +40,7 @@ class DBSecurityGroup(AWSResource):
         enum_spec = ('describe_db_security_groups', 'DBSecurityGroups', None)
         detail_spec = None
         id = 'DBSecurityGroupName'
-        filter_name = 'db_security_group_name'
+        filter_name = 'DbSecurityGroupName'
         filter_type = 'scalar'
         name = 'DBSecurityGroupDescription'
         date = None

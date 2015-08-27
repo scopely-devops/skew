@@ -23,7 +23,7 @@ class Cluster(AWSResource):
         enum_spec = ('describe_clusters', 'Clusters', None)
         detail_spec = None
         id = 'ClusterIdentifier'
-        filter_name = 'cluster_identifier'
+        filter_name = 'ClusterIdentifier'
         filter_type = 'scalar'
         name = 'ClusterIdentifier'
         date = 'ClusterCreateTime'

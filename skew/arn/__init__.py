@@ -139,18 +139,20 @@ class Resource(ARNComponent):
             enum_op, path, extra_args = resource_cls.Meta.enum_spec
             if extra_args:
                 kwargs.update(extra_args)
+            LOG.debug('enum_op=%s' % enum_op)
             data = client.call(enum_op, query=path, **kwargs)
             LOG.debug(data)
-            for d in data:
-                if do_client_side_filtering:
-                    # If the API does not support filtering, the resource
-                    # class should provide a filter method that will
-                    # return True if the returned data matches the
-                    # resource ID we are looking for.
-                    if not resource_cls.filter(resource_id, d):
-                        continue
-                resource = resource_cls(client, d, self._arn.query)
-                yield resource
+            if data:
+                for d in data:
+                    if do_client_side_filtering:
+                        # If the API does not support filtering, the resource
+                        # class should provide a filter method that will
+                        # return True if the returned data matches the
+                        # resource ID we are looking for.
+                        if not resource_cls.filter(resource_id, d):
+                            continue
+                    resource = resource_cls(client, d, self._arn.query)
+                    yield resource
 
 
 class Account(ARNComponent):

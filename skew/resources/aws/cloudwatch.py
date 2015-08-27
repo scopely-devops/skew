@@ -22,7 +22,7 @@ class Alarm(AWSResource):
         type = 'alarm'
         enum_spec = ('describe_alarms', 'MetricAlarms', None)
         id = 'AlarmArn'
-        filter_name = 'alarm_names'
+        filter_name = 'AlarmNames'
         filter_type = 'list'
         detail_spec = None
         name = 'AlarmName'
