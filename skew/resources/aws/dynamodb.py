@@ -1,4 +1,5 @@
 # Copyright (c) 2014 Scopely, Inc.
+# Copyright (c) 2015 Mitch Garnaat
 #
 # Licensed under the Apache License, Version 2.0 (the "License"). You
 # may not use this file except in compliance with the License. A copy of
@@ -26,8 +27,8 @@ class Table(AWSResource):
     class Meta(object):
         service = 'dynamodb'
         type = 'table'
-        enum_spec = ('ListTables', 'TableNames', None)
-        detail_spec = ('DescribeTable', 'table_name', 'Table')
+        enum_spec = ('list_tables', 'TableNames', None)
+        detail_spec = ('describe_table', 'TableName', 'Table')
         id = 'Table'
         filter_name = None
         name = 'TableName'

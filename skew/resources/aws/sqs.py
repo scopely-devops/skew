@@ -1,4 +1,5 @@
 # Copyright (c) 2014 Scopely, Inc.
+# Copyright (c) 2015 Mitch Garnaat
 #
 # Licensed under the Apache License, Version 2.0 (the "License"). You
 # may not use this file except in compliance with the License. A copy of
@@ -19,10 +20,10 @@ class Queue(AWSResource):
     class Meta(object):
         service = 'sqs'
         type = 'queue'
-        enum_spec = ('ListQueues', 'QueueUrls', None)
-        detail_spec = ('GetQueueAttributes', 'queue_url', 'QueueUrl')
+        enum_spec = ('list_queues', 'QueueUrls', None)
+        detail_spec = ('get_queue_attributes', 'QueueUrl', 'QueueUrl')
         id = 'QueueUrl'
-        filter_name = 'queue_name_prefix'
+        filter_name = 'QueueNamePrefix'
         filter_type = 'scalar'
         name = 'QueueUrl'
         date = None

@@ -1,4 +1,5 @@
 # Copyright (c) 2014 Scopely, Inc.
+# Copyright (c) 2015 Mitch Garnaat
 #
 # Licensed under the Apache License, Version 2.0 (the "License"). You
 # may not use this file except in compliance with the License. A copy of
@@ -19,11 +20,12 @@ class DBInstance(AWSResource):
     class Meta(object):
         service = 'rds'
         type = 'dbinstance'
-        enum_spec = ('DescribeDBInstances', 'DBInstances', None)
-        tags_spec = ('ListTagsForResource', 'TagList', 'resource_name', 'arn')
+        enum_spec = ('describe_db_instances', 'DBInstances', None)
+        tags_spec = ('list_tags_for_resource', 'TagList',
+                     'resource_name', 'arn')
         detail_spec = None
         id = 'DBInstanceIdentifier'
-        filter_name = 'db_instance_identifier'
+        filter_name = 'DbInstanceIdentifier'
         filter_type = 'scalar'
         name = 'Endpoint.Address'
         date = 'InstanceCreateTime'
@@ -35,10 +37,10 @@ class DBSecurityGroup(AWSResource):
     class Meta(object):
         service = 'rds'
         type = 'dbsecuritygroup'
-        enum_spec = ('DescribeDBSecurityGroups', 'DBSecurityGroups', None)
+        enum_spec = ('describe_db_security_groups', 'DBSecurityGroups', None)
         detail_spec = None
         id = 'DBSecurityGroupName'
-        filter_name = 'db_security_group_name'
+        filter_name = 'DbSecurityGroupName'
         filter_type = 'scalar'
         name = 'DBSecurityGroupDescription'
         date = None

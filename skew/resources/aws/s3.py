@@ -14,14 +14,14 @@ import jmespath
 
 from skew.resources.aws import AWSResource
 
+
 class Bucket(AWSResource):
 
     class Meta(object):
         service = 's3'
         type = 'bucket'
-        enum_spec = ('ListBuckets', 'Buckets[]', None)
-        detail_spec = (
-            'ListObjects', 'Bucket', 'Contents[]')
+        enum_spec = ('list_buckets', 'Buckets[]', None)
+        detail_spec = ('list_objects', 'Bucket', 'Contents[]')
         id = 'Name'
         filter_name = None
         name = 'BucketName'
@@ -37,7 +37,7 @@ class Bucket(AWSResource):
         detail_op, param_name, detail_path = self.Meta.detail_spec
         params = {param_name: self.id}
         if not self._keys:
-            data = self._endpoint.call(detail_op, **params)
+            data = self._client.call(detail_op, **params)
             self._keys = jmespath.search(detail_path, data)
         for key in self._keys:
             yield key

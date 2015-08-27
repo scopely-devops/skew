@@ -1,4 +1,5 @@
 # Copyright (c) 2014 Scopely, Inc.
+# Copyright (c) 2015 Mitch Garnaat
 #
 # Licensed under the Apache License, Version 2.0 (the "License"). You
 # may not use this file except in compliance with the License. A copy of
@@ -19,9 +20,9 @@ class Alarm(AWSResource):
     class Meta(object):
         service = 'cloudwatch'
         type = 'alarm'
-        enum_spec = ('DescribeAlarms', 'MetricAlarms', None)
+        enum_spec = ('describe_alarms', 'MetricAlarms', None)
         id = 'AlarmArn'
-        filter_name = 'alarm_names'
+        filter_name = 'AlarmNames'
         filter_type = 'list'
         detail_spec = None
         name = 'AlarmName'

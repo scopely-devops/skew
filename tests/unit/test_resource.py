@@ -13,12 +13,11 @@
 import unittest
 import os
 
-import botocore
 import mock
 
 import skew.resources
+import skew.awsclient
 from skew.resources.resource import Resource
-from skew.arn.endpoint import Endpoint
 
 
 class FooResource(Resource):
@@ -35,18 +34,20 @@ class TestResource(unittest.TestCase):
         self.environ = {}
         self.environ_patch = mock.patch('os.environ', self.environ)
         self.environ_patch.start()
+        credential_path = os.path.join(os.path.dirname(__file__), 'cfg',
+                                       'aws_credentials')
+        self.environ['AWS_CONFIG_FILE'] = credential_path
         config_path = os.path.join(os.path.dirname(__file__), 'cfg',
-                                   'aws_config')
-        self.environ['AWS_CONFIG_FILE'] = config_path
+                                   'skew.yml')
+        self.environ['SKEW_CONFIG'] = config_path
 
     def tearDown(self):
         pass
 
     def test_resource(self):
-        session = botocore.session.get_session()
-        service = session.get_service('ec2')
-        endpoint = Endpoint(service, 'us-east-1', '123456789012')
-        resource = FooResource(endpoint, data={'bar': 'bar'})
+        client = skew.awsclient.get_awsclient(
+            'ec2', 'us-east-1', '123456789012')
+        resource = FooResource(client, data={'bar': 'bar'})
         self.assertEqual(resource.id, 'bar')
         self.assertEqual(resource.__repr__(),
                          'arn:aws:ec2:us-east-1:123456789012:foo/bar')

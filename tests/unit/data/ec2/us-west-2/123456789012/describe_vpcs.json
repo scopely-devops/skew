@@ -1,0 +1,40 @@
+[
+    {
+        "VpcId": "vpc-2f0c8f4a", 
+        "InstanceTenancy": "default", 
+        "Tags": [
+            {
+                "Value": "theVpc", 
+                "Key": "aws:cloudformation:logical-id"
+            }, 
+            {
+                "Value": "Production-VPC", 
+                "Key": "aws:cloudformation:stack-name"
+            }, 
+            {
+                "Value": "Production", 
+                "Key": "Environment"
+            }, 
+            {
+                "Value": "Production VPC", 
+                "Key": "Name"
+            }, 
+            {
+                "Value": "arn:aws:cloudformation:us-west-2:123456789012:stack/Production-VPC/d1923df0-f84d-11e4-b16d-5001230106a6", 
+                "Key": "aws:cloudformation:stack-id"
+            }
+        ], 
+        "State": "available", 
+        "DhcpOptionsId": "dopt-46d53d23", 
+        "CidrBlock": "10.0.0.0/16", 
+        "IsDefault": false
+    }, 
+    {
+        "VpcId": "vpc-fc098f99", 
+        "InstanceTenancy": "default", 
+        "State": "available", 
+        "DhcpOptionsId": "dopt-f3cc2596", 
+        "CidrBlock": "172.31.0.0/16", 
+        "IsDefault": true
+    }
+]

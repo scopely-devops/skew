@@ -1,0 +1,31 @@
+{
+    "Table": {
+        "TableArn": "arn:aws:dynamodb:us-east-1:860421987956:table/foo-dev-build-number", 
+        "AttributeDefinitions": [
+            {
+                "AttributeName": "pipeline_id", 
+                "AttributeType": "N"
+            }
+        ], 
+        "ProvisionedThroughput": {
+            "NumberOfDecreasesToday": 0, 
+            "WriteCapacityUnits": 1, 
+            "ReadCapacityUnits": 1
+        }, 
+        "TableSizeBytes": 0, 
+        "TableName": "foo-dev-build-number", 
+        "TableStatus": "ACTIVE", 
+        "KeySchema": [
+            {
+                "KeyType": "HASH", 
+                "AttributeName": "pipeline_id"
+            }
+        ], 
+        "ItemCount": 0, 
+        "CreationDateTime": "2015-06-11T15:01:21.011000-04:00"
+    }, 
+    "ResponseMetadata": {
+        "HTTPStatusCode": 200, 
+        "RequestId": "A6GPO5S1SIKJ7S04OU2IIIH9HBVV4KQNSO5AEMVJF66Q9ASUAAJG"
+    }
+}
