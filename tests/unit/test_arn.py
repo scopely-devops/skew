@@ -104,3 +104,6 @@ class TestARN(unittest.TestCase):
         arn = scan('arn:aws:s3:us-east-1:234567890123:bucket/*')
         l = list(arn)
         self.assertEqual(len(l), 4)
+        bucket_resource = l[1]
+        keys = list(bucket_resource)
+        self.assertEqual(len(keys), 4)
