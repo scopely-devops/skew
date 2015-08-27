@@ -52,6 +52,12 @@ class TestARN(unittest.TestCase):
         arn = scan('arn:aws:ec2:us-west-2:123456789012:instance/i-30f39af5')
         l = list(arn)
         self.assertEqual(len(l), 1)
+        # check filters
+        arn = scan('arn:aws:ec2:us-west-2:123456789012:instance/i-30f39af5|InstanceType')
+        l = list(arn)
+        self.assertEqual(len(l), 1)
+        r = l[0]
+        self.assertEqual(r.filtered_data, 't2.small')
 
     def test_ec2_keypairs(self):
         arn = scan('arn:aws:ec2:*:234567890123:key-pair/*')
