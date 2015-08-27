@@ -34,23 +34,26 @@ An example ARN pattern would be:
   12-digit
 | unique identifier for a specific AWS account as described
 | `here <http://docs.aws.amazon.com/general/latest/gr/acct-identifiers.html>`__.
-| To allow **skew** to find your account number, you need to add it to
-  your
-| botocore/AWSCLI config file. For example:
+To allow **skew** to find your account number, you need to create a **skew**
+YAML config file.  By default, **skew** will look for your config file in
+``~/.skew`` but you can use the ``SKEW_CONFIG`` environment variable to tell *skew*
+where to find your config file if you choose to put it somewhere else.  The
+basic format of the *skew* config file is:
 
-.. code:: ini
+.. code:: yaml
 
-    [profile prod]
-    aws_access_key_id = <my access key>
-    aws_secret_access_key = <my secret key>
-    region = us-west-2
-    account_id = 123456789012
+    ---
+      accounts:
+        "123456789012":
+          profile: dev
+        "234567890123":
+          profile: prod
 
-| Skew will look through all of the profiles defined in your config file
-  and
-| keep track of all of the ones that have an ``account_id`` associated
-  with
-| them.
+Within the ``accounts`` section, you create keys named after your 12-digit
+account ID (as a string).  Within that, you must have an entry called *profile*
+that lists the profile name this account maps to within your AWS credential
+file.
+          
 
 | The main purpose of skew is to identify resources or sets of resources
 | across services, regions, and accounts and to quickly and easily

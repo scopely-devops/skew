@@ -45,9 +45,6 @@ Within the `accounts` section, you create keys named after your 12-digit
 account ID (as a string).  Within that, you must have an entry called *profile*
 that lists the profile name this account maps to within your AWS credential
 file.
-Skew will look through all of the profiles defined in your config file and
-keep track of all of the ones that have an `account_id` associated with
-them.
 
 The main purpose of skew is to identify resources or sets of resources 
 across services, regions, and accounts and to quickly and easily return the
