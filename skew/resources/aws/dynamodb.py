@@ -40,10 +40,10 @@ class Table(AWSResource):
         LOG.debug('%s == %s', resource_id, data)
         return resource_id == data
 
-    def __init__(self, endpoint, data, query=None):
-        super(Table, self).__init__(endpoint, data, query)
+    def __init__(self, client, data, query=None):
+        super(Table, self).__init__(client, data, query)
         self._id = data
         detail_op, param_name, detail_path = self.Meta.detail_spec
         params = {param_name: self.id}
-        data = endpoint.call(detail_op, **params)
+        data = client.call(detail_op, **params)
         self.data = jmespath.search(detail_path, data)

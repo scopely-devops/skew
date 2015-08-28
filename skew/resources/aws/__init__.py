@@ -157,7 +157,7 @@ class AWSResource(Resource):
                 else:
                     kwargs = {param_name: getattr(self, param_value)}
                 LOG.debug('fetching tags')
-                self.data['Tags'] = self._endpoint.call(
+                self.data['Tags'] = self._client.call(
                     method, query=path, **kwargs)
                 LOG.debug(self.data['Tags'])
 
@@ -254,19 +254,3 @@ class AWSResource(Resource):
 ArnComponents = namedtuple('ArnComponents',
                            ['scheme', 'provider', 'service', 'region',
                             'account', 'resource'])
-
-
-def resource_from_arn(arn, data):
-    session = botocore.session.get_session()
-    parts = ArnComponents(*arn.split(':', 6))
-    service = session.get_service(parts.service)
-    if ':' in parts.resource:
-        resource_type, _ = parts.resource.split(':')
-    elif '/' in parts.resource:
-        resource_type, _ = parts.resource.split('/')
-    else:
-        resource_type = parts.resource
-    endpoint = Endpoint(service, parts.region, parts.account)
-    resource_path = '.'.join(['aws', parts.service, resource_type])
-    resource_cls = find_resource_class(resource_path)
-    return resource_cls(endpoint, data)
