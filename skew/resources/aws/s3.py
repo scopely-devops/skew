@@ -28,8 +28,8 @@ class Bucket(AWSResource):
         date = 'CreationDate'
         dimension = None
 
-    def __init__(self, endpoint, data, query=None):
-        super(Bucket, self).__init__(endpoint, data, query)
+    def __init__(self, client, data, query=None):
+        super(Bucket, self).__init__(client, data, query)
         self._data = data
         self._keys = []
 

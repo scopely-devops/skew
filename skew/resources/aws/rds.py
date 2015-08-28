@@ -22,7 +22,7 @@ class DBInstance(AWSResource):
         type = 'dbinstance'
         enum_spec = ('describe_db_instances', 'DBInstances', None)
         tags_spec = ('list_tags_for_resource', 'TagList',
-                     'resource_name', 'arn')
+                     'ResourceName', 'arn')
         detail_spec = None
         id = 'DBInstanceIdentifier'
         filter_name = 'DbInstanceIdentifier'
