@@ -30,4 +30,4 @@ class LoadBalancer(AWSResource):
         date = 'CreatedTime'
         dimension = 'LoadBalancerName'
         tags_spec = ('describe_tags', 'TagDescriptions[].Tags[]',
-                     'load_balancer_names', 'id')
+                     'LoadBalancerNames', 'id')
