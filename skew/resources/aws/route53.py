@@ -1,4 +1,5 @@
 # Copyright (c) 2014 Scopely, Inc.
+# Copyright (c) 2015 Mitch Garnaat
 #
 # Licensed under the Apache License, Version 2.0 (the "License"). You
 # may not use this file except in compliance with the License. A copy of
@@ -19,8 +20,8 @@ class HostedZone(AWSResource):
     class Meta(object):
         service = 'route53'
         type = 'hostedzone'
-        enum_spec = ('ListHostedZones', 'HostedZones')
-        detail_spec = ('GetHostedZone', 'id', None)
+        enum_spec = ('list_hosted_zones', 'HostedZones', None)
+        detail_spec = ('GetHostedZone', 'Id', None)
         id = 'Id'
         filter_name = None
         name = 'Name'
@@ -37,8 +38,8 @@ class HealthCheck(AWSResource):
     class Meta(object):
         service = 'route53'
         type = 'healthcheck'
-        enum_spec = ('ListHealthChecks', 'HealthChecks')
-        detail_spec = ('GetHealthCheck', 'id', None)
+        enum_spec = ('list_health_checks', 'HealthChecks', None)
+        detail_spec = ('GetHealthCheck', 'Id', None)
         id = 'Id'
         filter_name = None
         name = None
@@ -51,7 +52,7 @@ class ResourceRecordSet(AWSResource):
     class Meta(object):
         service = 'route53'
         type = 'rrset'
-        enum_spec = ('ListResourceRecordSets', 'ResourceRecordSets')
+        enum_spec = ('list_resource_record_sets', 'ResourceRecordSets', None)
         detail_spec = None
         id = 'Name'
         filter_name = None

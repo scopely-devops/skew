@@ -1,0 +1,34 @@
+[
+    {
+        "IpPermissionsEgress": [
+            {
+                "IpProtocol": "-1", 
+                "IpRanges": [
+                    {
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ], 
+                "UserIdGroupPairs": [], 
+                "PrefixListIds": []
+            }
+        ], 
+        "Description": "default VPC security group", 
+        "IpPermissions": [
+            {
+                "IpProtocol": "-1", 
+                "IpRanges": [], 
+                "UserIdGroupPairs": [
+                    {
+                        "UserId": "123456789012", 
+                        "GroupId": "sg-9b189bfe"
+                    }
+                ], 
+                "PrefixListIds": []
+            }
+        ], 
+        "GroupName": "default", 
+        "VpcId": "vpc-7217c217", 
+        "OwnerId": "123456789012", 
+        "GroupId": "sg-9b189bfe"
+    }
+]

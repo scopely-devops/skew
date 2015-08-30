@@ -1,4 +1,5 @@
 # Copyright (c) 2014 Scopely, Inc.
+# Copyright (c) 2015 Mitch Garnaat
 #
 # Licensed under the Apache License, Version 2.0 (the "License"). You
 # may not use this file except in compliance with the License. A copy of
@@ -19,7 +20,7 @@ class Stream(AWSResource):
     class Meta(object):
         service = 'kinesis'
         type = 'stream'
-        enum_spec = ('ListStreams', 'StreamNames')
+        enum_spec = ('list_streams', 'StreamNames', None)
         detail_spec = None
         id = 'StreamName'
         filter_name = None
@@ -28,7 +29,7 @@ class Stream(AWSResource):
         date = None
         dimension = 'StreamName'
 
-    def __init__(self, endpoint, data, query=None):
-        super(Stream, self).__init__(endpoint, data, query)
+    def __init__(self, client, data, query=None):
+        super(Stream, self).__init__(client, data, query)
         self.data = {self.Meta.id: data}
         self._id = self.data[self.Meta.id]

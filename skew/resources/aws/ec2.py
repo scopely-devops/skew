@@ -1,4 +1,5 @@
 # Copyright (c) 2014 Scopely, Inc.
+# Copyright (c) 2015 Mitch Garnaat
 #
 # Licensed under the Apache License, Version 2.0 (the "License"). You
 # may not use this file except in compliance with the License. A copy of
@@ -19,10 +20,10 @@ class Instance(AWSResource):
     class Meta(object):
         service = 'ec2'
         type = 'instance'
-        enum_spec = ('DescribeInstances', 'Reservations[].Instances[]')
+        enum_spec = ('describe_instances', 'Reservations[].Instances[]', None)
         detail_spec = None
         id = 'InstanceId'
-        filter_name = 'instance_ids'
+        filter_name = 'InstanceIds'
         filter_type = 'list'
         name = 'PublicDnsName'
         date = 'LaunchTime'
@@ -38,10 +39,10 @@ class SecurityGroup(AWSResource):
     class Meta(object):
         service = 'ec2'
         type = 'security-group'
-        enum_spec = ('DescribeSecurityGroups', 'SecurityGroups')
+        enum_spec = ('describe_security_groups', 'SecurityGroups', None)
         detail_spec = None
         id = 'GroupId'
-        filter_name = 'group_names'
+        filter_name = 'GroupNames'
         filter_type = 'list'
         name = 'GroupName'
         date = None
@@ -53,10 +54,10 @@ class KeyPair(AWSResource):
     class Meta(object):
         service = 'ec2'
         type = 'key-pair'
-        enum_spec = ('DescribeKeyPairs', 'KeyPairs')
+        enum_spec = ('describe_key_pairs', 'KeyPairs', None)
         detail_spec = None
         id = 'KeyName'
-        filter_name = 'key_names'
+        filter_name = 'KeyNames'
         name = 'KeyName'
         date = None
         dimension = None
@@ -67,10 +68,10 @@ class Address(AWSResource):
     class Meta(object):
         service = 'ec2'
         type = 'address'
-        enum_spec = ('DescribeAddresses', 'Addresses')
+        enum_spec = ('describe_addresses', 'Addresses', None)
         detail_spec = None
         id = 'PublicIp'
-        filter_name = 'public-ips'
+        filter_name = 'PublicIps'
         filter_type = 'list'
         name = 'PublicIp'
         date = None
@@ -82,10 +83,10 @@ class Volume(AWSResource):
     class Meta(object):
         service = 'ec2'
         type = 'volume'
-        enum_spec = ('DescribeVolumes', 'Volumes')
+        enum_spec = ('describe_volumes', 'Volumes', None)
         detail_spec = None
         id = 'VolumeId'
-        filter_name = 'volume_ids'
+        filter_name = 'VolumeIds'
         filter_type = 'list'
         name = 'VolumeId'
         date = 'createTime'
@@ -104,10 +105,11 @@ class Snapshot(AWSResource):
     class Meta(object):
         service = 'ec2'
         type = 'snapshot'
-        enum_spec = ('DescribeSnapshots', 'Snapshots')
+        enum_spec = (
+            'describe_snapshots', 'Snapshots', {'OwnerIds': ['self']})
         detail_spec = None
         id = 'SnapshotId'
-        filter_name = 'snapshot_ids'
+        filter_name = 'SnapshotIds'
         filter_type = 'list'
         name = 'SnapshotId'
         date = 'StartTime'
@@ -119,3 +121,132 @@ class Snapshot(AWSResource):
             return self.data['VolumeId']
         else:
             return None
+
+
+class Image(AWSResource):
+
+    class Meta(object):
+        service = 'ec2'
+        type = 'image'
+        enum_spec = (
+            'describe_images', 'Images', {'Owners': ['self']})
+        detail_spec = None
+        id = 'ImageId'
+        filter_name = 'ImageIds'
+        filter_type = 'list'
+        name = 'ImageId'
+        date = 'StartTime'
+        dimension = None
+
+    @property
+    def parent(self):
+        if self.data['VolumeId']:
+            return self.data['VolumeId']
+        else:
+            return None
+
+
+class Vpc(AWSResource):
+
+    class Meta(object):
+        service = 'ec2'
+        type = 'vpc'
+        enum_spec = ('describe_vpcs', 'Vpcs', None)
+        detail_spec = None
+        id = 'VpcId'
+        filter_name = 'VpcIds'
+        filter_type = 'list'
+        name = 'VpcId'
+        date = None
+        dimension = None
+
+
+class Subnet(AWSResource):
+
+    class Meta(object):
+        service = 'ec2'
+        type = 'subnet'
+        enum_spec = ('describe_subnets', 'Subnets', None)
+        detail_spec = None
+        id = 'SubnetId'
+        filter_name = 'SubnetIds'
+        filter_type = 'list'
+        name = 'SubnetId'
+        date = None
+        dimension = None
+
+
+class CustomerGateway(AWSResource):
+
+    class Meta(object):
+        service = 'ec2'
+        type = 'customer-gateway'
+        enum_spec = ('describe_customer_gateways', 'CustomerGateway', None)
+        detail_spec = None
+        id = 'CustomerGatewayId'
+        filter_name = 'CustomerGatewayIds'
+        filter_type = 'list'
+        name = 'CustomerGatewayId'
+        date = None
+        dimension = None
+
+
+class InternetGateway(AWSResource):
+
+    class Meta(object):
+        service = 'ec2'
+        type = 'internet-gateway'
+        enum_spec = ('describe_internet_gateways', 'InternetGateway', None)
+        detail_spec = None
+        id = 'InternetGatewayId'
+        filter_name = 'InternetGatewayIds'
+        filter_type = 'list'
+        name = 'InternetGatewayId'
+        date = None
+        dimension = None
+
+
+class RouteTable(AWSResource):
+
+    class Meta(object):
+        service = 'ec2'
+        type = 'route-table'
+        enum_spec = ('describe_route_tables', 'RouteTables', None)
+        detail_spec = None
+        id = 'RouteTableId'
+        filter_name = 'RouteTableIds'
+        filter_type = 'list'
+        name = 'RouteTableId'
+        date = None
+        dimension = None
+
+
+class NetworkAcl(AWSResource):
+
+    class Meta(object):
+        service = 'ec2'
+        type = 'network-acl'
+        enum_spec = ('describe_network_acls', 'NetworkAcls', None)
+        detail_spec = None
+        id = 'NetworkAclId'
+        filter_name = 'NetworkAclIds'
+        filter_type = 'list'
+        name = 'NetworkAclId'
+        date = None
+        dimension = None
+
+
+class VpcPeeringConnection(AWSResource):
+
+    class Meta(object):
+        service = 'ec2'
+        type = 'vpc-peering-connection'
+        enum_spec = ('describe_vpc_peering_connections',
+                     'VpcPeeringConnection', None)
+        detail_spec = None
+        id = 'VpcPeeringConnectionId'
+        filter_name = 'VpcPeeringConnectionIds'
+        filter_type = 'list'
+        name = 'VpcPeeringConnectionId'
+        date = None
+        dimension = None

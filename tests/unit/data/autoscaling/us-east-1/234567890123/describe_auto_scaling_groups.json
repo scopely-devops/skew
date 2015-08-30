@@ -1,0 +1,60 @@
+[
+    {
+        "AutoScalingGroupARN": "arn:aws:autoscaling:us-east-1:860421987956:autoScalingGroup:1c40bcc1-4382-43c6-82b8-5f9e7f25a38b:autoScalingGroupName/new-prod-test-hello-003", 
+        "HealthCheckGracePeriod": 600, 
+        "SuspendedProcesses": [], 
+        "DesiredCapacity": 1, 
+        "Tags": [
+            {
+                "ResourceType": "auto-scaling-group", 
+                "ResourceId": "new-prod-test-hello-003", 
+                "PropagateAtLaunch": true, 
+                "Value": "CloudNative Bakery", 
+                "Key": "Creator"
+            }, 
+            {
+                "ResourceType": "auto-scaling-group", 
+                "ResourceId": "new-prod-test-hello-003", 
+                "PropagateAtLaunch": true, 
+                "Value": "new-prod-test", 
+                "Key": "Name"
+            }, 
+            {
+                "ResourceType": "auto-scaling-group", 
+                "ResourceId": "new-prod-test-hello-003", 
+                "PropagateAtLaunch": true, 
+                "Value": "hello-003", 
+                "Key": "Version"
+            }
+        ], 
+        "EnabledMetrics": [], 
+        "LoadBalancerNames": [
+            "new-prod-test"
+        ], 
+        "AutoScalingGroupName": "new-prod-test-hello-003", 
+        "DefaultCooldown": 600, 
+        "MinSize": 1, 
+        "Instances": [
+            {
+                "InstanceId": "i-af6a4d50", 
+                "AvailabilityZone": "us-east-1b", 
+                "HealthStatus": "Healthy", 
+                "LifecycleState": "InService", 
+                "LaunchConfigurationName": "new-prod-test-hello-003"
+            }
+        ], 
+        "MaxSize": 1, 
+        "VPCZoneIdentifier": "subnet-547c8023,subnet-daadb39c,subnet-30596018", 
+        "TerminationPolicies": [
+            "ClosestToNextInstanceHour"
+        ], 
+        "LaunchConfigurationName": "new-prod-test-hello-003", 
+        "CreatedTime": "2015-05-12T21:58:23.357000+00:00", 
+        "AvailabilityZones": [
+            "us-east-1b", 
+            "us-east-1a", 
+            "us-east-1d"
+        ], 
+        "HealthCheckType": "ELB"
+    }
+]

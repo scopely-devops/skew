@@ -1,0 +1,39 @@
+{
+    "Table": {
+        "TableArn": "arn:aws:dynamodb:us-west-2:123456789012:table/foo", 
+        "AttributeDefinitions": [
+            {
+                "AttributeName": "external_id", 
+                "AttributeType": "S"
+            }, 
+            {
+                "AttributeName": "org_key", 
+                "AttributeType": "S"
+            }
+        ], 
+        "ProvisionedThroughput": {
+            "NumberOfDecreasesToday": 0, 
+            "WriteCapacityUnits": 1, 
+            "ReadCapacityUnits": 5
+        }, 
+        "TableSizeBytes": 3257, 
+        "TableName": "org-account-link", 
+        "TableStatus": "ACTIVE", 
+        "KeySchema": [
+            {
+                "KeyType": "HASH", 
+                "AttributeName": "org_key"
+            }, 
+            {
+                "KeyType": "RANGE", 
+                "AttributeName": "external_id"
+            }
+        ], 
+        "ItemCount": 17, 
+        "CreationDateTime": "2015-08-05T14:24:35.814000-04:00"
+    }, 
+    "ResponseMetadata": {
+        "HTTPStatusCode": 200, 
+        "RequestId": "BA2HQHD1UAQ1EGMU1HNRFOV85FVV4KQNSO5AEMVJF66Q9ASUAAJG"
+    }
+}

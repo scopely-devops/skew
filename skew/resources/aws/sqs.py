@@ -1,4 +1,5 @@
 # Copyright (c) 2014 Scopely, Inc.
+# Copyright (c) 2015 Mitch Garnaat
 #
 # Licensed under the Apache License, Version 2.0 (the "License"). You
 # may not use this file except in compliance with the License. A copy of
@@ -19,17 +20,17 @@ class Queue(AWSResource):
     class Meta(object):
         service = 'sqs'
         type = 'queue'
-        enum_spec = ('ListQueues', 'QueueUrls')
-        detail_spec = ('GetQueueAttributes', 'queue_url', 'QueueUrl')
+        enum_spec = ('list_queues', 'QueueUrls', None)
+        detail_spec = ('get_queue_attributes', 'QueueUrl', 'QueueUrl')
         id = 'QueueUrl'
-        filter_name = 'queue_name_prefix'
+        filter_name = 'QueueNamePrefix'
         filter_type = 'scalar'
         name = 'QueueUrl'
         date = None
         dimension = 'QueueName'
 
-    def __init__(self, endpoint, data, query=None):
-        super(Queue, self).__init__(endpoint, data, query)
+    def __init__(self, client, data, query=None):
+        super(Queue, self).__init__(client, data, query)
         self.data = {self.Meta.id: data,
                      'QueueName': data.split('/')[-1]}
         self._id = self.data['QueueName']

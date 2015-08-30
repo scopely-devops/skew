@@ -1,0 +1,24 @@
+[
+    {
+        "UserData": "IyEvYmluL2Jhc2gNCg0KYXB0LWdldCB1cGRhdGUNCmFwdC1nZXQgaW5zdGFs\nbCAteSBhcGFjaGUyDQpjYXQgPiAvdmFyL3d3dy9odG1sL2luZGV4Lmh0bWwg\nPDxFT0YNCjxodG1sPg0KPGJvZHkgc3R5bGU9ImJhY2tncm91bmQtY29sb3I6\nICNmZmZmZmYiPg0KPGgxPlRoaXMgaXMgdmVyc2lvbiAwMDE8L2gxPg0KPC9i\nb2R5Pg0KPC9odG1sPg0KRU9G\n", 
+        "IamInstanceProfile": "DevTest-new-prod-test-Resources-exampleInstanceProfile-L237HDBJHQUA", 
+        "EbsOptimized": false, 
+        "LaunchConfigurationARN": "arn:aws:autoscaling:us-east-1:860421987956:launchConfiguration:deb63322-9f04-4645-9d88-921e3a5a2e09:launchConfigurationName/new-prod-test-hello-003", 
+        "InstanceMonitoring": {
+            "Enabled": true
+        }, 
+        "ClassicLinkVPCSecurityGroups": [], 
+        "CreatedTime": "2015-05-12T21:58:23.033000+00:00", 
+        "BlockDeviceMappings": [], 
+        "KeyName": "", 
+        "SecurityGroups": [
+            "sg-74e1c210"
+        ], 
+        "LaunchConfigurationName": "new-prod-test-hello-003", 
+        "KernelId": "", 
+        "RamdiskId": "", 
+        "ImageId": "ami-9a562df2", 
+        "InstanceType": "t2.micro", 
+        "AssociatePublicIpAddress": true
+    }
+]

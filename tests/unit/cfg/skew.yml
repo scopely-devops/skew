@@ -1,0 +1,10 @@
+---
+  accounts:
+    "123456789012":
+      profile: foo
+    "234567890123":
+      profile: bar
+    "345678901234":
+      profile: fie
+    "456789012345":
+      profile: baz

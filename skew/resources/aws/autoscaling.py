@@ -1,4 +1,5 @@
 # Copyright (c) 2014 Scopely, Inc.
+# Copyright (c) 2015 Mitch Garnaat
 #
 # Licensed under the Apache License, Version 2.0 (the "License"). You
 # may not use this file except in compliance with the License. A copy of
@@ -24,14 +25,14 @@ class AutoScalingGroup(AWSResource):
         name = 'AutoScalingGroupName'
         date = 'CreatedTime'
         dimension = 'AutoScalingGroupName'
-        enum_spec = ('DescribeAutoScalingGroups', 'AutoScalingGroups')
+        enum_spec = ('describe_auto_scaling_groups', 'AutoScalingGroups', None)
         detail_spec = None
         id = 'AutoScalingGroupName'
-        filter_name = 'auto_scaling_group_names'
+        filter_name = 'AutoScalingGroupNames'
         filter_type = 'list'
 
-    def __init__(self, endpoint, data, query=None):
-        super(AutoScalingGroup, self).__init__(endpoint, data, query)
+    def __init__(self, client, data, query=None):
+        super(AutoScalingGroup, self).__init__(client, data, query)
         self._arn_query = jmespath.compile('AutoScalingGroupARN')
 
     @property
@@ -47,14 +48,15 @@ class LaunchConfiguration(AWSResource):
         name = 'LaunchConfigurationName'
         date = 'CreatedTime'
         dimension = 'AutoScalingGroupName'
-        enum_spec = ('DescribeLaunchConfigurations', 'LaunchConfigurations')
+        enum_spec = (
+            'describe_launch_configurations', 'LaunchConfigurations', None)
         detail_spec = None
         id = 'LaunchConfigurationName'
-        filter_name = 'launch_configuration_names'
+        filter_name = 'LaunchConfigurationNames'
         filter_type = 'list'
 
-    def __init__(self, endpoint, data, query=None):
-        super(LaunchConfiguration, self).__init__(endpoint, data, query)
+    def __init__(self, client, data, query=None):
+        super(LaunchConfiguration, self).__init__(client, data, query)
         self._arn_query = jmespath.compile('LaunchConfigurationARN')
 
     @property
