@@ -19,7 +19,7 @@ class DBInstance(AWSResource):
 
     class Meta(object):
         service = 'rds'
-        type = 'dbinstance'
+        type = 'db'
         enum_spec = ('describe_db_instances', 'DBInstances', None)
         tags_spec = ('list_tags_for_resource', 'TagList',
                      'ResourceName', 'arn')
@@ -31,12 +31,19 @@ class DBInstance(AWSResource):
         date = 'InstanceCreateTime'
         dimension = 'DBInstanceIdentifier'
 
+    @property
+    def arn(self):
+        return 'arn:aws:%s:%s:%s:%s:%s' % (
+            self._client.service_name,
+            self._client.region_name,
+            self._client.account_id, self.resourcetype, self.id)
+
 
 class DBSecurityGroup(AWSResource):
 
     class Meta(object):
         service = 'rds'
-        type = 'dbsecuritygroup'
+        type = 'secgrp'
         enum_spec = ('describe_db_security_groups', 'DBSecurityGroups', None)
         detail_spec = None
         id = 'DBSecurityGroupName'
@@ -45,3 +52,11 @@ class DBSecurityGroup(AWSResource):
         name = 'DBSecurityGroupDescription'
         date = None
         dimension = None
+
+    @property
+    def arn(self):
+        return 'arn:aws:%s:%s:%s:%s:%s' % (
+            self._client.service_name,
+            self._client.region_name,
+            self._client.account_id, self.resourcetype, self.id)
+
