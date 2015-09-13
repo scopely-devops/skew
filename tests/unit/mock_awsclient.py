@@ -30,7 +30,8 @@ class MockAWSClient(object):
         data = {}
         path = os.path.join(os.path.dirname(__file__), 'data',
                             self.service_name)
-        path = os.path.join(path, self.region_name)
+        if self.service_name not in ('iam', 'route53'):
+            path = os.path.join(path, self.region_name)
         path = os.path.join(path, self.account_id)
         filename = op_name
         if kwargs:

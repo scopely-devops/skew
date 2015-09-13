@@ -20,7 +20,16 @@ from skew.resources.aws import AWSResource
 LOG = logging.getLogger(__name__)
 
 
-class Group(AWSResource):
+class IAMResource(AWSResource):
+
+    @property
+    def arn(self):
+        return 'arn:aws:%s::%s:%s/%s' % (
+            self._client.service_name,
+            self._client.account_id, self.resourcetype, self.id)
+
+
+class Group(IAMResource):
 
     class Meta(object):
         service = 'iam'
@@ -39,7 +48,7 @@ class Group(AWSResource):
         return resource_id == data['GroupName']
 
 
-class User(AWSResource):
+class User(IAMResource):
 
     class Meta(object):
         service = 'iam'
@@ -58,7 +67,45 @@ class User(AWSResource):
         return resource_id == data['UserName']
 
 
-class ServerCertificate(AWSResource):
+class Role(IAMResource):
+
+    class Meta(object):
+        service = 'iam'
+        type = 'role'
+        enum_spec = ('list_roles', 'Roles', None)
+        detail_spec = None
+        id = 'RoleName'
+        filter_name = None
+        name = 'RoleName'
+        date = 'CreateDate'
+        dimension = None
+
+    @classmethod
+    def filter(cls, resource_id, data):
+        LOG.debug('%s == %s', resource_id, data)
+        return resource_id == data['RoleName']
+
+
+class Policy(IAMResource):
+
+    class Meta(object):
+        service = 'iam'
+        type = 'policy'
+        enum_spec = ('list_policies', 'Policies', None)
+        detail_spec = None
+        id = 'PolicyName'
+        filter_name = None
+        name = 'PolicyName'
+        date = 'CreateDate'
+        dimension = None
+
+    @classmethod
+    def filter(cls, resource_id, data):
+        LOG.debug('%s == %s', resource_id, data)
+        return resource_id == data['UserName']
+
+
+class ServerCertificate(IAMResource):
 
     class Meta(object):
         service = 'iam'
@@ -77,4 +124,3 @@ class ServerCertificate(AWSResource):
     def filter(cls, resource_id, data):
         LOG.debug('%s == %s', resource_id, data)
         return resource_id == data['ServerCertificateName']
-        

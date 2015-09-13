@@ -3,7 +3,7 @@
         "Path": "/", 
         "CreateDate": "2015-05-01T04:55:13+00:00", 
         "GroupId": "AGPAJPEN42SMQRU5UWRGS", 
-        "Arn": "arn:aws:iam::433502988969:group/Administrators", 
+        "Arn": "arn:aws:iam::123456789012:group/Administrators", 
         "GroupName": "Administrators"
     }, 
     {

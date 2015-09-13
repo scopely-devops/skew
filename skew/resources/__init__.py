@@ -36,6 +36,8 @@ ResourceTypes = {
     'aws.ec2.subnet': 'aws.ec2.Subnet',
     'aws.elb.loadbalancer': 'aws.elb.LoadBalancer',
     'aws.iam.group': 'aws.iam.Group',
+    'aws.iam.role': 'aws.iam.Role',
+    'aws.iam.policy': 'aws.iam.Policy',
     'aws.iam.user': 'aws.iam.User',
     'aws.iam.server-certificate': 'aws.iam.ServerCertificate',
     'aws.kinesis.stream': 'aws.kinesis.Stream',

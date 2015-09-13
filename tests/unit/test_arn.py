@@ -107,3 +107,19 @@ class TestARN(unittest.TestCase):
         bucket_resource = l[1]
         keys = list(bucket_resource)
         self.assertEqual(len(keys), 4)
+
+    def test_iam_groups(self):
+        arn = scan('arn:aws:iam::123456789012:group/*')
+        l = list(arn)
+        self.assertEqual(len(l), 2)
+        group_resource = l[0]
+        self.assertEqual(group_resource.arn,
+                         'arn:aws:iam::123456789012:group/Administrators')
+
+    def test_route53_hostedzone(self):
+        arn = scan('arn:aws:route53::123456789012:hostedzone/*')
+        l = list(arn)
+        self.assertEqual(len(l), 2)
+        zone_resource = l[0]
+        self.assertEqual(zone_resource.arn,
+                         'arn:aws:route53:::hostedzone/FFFF865FFFF3')
