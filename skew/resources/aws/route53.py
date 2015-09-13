@@ -15,7 +15,15 @@
 from skew.resources.aws import AWSResource
 
 
-class HostedZone(AWSResource):
+class Route53Resource(AWSResource):
+
+    @property
+    def arn(self):
+        return 'arn:aws:%s:::%s/%s' % (
+            self._client.service_name, self.resourcetype, self.id)
+
+
+class HostedZone(Route53Resource):
 
     class Meta(object):
         service = 'route53'
@@ -33,7 +41,7 @@ class HostedZone(AWSResource):
         return self._id.split('/')[-1]
 
 
-class HealthCheck(AWSResource):
+class HealthCheck(Route53Resource):
 
     class Meta(object):
         service = 'route53'
@@ -47,7 +55,7 @@ class HealthCheck(AWSResource):
         dimension = None
 
 
-class ResourceRecordSet(AWSResource):
+class ResourceRecordSet(Route53Resource):
 
     class Meta(object):
         service = 'route53'

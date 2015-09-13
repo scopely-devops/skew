@@ -192,10 +192,14 @@ class Region(ARNComponent):
                          'ap-northeast-1',
                          'sa-east-1']
 
+    _universal_region_names = ['us-east-1']
+
     _service_region_map = {
         'redshift': _region_names_limited,
         'glacier': _region_names_limited,
-        'kinesis': _region_names_limited}
+        'kinesis': _region_names_limited,
+        'iam': _universal_region_names,
+        'route53': _universal_region_names}
 
     def choices(self, context=None):
         if context:
