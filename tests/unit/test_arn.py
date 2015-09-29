@@ -93,10 +93,10 @@ class TestARN(unittest.TestCase):
         self.assertEqual(len(l), 4)
 
     def test_iam_users(self):
-        arn = scan('arn:aws:iam:us-east-1:234567890123:user/*')
+        arn = scan('arn:aws:iam:*:234567890123:user/*')
         l = list(arn)
         self.assertEqual(len(l), 3)
-        arn = scan('arn:aws:iam:us-east-1:234567890123:user/foo')
+        arn = scan('arn:aws:iam:*:234567890123:user/foo')
         l = list(arn)
         self.assertEqual(len(l), 1)
 
