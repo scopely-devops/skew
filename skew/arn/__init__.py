@@ -174,14 +174,6 @@ class Account(ARNComponent):
 
 
 class Region(ARNComponent):
-
-    _region_names_limited = ['us-east-1',
-                             'us-west-2',
-                             'eu-west-1',
-                             'ap-southeast-1',
-                             'ap-southeast-2',
-                             'ap-northeast-1']
-
     _all_region_names = ['us-east-1',
                          'us-west-1',
                          'us-west-2',
@@ -192,14 +184,21 @@ class Region(ARNComponent):
                          'ap-northeast-1',
                          'sa-east-1']
 
-    _universal_region_names = ['us-east-1']
+    _region_names_limited = ['us-east-1',
+                             'us-west-2',
+                             'eu-west-1',
+                             'ap-southeast-1',
+                             'ap-southeast-2',
+                             'ap-northeast-1']
+
+    _no_region_required = ['']
 
     _service_region_map = {
         'redshift': _region_names_limited,
         'glacier': _region_names_limited,
         'kinesis': _region_names_limited,
-        'iam': _universal_region_names,
-        'route53': _universal_region_names}
+        'iam': _no_region_required,
+        'route53': _no_region_required}
 
     def choices(self, context=None):
         if context:
