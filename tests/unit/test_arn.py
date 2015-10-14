@@ -60,11 +60,16 @@ class TestARN(unittest.TestCase):
         self.assertEqual(r.filtered_data, 't2.small')
 
     def test_ec2_volumes(self):
-        arn = scan('arn:aws:ec2:*:234567890123:volume/*')
+        arn = scan('arn:aws:ec2::234567890123:volume/*')
         l = list(arn)
         self.assertEqual(len(l), 1)
         r = l[0]
         self.assertEqual(r.data['VolumeId'], "vol-ea3e1724")
+
+    def test_ec2_images(self):
+        arn = scan('arn:aws:ec2:us-west-2:234567890123:image/*')
+        l = list(arn)
+        self.assertEqual(len(l), 1)
 
     def test_ec2_keypairs(self):
         arn = scan('arn:aws:ec2:*:234567890123:key-pair/*')
