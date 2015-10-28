@@ -1,0 +1,42 @@
+{
+    "Images": [
+        {
+            "VirtualizationType": "paravirtual", 
+            "Name": "test name", 
+            "Tags": [
+                {
+                    "Value": "test name", 
+                    "Key": "Name"
+                }
+            ], 
+            "Hypervisor": "xen", 
+            "ImageId": "ami-13b9dc64", 
+            "RootDeviceType": "ebs", 
+            "State": "available", 
+            "BlockDeviceMappings": [
+                {
+                    "DeviceName": "/dev/sda1", 
+                    "Ebs": {
+                        "DeleteOnTermination": false, 
+                        "SnapshotId": "snap-4445ef6d", 
+                        "VolumeSize": 8, 
+                        "VolumeType": "gp2", 
+                        "Encrypted": false
+                    }
+                }, 
+                {
+                    "DeviceName": "/dev/sdb", 
+                    "VirtualName": "ephemeral0"
+                }
+            ], 
+            "Architecture": "x86_64", 
+            "ImageLocation": "234567890123/test name", 
+            "KernelId": "aki-52a34525", 
+            "OwnerId": "234567890123", 
+            "RootDeviceName": "/dev/sda1", 
+            "CreationDate": "2015-04-03T13:19:34.000Z", 
+            "Public": false, 
+            "ImageType": "machine"
+        }
+    ]
+}

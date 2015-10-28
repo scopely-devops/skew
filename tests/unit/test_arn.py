@@ -59,6 +59,18 @@ class TestARN(unittest.TestCase):
         r = l[0]
         self.assertEqual(r.filtered_data, 't2.small')
 
+    def test_ec2_volumes(self):
+        arn = scan('arn:aws:ec2::234567890123:volume/*')
+        l = list(arn)
+        self.assertEqual(len(l), 1)
+        r = l[0]
+        self.assertEqual(r.data['VolumeId'], "vol-ea3e1724")
+
+    def test_ec2_images(self):
+        arn = scan('arn:aws:ec2:us-west-2:234567890123:image/*')
+        l = list(arn)
+        self.assertEqual(len(l), 1)
+
     def test_ec2_keypairs(self):
         arn = scan('arn:aws:ec2:*:234567890123:key-pair/*')
         l = list(arn)
@@ -93,10 +105,10 @@ class TestARN(unittest.TestCase):
         self.assertEqual(len(l), 4)
 
     def test_iam_users(self):
-        arn = scan('arn:aws:iam:us-east-1:234567890123:user/*')
+        arn = scan('arn:aws:iam:*:234567890123:user/*')
         l = list(arn)
         self.assertEqual(len(l), 3)
-        arn = scan('arn:aws:iam:us-east-1:234567890123:user/foo')
+        arn = scan('arn:aws:iam:*:234567890123:user/foo')
         l = list(arn)
         self.assertEqual(len(l), 1)
 
@@ -107,3 +119,19 @@ class TestARN(unittest.TestCase):
         bucket_resource = l[1]
         keys = list(bucket_resource)
         self.assertEqual(len(keys), 4)
+
+    def test_iam_groups(self):
+        arn = scan('arn:aws:iam::123456789012:group/*')
+        l = list(arn)
+        self.assertEqual(len(l), 2)
+        group_resource = l[0]
+        self.assertEqual(group_resource.arn,
+                         'arn:aws:iam::123456789012:group/Administrators')
+
+    def test_route53_hostedzone(self):
+        arn = scan('arn:aws:route53::123456789012:hostedzone/*')
+        l = list(arn)
+        self.assertEqual(len(l), 2)
+        zone_resource = l[0]
+        self.assertEqual(zone_resource.arn,
+                         'arn:aws:route53:::hostedzone/FFFF865FFFF3')
