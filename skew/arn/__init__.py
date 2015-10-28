@@ -96,7 +96,7 @@ class Resource(ARNComponent):
 
     def match(self, pattern, context=None):
         resource_type, _ = self._split_resource(pattern)
-        return super(Resource, self).match(resource_type)
+        return super(Resource, self).match(resource_type, context)
 
     def choices(self, context=None):
         if context:
