@@ -135,3 +135,11 @@ class TestARN(unittest.TestCase):
         zone_resource = l[0]
         self.assertEqual(zone_resource.arn,
                          'arn:aws:route53:::hostedzone/FFFF865FFFF3')
+
+    def test_cloudformation_stacks(self):
+        arn = scan('arn:aws:cloudformation:us-west-2:123456789012:stack/*')
+        l = list(arn)
+        self.assertEqual(len(l), 10)
+        stack_resource = l[0]
+        resources = list(stack_resource)
+        self.assertEqual(len(resources), 6)

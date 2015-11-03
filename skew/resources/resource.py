@@ -15,10 +15,51 @@
 import logging
 import jmespath
 
+import skew.awsclient
+
 LOG = logging.getLogger(__name__)
 
 
 class Resource(object):
+
+    @classmethod
+    def enumerate(cls, arn, region, account, resource_id=None):
+        client = skew.awsclient.get_awsclient(
+            cls.Meta.service, region, account)
+        kwargs = {}
+        do_client_side_filtering = False
+        if resource_id and resource_id != '*':
+            # If we are looking for a specific resource and the
+            # API provides a way to filter on a specific resource
+            # id then let's insert the right parameter to do the filtering.
+            # If the API does not support that, we will have to filter
+            # after we get all of the results.
+            filter_name = cls.Meta.filter_name
+            if filter_name:
+                if cls.Meta.filter_type == 'list':
+                    kwargs[filter_name] = [resource_id]
+                else:
+                    kwargs[filter_name] = resource_id
+            else:
+                do_client_side_filtering = True
+        enum_op, path, extra_args = cls.Meta.enum_spec
+        if extra_args:
+            kwargs.update(extra_args)
+        LOG.debug('enum_op=%s' % enum_op)
+        data = client.call(enum_op, query=path, **kwargs)
+        LOG.debug(data)
+        resources = []
+        if data:
+            for d in data:
+                if do_client_side_filtering:
+                    # If the API does not support filtering, the resource
+                    # class should provide a filter method that will
+                    # return True if the returned data matches the
+                    # resource ID we are looking for.
+                    if not cls.filter(resource_id, d):
+                        continue
+                resources.append(cls(client, d, arn.query))
+        return resources
 
     class Meta(object):
         type = 'resource'

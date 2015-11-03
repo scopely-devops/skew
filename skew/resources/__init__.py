@@ -19,6 +19,7 @@ import importlib
 ResourceTypes = {
     'aws.autoscaling.autoScalingGroup': 'aws.autoscaling.AutoScalingGroup',
     'aws.autoscaling.launchConfigurationName': 'aws.autoscaling.LaunchConfiguration',
+    'aws.cloudformation.stack': 'aws.cloudformation.Stack',
     'aws.cloudwatch.alarm': 'aws.cloudwatch.Alarm',
     'aws.dynamodb.table': 'aws.dynamodb.Table',
     'aws.ec2.address': 'aws.ec2.Address',

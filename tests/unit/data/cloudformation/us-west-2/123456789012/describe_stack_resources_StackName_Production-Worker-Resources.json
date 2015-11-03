@@ -1,0 +1,62 @@
+{
+    "StackResources": [
+        {
+            "StackId": "arn:aws:cloudformation:us-west-2:123456789012:stack/Production-Worker-Resources/684bc4e0-4c32-11e5-b67b-500160d4da7c", 
+            "ResourceStatus": "CREATE_COMPLETE", 
+            "ResourceType": "AWS::EC2::SecurityGroupIngress", 
+            "Timestamp": "2015-08-26T20:39:18.642000+00:00", 
+            "StackName": "Production-Worker-Resources", 
+            "PhysicalResourceId": "dbSecurityGroupIngress", 
+            "LogicalResourceId": "dbSecurityGroupIngress"
+        }, 
+        {
+            "StackId": "arn:aws:cloudformation:us-west-2:123456789012:stack/Production-Worker-Resources/684bc4e0-4c32-11e5-b67b-500160d4da7c", 
+            "ResourceStatus": "CREATE_COMPLETE", 
+            "ResourceType": "AWS::EC2::SecurityGroup", 
+            "Timestamp": "2015-08-26T20:39:16.348000+00:00", 
+            "StackName": "Production-Worker-Resources", 
+            "PhysicalResourceId": "sg-a77fc8c3", 
+            "LogicalResourceId": "ec2SecurityGroup"
+        }, 
+        {
+            "StackId": "arn:aws:cloudformation:us-west-2:123456789012:stack/Production-Worker-Resources/684bc4e0-4c32-11e5-b67b-500160d4da7c", 
+            "ResourceStatus": "UPDATE_COMPLETE", 
+            "ResourceType": "AWS::ElasticLoadBalancing::LoadBalancer", 
+            "Timestamp": "2015-08-26T21:15:29.762000+00:00", 
+            "StackName": "Production-Worker-Resources", 
+            "PhysicalResourceId": "worker-production", 
+            "LogicalResourceId": "elb"
+        }, 
+        {
+            "StackId": "arn:aws:cloudformation:us-west-2:123456789012:stack/Production-Worker-Resources/684bc4e0-4c32-11e5-b67b-500160d4da7c", 
+            "ResourceStatus": "CREATE_COMPLETE", 
+            "ResourceType": "AWS::EC2::SecurityGroup", 
+            "Timestamp": "2015-08-26T20:38:57.834000+00:00", 
+            "StackName": "Production-Worker-Resources", 
+            "PhysicalResourceId": "sg-d77fc8b3", 
+            "LogicalResourceId": "elbSecurityGroup"
+        }, 
+        {
+            "StackId": "arn:aws:cloudformation:us-west-2:123456789012:stack/Production-Worker-Resources/684bc4e0-4c32-11e5-b67b-500160d4da7c", 
+            "ResourceStatus": "CREATE_COMPLETE", 
+            "ResourceType": "AWS::IAM::Role", 
+            "Timestamp": "2015-08-26T20:38:52.422000+00:00", 
+            "StackName": "Production-Worker-Resources", 
+            "PhysicalResourceId": "Production-Worker-Resources-workersIamRole-436UOCN5ITI3", 
+            "LogicalResourceId": "workersIamRole"
+        }, 
+        {
+            "StackId": "arn:aws:cloudformation:us-west-2:123456789012:stack/Production-Worker-Resources/684bc4e0-4c32-11e5-b67b-500160d4da7c", 
+            "ResourceStatus": "CREATE_COMPLETE", 
+            "ResourceType": "AWS::IAM::InstanceProfile", 
+            "Timestamp": "2015-08-26T20:40:55.821000+00:00", 
+            "StackName": "Production-Worker-Resources", 
+            "PhysicalResourceId": "Production-Worker-Resources-workersInstanceProfile-1MX8GHOXXDU95", 
+            "LogicalResourceId": "workersInstanceProfile"
+        }
+    ], 
+    "ResponseMetadata": {
+        "HTTPStatusCode": 200, 
+        "RequestId": "a236e60a-8266-11e5-ba6f-7fb96a223003"
+    }
+}

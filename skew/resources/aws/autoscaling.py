@@ -44,7 +44,7 @@ class LaunchConfiguration(AWSResource):
 
     class Meta(object):
         service = 'autoscaling'
-        type = 'launchConfigurationName'
+        type = 'launchConfiguration'
         name = 'LaunchConfigurationName'
         date = 'CreatedTime'
         dimension = 'AutoScalingGroupName'
