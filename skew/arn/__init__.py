@@ -20,7 +20,6 @@ from six.moves import zip_longest
 import jmespath
 
 import skew.resources
-import skew.awsclient
 from skew.config import get_config
 
 LOG = logging.getLogger(__name__)
@@ -112,47 +111,16 @@ class Resource(ARNComponent):
     def enumerate(self, context):
         LOG.debug('Resource.enumerate %s', context)
         _, provider, service_name, region, account = context
-        client = skew.awsclient.get_awsclient(
-            service_name, region, account)
         resource_type, resource_id = self._split_resource(self.pattern)
         LOG.debug('resource_type=%s, resource_id=%s',
                   resource_type, resource_id)
+        resources = []
         for resource_type in self.matches(context):
-            kwargs = {}
             resource_path = '.'.join([provider, service_name, resource_type])
             resource_cls = skew.resources.find_resource_class(resource_path)
-            do_client_side_filtering = False
-            if resource_id and resource_id != '*':
-                # If we are looking for a specific resource and the
-                # API provides a way to filter on a specific resource
-                # id then let's insert the right parameter to do the filtering.
-                # If the API does not support that, we will have to filter
-                # after we get all of the results.
-                filter_name = resource_cls.Meta.filter_name
-                if filter_name:
-                    if resource_cls.Meta.filter_type == 'list':
-                        kwargs[filter_name] = [resource_id]
-                    else:
-                        kwargs[filter_name] = resource_id
-                else:
-                    do_client_side_filtering = True
-            enum_op, path, extra_args = resource_cls.Meta.enum_spec
-            if extra_args:
-                kwargs.update(extra_args)
-            LOG.debug('enum_op=%s' % enum_op)
-            data = client.call(enum_op, query=path, **kwargs)
-            LOG.debug(data)
-            if data:
-                for d in data:
-                    if do_client_side_filtering:
-                        # If the API does not support filtering, the resource
-                        # class should provide a filter method that will
-                        # return True if the returned data matches the
-                        # resource ID we are looking for.
-                        if not resource_cls.filter(resource_id, d):
-                            continue
-                    resource = resource_cls(client, d, self._arn.query)
-                    yield resource
+            resources.extend(resource_cls.enumerate(
+                self._arn, region, account, resource_id))
+        return resources
 
 
 class Account(ARNComponent):

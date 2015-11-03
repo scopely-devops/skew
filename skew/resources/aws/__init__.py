@@ -17,10 +17,8 @@ import datetime
 from collections import namedtuple
 
 import jmespath
-import botocore.session
 
 import skew.awsclient
-from skew.resources import find_resource_class
 from skew.resources.resource import Resource
 
 LOG = logging.getLogger(__name__)
