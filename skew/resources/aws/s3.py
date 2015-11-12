@@ -18,6 +18,8 @@ import skew.awsclient
 
 class Bucket(AWSResource):
 
+    _location_cache = {}
+
     @classmethod
     def enumerate(cls, arn, region, account, resource_id=None):
         resources = super(Bucket, cls).enumerate(arn, region, account,
@@ -28,13 +30,17 @@ class Bucket(AWSResource):
         if region is None:
             region = 'us-east-1'
         for r in resources:
-            kwargs = {'Bucket': r.id}
-            response = client.call('get_bucket_location', **kwargs)
-            location = response.get('LocationConstraint', 'us-east-1')
+            location = cls._location_cache.get(r.id)
             if location is None:
-                location = 'us-east-1'
-            if location is 'EU':
-                location = 'eu-west-1'
+                print('need to find location of %s' % r.id)
+                kwargs = {'Bucket': r.id}
+                response = client.call('get_bucket_location', **kwargs)
+                location = response.get('LocationConstraint', 'us-east-1')
+                if location is None:
+                    location = 'us-east-1'
+                if location is 'EU':
+                    location = 'eu-west-1'
+                cls._location_cache[r.id] = location
             if location == region:
                 region_resources.append(r)
         return region_resources
