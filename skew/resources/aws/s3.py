@@ -11,9 +11,12 @@
 # ANY KIND, either express or implied. See the License for the specific
 # language governing permissions and limitations under the License.
 import jmespath
+import logging
 
 from skew.resources.aws import AWSResource
 import skew.awsclient
+
+LOG = logging.getLogger(__name__)
 
 
 class Bucket(AWSResource):
@@ -32,7 +35,7 @@ class Bucket(AWSResource):
         for r in resources:
             location = cls._location_cache.get(r.id)
             if location is None:
-                print('need to find location of %s' % r.id)
+                LOG.debug('finding location for %s', r.id)
                 kwargs = {'Bucket': r.id}
                 response = client.call('get_bucket_location', **kwargs)
                 location = response.get('LocationConstraint', 'us-east-1')
