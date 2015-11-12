@@ -13,9 +13,31 @@
 import jmespath
 
 from skew.resources.aws import AWSResource
+import skew.awsclient
 
 
 class Bucket(AWSResource):
+
+    @classmethod
+    def enumerate(cls, arn, region, account, resource_id=None):
+        resources = super(Bucket, cls).enumerate(arn, region, account,
+                                                 resource_id)
+        client = skew.awsclient.get_awsclient(
+            cls.Meta.service, region, account)
+        region_resources = []
+        if region is None:
+            region = 'us-east-1'
+        for r in resources:
+            kwargs = {'Bucket': r.id}
+            response = client.call('get_bucket_location', **kwargs)
+            location = response.get('LocationConstraint', 'us-east-1')
+            if location is None:
+                location = 'us-east-1'
+            if location is 'EU':
+                location = 'eu-west-1'
+            if location == region:
+                region_resources.append(r)
+        return region_resources
 
     class Meta(object):
         service = 's3'
