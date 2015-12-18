@@ -24,14 +24,6 @@ from skew.config import get_config
 
 LOG = logging.getLogger(__name__)
 
-# Offer an override for setting credentials instead of falling back to the
-# ~/.aws/credentials file. Dict to be formatted as:
-# {'access_key': key, 'secret_key': secret, 'token': token}
-# Token is optional and only required for federated accounts.
-# In order for this to work, you must provide a
-# value to skew.config._config, i.e. {'accounts': {'123456789012': None}}
-global_aws_creds = {}
-
 
 def json_encoder(obj):
     """JSON encoder that formats datetimes as ISO8601 format."""
@@ -49,7 +41,7 @@ class AWSClient(object):
         self._region_name = region_name
         self._account_id = account_id
         self._has_credentials = False
-        if not (global_aws_creds or aws_creds):
+        if not aws_creds:
             # If no creds, need profile name to retrieve creds from ~/.aws/credentials
             self._profile = self._config['accounts'][account_id]['profile']
         self.aws_creds = aws_creds
@@ -113,9 +105,6 @@ class AWSClient(object):
         # Try using "local" creds first:
         if self.aws_creds:
             session.set_credentials(**self.aws_creds)
-        # Then try global:
-        elif global_aws_creds:
-            session.set_credentials(**global_aws_creds)
         else:
             session.set_config_variable('profile', self.profile)
         return session.create_client(
