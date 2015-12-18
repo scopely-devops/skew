@@ -24,9 +24,10 @@ class Bucket(AWSResource):
     _location_cache = {}
 
     @classmethod
-    def enumerate(cls, arn, region, account, resource_id=None):
+    def enumerate(cls, arn, region, account, resource_id=None, aws_creds=None):
         resources = super(Bucket, cls).enumerate(arn, region, account,
-                                                 resource_id)
+                                                 resource_id,
+                                                 aws_creds=aws_creds)
         client = skew.awsclient.get_awsclient(
             cls.Meta.service, region, account)
         region_resources = []

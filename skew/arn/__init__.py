@@ -108,7 +108,7 @@ class Resource(ARNComponent):
             all_resources = ['*']
         return all_resources
 
-    def enumerate(self, context):
+    def enumerate(self, context, aws_creds=None):
         LOG.debug('Resource.enumerate %s', context)
         _, provider, service_name, region, account = context
         resource_type, resource_id = self._split_resource(self.pattern)
@@ -119,7 +119,7 @@ class Resource(ARNComponent):
             resource_path = '.'.join([provider, service_name, resource_type])
             resource_cls = skew.resources.find_resource_class(resource_path)
             resources.extend(resource_cls.enumerate(
-                self._arn, region, account, resource_id))
+                self._arn, region, account, resource_id, aws_creds=aws_creds))
         return resources
 
 
@@ -132,11 +132,12 @@ class Account(ARNComponent):
     def choices(self, context=None):
         return list(self._accounts.keys())
 
-    def enumerate(self, context):
+    def enumerate(self, context, aws_creds=None):
         LOG.debug('Account.enumerate %s', context)
         for match in self.matches(context):
             context.append(match)
-            for resource in self._arn.resource.enumerate(context):
+            for resource in self._arn.resource.enumerate(
+                    context, aws_creds=aws_creds):
                 yield resource
             context.pop()
 
@@ -176,11 +177,12 @@ class Region(ARNComponent):
         return self._service_region_map.get(
             service, self._all_region_names)
 
-    def enumerate(self, context):
+    def enumerate(self, context, aws_creds=None):
         LOG.debug('Region.enumerate %s', context)
         for match in self.matches(context):
             context.append(match)
-            for account in self._arn.account.enumerate(context):
+            for account in self._arn.account.enumerate(
+                    context, aws_creds=aws_creds):
                 yield account
             context.pop()
 
@@ -194,11 +196,12 @@ class Service(ARNComponent):
             provider = self._arn.provider.pattern
         return skew.resources.all_services(provider)
 
-    def enumerate(self, context):
+    def enumerate(self, context, aws_creds=None):
         LOG.debug('Service.enumerate %s', context)
         for match in self.matches(context):
             context.append(match)
-            for region in self._arn.region.enumerate(context):
+            for region in self._arn.region.enumerate(
+                    context, aws_creds=aws_creds):
                 yield region
             context.pop()
 
@@ -208,11 +211,12 @@ class Provider(ARNComponent):
     def choices(self, context=None):
         return ['aws']
 
-    def enumerate(self, context):
+    def enumerate(self, context, aws_creds=None):
         LOG.debug('Provider.enumerate %s', context)
         for match in self.matches(context):
             context.append(match)
-            for service in self._arn.service.enumerate(context):
+            for service in self._arn.service.enumerate(
+                    context, aws_creds=aws_creds):
                 yield service
             context.pop()
 
@@ -222,11 +226,12 @@ class Scheme(ARNComponent):
     def choices(self, context=None):
         return ['arn']
 
-    def enumerate(self, context):
+    def enumerate(self, context, aws_creds=None):
         LOG.debug('Scheme.enumerate %s', context)
         for match in self.matches(context):
             context.append(match)
-            for provider in self._arn.provider.enumerate(context):
+            for provider in self._arn.provider.enumerate(
+                    context, aws_creds=aws_creds):
                 yield provider
             context.pop()
 
@@ -235,10 +240,11 @@ class ARN(object):
 
     ComponentClasses = [Scheme, Provider, Service, Region, Account, Resource]
 
-    def __init__(self, arn_string='arn:aws:*:*:*:*'):
+    def __init__(self, arn_string='arn:aws:*:*:*:*', aws_creds=None):
         self.query = None
         self._components = None
         self._build_components_from_string(arn_string)
+        self.aws_creds = aws_creds
 
     def __repr__(self):
         return ':'.join([str(c) for c in self._components])
@@ -300,5 +306,5 @@ class ARN(object):
 
     def __iter__(self):
         context = []
-        for scheme in self.scheme.enumerate(context):
+        for scheme in self.scheme.enumerate(context, aws_creds=self.aws_creds):
             yield scheme

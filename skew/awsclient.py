@@ -30,7 +30,7 @@ LOG = logging.getLogger(__name__)
 # Token is optional and only required for federated accounts.
 # In order for this to work, you must provide a
 # value to skew.config._config, i.e. {'accounts': {'123456789012': None}}
-aws_creds = {}
+global_aws_creds = {}
 
 
 def json_encoder(obj):
@@ -43,15 +43,16 @@ def json_encoder(obj):
 
 class AWSClient(object):
 
-    def __init__(self, service_name, region_name, account_id):
+    def __init__(self, service_name, region_name, account_id, aws_creds=None):
         self._config = get_config()
         self._service_name = service_name
         self._region_name = region_name
         self._account_id = account_id
         self._has_credentials = False
-        if not aws_creds:
+        if not (global_aws_creds or aws_creds):
             # If no creds, need profile name to retrieve creds from ~/.aws/credentials
             self._profile = self._config['accounts'][account_id]['profile']
+        self.aws_creds = aws_creds
         self._client = self._create_client()
         self._record_path = self._config.get('record_path', None)
 
@@ -109,8 +110,12 @@ class AWSClient(object):
 
     def _create_client(self):
         session = botocore.session.get_session()
-        if aws_creds:
-            session.set_credentials(**aws_creds)
+        # Try using "local" creds first:
+        if self.aws_creds:
+            session.set_credentials(**self.aws_creds)
+        # Then try global:
+        elif global_aws_creds:
+            session.set_credentials(**global_aws_creds)
         else:
             session.set_config_variable('profile', self.profile)
         return session.create_client(
@@ -162,11 +167,12 @@ class AWSClient(object):
 _client_cache = {}
 
 
-def get_awsclient(service_name, region_name, account_id):
+def get_awsclient(service_name, region_name, account_id, aws_creds=None):
     global _client_cache
     client_key = '{}:{}:{}'.format(service_name, region_name, account_id)
     if client_key not in _client_cache:
         _client_cache[client_key] = AWSClient(service_name,
                                               region_name,
-                                              account_id)
+                                              account_id,
+                                              aws_creds=aws_creds)
     return _client_cache[client_key]
