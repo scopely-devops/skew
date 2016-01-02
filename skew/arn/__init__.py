@@ -166,7 +166,9 @@ class Region(ARNComponent):
         'glacier': _region_names_limited,
         'kinesis': _region_names_limited,
         'iam': _no_region_required,
-        'route53': _no_region_required}
+        'route53': _no_region_required,
+        'lambda': ['us-east-1', 'us-west-2', 'eu-west-1', 'ap-northeast-1']
+    }
 
     def choices(self, context=None):
         if context:

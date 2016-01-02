@@ -14,7 +14,6 @@ import jmespath
 import logging
 
 from skew.resources.aws import AWSResource
-import skew.awsclient
 
 LOG = logging.getLogger(__name__)
 
@@ -27,8 +26,6 @@ class Bucket(AWSResource):
     def enumerate(cls, arn, region, account, resource_id=None):
         resources = super(Bucket, cls).enumerate(arn, region, account,
                                                  resource_id)
-        client = skew.awsclient.get_awsclient(
-            cls.Meta.service, region, account)
         region_resources = []
         if region is None:
             region = 'us-east-1'
@@ -37,7 +34,7 @@ class Bucket(AWSResource):
             if location is None:
                 LOG.debug('finding location for %s', r.id)
                 kwargs = {'Bucket': r.id}
-                response = client.call('get_bucket_location', **kwargs)
+                response = r._client.call('get_bucket_location', **kwargs)
                 location = response.get('LocationConstraint', 'us-east-1')
                 if location is None:
                     location = 'us-east-1'
