@@ -159,14 +159,5 @@ class AWSClient(object):
         return data
 
 
-_client_cache = {}
-
-
 def get_awsclient(service_name, region_name, account_id):
-    global _client_cache
-    client_key = '{}:{}:{}'.format(service_name, region_name, account_id)
-    if client_key not in _client_cache:
-        _client_cache[client_key] = AWSClient(service_name,
-                                              region_name,
-                                              account_id)
-    return _client_cache[client_key]
+    return AWSClient(service_name, region_name, account_id)
