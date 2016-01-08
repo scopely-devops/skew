@@ -18,7 +18,7 @@ from skew.arn import ARN
 __version__ = open(os.path.join(os.path.dirname(__file__), '_version')).read()
 
 
-def scan(sku):
+def scan(sku, aws_creds=None):
     """
     Scan (i.e. look up) a SKU.
 
@@ -37,4 +37,4 @@ def scan(sku):
     but since there is currently only one (ARN) let's not over-complicate
     things.
     """
-    return ARN(sku)
+    return ARN(sku, aws_creds=aws_creds)
