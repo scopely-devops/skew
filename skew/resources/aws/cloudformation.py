@@ -18,9 +18,9 @@ from skew.resources.aws import AWSResource
 class Stack(AWSResource):
 
     @classmethod
-    def enumerate(cls, arn, region, account, resource_id=None, aws_creds=None):
-        resources = super(Stack, cls).enumerate(
-            arn, region, account, resource_id, aws_creds=aws_creds)
+    def enumerate(cls, arn, region, account, resource_id=None):
+        resources = super(Stack, cls).enumerate(arn, region, account,
+                                                resource_id)
         for stack in resources:
             stack.data['Resources'] = []
             for stack_resource in stack:

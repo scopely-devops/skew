@@ -20,11 +20,10 @@ LOG = logging.getLogger(__name__)
 
 class MockAWSClient(object):
 
-    def __init__(self, service_name, region_name, account_id, aws_creds=None):
+    def __init__(self, service_name, region_name, account_id):
         self.service_name = service_name
         self.region_name = region_name
         self.account_id = account_id
-        self.aws_creds = aws_creds
 
     def _get_stored_response(self, op_name, kwargs):
         LOG.debug('op_name={}, kwargs={}'.format(op_name, kwargs))
@@ -52,6 +51,5 @@ class MockAWSClient(object):
         return self._get_stored_response(op_name, kwargs)
 
 
-def get_awsclient(service_name, region_name, account_id, aws_creds=None):
-    return MockAWSClient(service_name, region_name, account_id,
-                         aws_creds=aws_creds)
+def get_awsclient(service_name, region_name, account_id):
+    return MockAWSClient(service_name, region_name, account_id)
