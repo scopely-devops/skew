@@ -5,8 +5,7 @@ from setuptools import setup, find_packages
 import os
 
 requires = [
-    'six>=1.8.0,<2.0.0',
-    'botocore>=1.3.17',
+    'boto3>=1.2.3',
     'python-dateutil>=2.1,<3.0.0',
     'PyYAML==3.11']
 
