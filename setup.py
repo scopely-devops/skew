@@ -6,6 +6,7 @@ import os
 
 requires = [
     'boto3>=1.2.3',
+    'six>=1.9.0',
     'python-dateutil>=2.1,<3.0.0',
     'PyYAML==3.11']
 

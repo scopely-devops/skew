@@ -16,7 +16,7 @@
 import logging
 import re
 
-from botocore.vendored.six.moves import zip_longest
+from six.moves import zip_longest
 import jmespath
 
 import skew.resources
