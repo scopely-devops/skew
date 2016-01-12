@@ -18,7 +18,7 @@ import os
 
 import datetime
 import jmespath
-import botocore.session
+import boto3
 
 from skew.config import get_config
 
@@ -101,14 +101,12 @@ class AWSClient(object):
                           ensure_ascii=False)
 
     def _create_client(self):
-        session = botocore.session.get_session()
-        # Try using "local" creds first:
         if self.aws_creds:
-            session.set_credentials(**self.aws_creds)
+            session = boto3.Session(**self.aws_creds)
         else:
-            session.set_config_variable('profile', self.profile)
-        return session.create_client(
-            self.service_name, region_name=self.region_name)
+            session = boto3.Session(
+                profile_name=self.profile, region_name=self.region_name)
+        return session.client(self.service_name)
 
     def call(self, op_name, query=None, **kwargs):
         """
@@ -153,5 +151,5 @@ class AWSClient(object):
         return data
 
 
-def get_awsclient(service_name, region_name, account_id):
-    return AWSClient(service_name, region_name, account_id)
+def get_awsclient(service_name, region_name, account_id, aws_creds=None):
+    return AWSClient(service_name, region_name, account_id, aws_creds)
