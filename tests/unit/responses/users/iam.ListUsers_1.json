@@ -1,0 +1,106 @@
+{
+    "status_code": 200, 
+    "data": {
+        "Users": [
+            {
+                "UserName": "foo", 
+                "Path": "/", 
+                "CreateDate": {
+                    "hour": 16, 
+                    "__class__": "datetime", 
+                    "month": 9, 
+                    "second": 8, 
+                    "microsecond": 0, 
+                    "year": 2015, 
+                    "day": 3, 
+                    "minute": 38
+                }, 
+                "UserId": "AIDAIRPF4OH5UHMJZL46Y", 
+                "Arn": "arn:aws:iam::234567890123:user/foo"
+            }, 
+            {
+                "UserName": "bar", 
+                "PasswordLastUsed": {
+                    "hour": 4, 
+                    "__class__": "datetime", 
+                    "month": 1, 
+                    "second": 9, 
+                    "microsecond": 0, 
+                    "year": 2016, 
+                    "day": 13, 
+                    "minute": 9
+                }, 
+                "CreateDate": {
+                    "hour": 22, 
+                    "__class__": "datetime", 
+                    "month": 6, 
+                    "second": 14, 
+                    "microsecond": 0, 
+                    "year": 2015, 
+                    "day": 11, 
+                    "minute": 37
+                }, 
+                "UserId": "AIDAI3QVEB6MR6JTWJUDU", 
+                "Path": "/", 
+                "Arn": "arn:aws:iam::234567890123:user/bar"
+            }, 
+            {
+                "UserName": "fie", 
+                "PasswordLastUsed": {
+                    "hour": 7, 
+                    "__class__": "datetime", 
+                    "month": 1, 
+                    "second": 36, 
+                    "microsecond": 0, 
+                    "year": 2016, 
+                    "day": 4, 
+                    "minute": 4
+                }, 
+                "CreateDate": {
+                    "hour": 20, 
+                    "__class__": "datetime", 
+                    "month": 5, 
+                    "second": 10, 
+                    "microsecond": 0, 
+                    "year": 2015, 
+                    "day": 26, 
+                    "minute": 42
+                }, 
+                "UserId": "AIDAJV2QK2FRI4DIGSU54", 
+                "Path": "/", 
+                "Arn": "arn:aws:iam::234567890123:user/fie"
+            }, 
+            {
+                "UserName": "baz", 
+                "PasswordLastUsed": {
+                    "hour": 13, 
+                    "__class__": "datetime", 
+                    "month": 1, 
+                    "second": 36, 
+                    "microsecond": 0, 
+                    "year": 2016, 
+                    "day": 4, 
+                    "minute": 5
+                }, 
+                "CreateDate": {
+                    "hour": 18, 
+                    "__class__": "datetime", 
+                    "month": 11, 
+                    "second": 40, 
+                    "microsecond": 0, 
+                    "year": 2015, 
+                    "day": 30, 
+                    "minute": 48
+                }, 
+                "UserId": "AIDAJAUML5KUAM547O6LK", 
+                "Path": "/", 
+                "Arn": "arn:aws:iam::234567890123:user/baz"
+            }
+        ], 
+        "ResponseMetadata": {
+            "HTTPStatusCode": 200, 
+            "RequestId": "e2cfc45a-ba38-11e5-ac7c-6b766251e9ee"
+        }, 
+        "IsTruncated": false
+    }
+}

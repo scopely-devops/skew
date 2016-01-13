@@ -23,9 +23,9 @@ LOG = logging.getLogger(__name__)
 class Function(AWSResource):
 
     @classmethod
-    def enumerate(cls, arn, region, account, resource_id=None):
+    def enumerate(cls, arn, region, account, resource_id=None, **kwargs):
         resources = super(Function, cls).enumerate(arn, region, account,
-                                                   resource_id)
+                                                   resource_id, **kwargs)
         for r in resources:
             r.data['EventSources'] = []
             kwargs = {'FunctionName': r.data['FunctionName']}

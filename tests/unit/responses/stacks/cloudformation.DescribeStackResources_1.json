@@ -1,0 +1,83 @@
+{
+    "status_code": 200, 
+    "data": {
+        "StackResources": [
+            {
+                "StackId": "arn:aws:cloudformation:us-west-2:860421987956:stack/foobar-tables/117c58a0-b56e-11e5-a63a-503f2a2ceeae", 
+                "ResourceStatus": "CREATE_COMPLETE", 
+                "ResourceType": "AWS::DynamoDB::Table", 
+                "Timestamp": {
+                    "hour": 18, 
+                    "__class__": "datetime", 
+                    "month": 1, 
+                    "second": 51, 
+                    "microsecond": 962000, 
+                    "year": 2016, 
+                    "day": 7, 
+                    "minute": 40
+                }, 
+                "StackName": "foobar-tables", 
+                "PhysicalResourceId": "foobar-tables", 
+                "LogicalResourceId": "foobar"
+            }, 
+            {
+                "StackId": "arn:aws:cloudformation:us-west-2:123456789012:stack/foobar-tables/117c58a0-b56e-11e5-a63a-503f2a2ceeae", 
+                "ResourceStatus": "CREATE_COMPLETE", 
+                "ResourceType": "AWS::DynamoDB::Table", 
+                "Timestamp": {
+                    "hour": 18, 
+                    "__class__": "datetime", 
+                    "month": 1, 
+                    "second": 50, 
+                    "microsecond": 715000, 
+                    "year": 2016, 
+                    "day": 7, 
+                    "minute": 40
+                }, 
+                "StackName": "foo", 
+                "PhysicalResourceId": "foo", 
+                "LogicalResourceId": "foo"
+            }, 
+            {
+                "StackId": "arn:aws:cloudformation:us-west-2:123456789012:stack/yeobot-tables/117c58a0-b56e-11e5-a63a-503f2a2ceeae", 
+                "ResourceStatus": "CREATE_COMPLETE", 
+                "ResourceType": "AWS::DynamoDB::Table", 
+                "Timestamp": {
+                    "hour": 23, 
+                    "__class__": "datetime", 
+                    "month": 1, 
+                    "second": 29, 
+                    "microsecond": 437000, 
+                    "year": 2016, 
+                    "day": 8, 
+                    "minute": 1
+                }, 
+                "StackName": "bar", 
+                "PhysicalResourceId": "bar", 
+                "LogicalResourceId": "bar"
+            }, 
+            {
+                "StackId": "arn:aws:cloudformation:us-west-2:123456789012:stack/yeobot-tables/117c58a0-b56e-11e5-a63a-503f2a2ceeae", 
+                "ResourceStatus": "CREATE_COMPLETE", 
+                "ResourceType": "AWS::DynamoDB::Table", 
+                "Timestamp": {
+                    "hour": 18, 
+                    "__class__": "datetime", 
+                    "month": 1, 
+                    "second": 50, 
+                    "microsecond": 915000, 
+                    "year": 2016, 
+                    "day": 7, 
+                    "minute": 40
+                }, 
+                "StackName": "fie", 
+                "PhysicalResourceId": "fie", 
+                "LogicalResourceId": "fie"
+            }
+        ], 
+        "ResponseMetadata": {
+            "HTTPStatusCode": 200, 
+            "RequestId": "f7cff340-ba3d-11e5-9c27-a9e2294677da"
+        }
+    }
+}

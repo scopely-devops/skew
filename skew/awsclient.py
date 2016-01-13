@@ -13,12 +13,12 @@
 # limitations under the License.
 
 import logging
-import json
-import os
+import time
 
 import datetime
 import jmespath
 import boto3
+from botocore.exceptions import ClientError
 
 from skew.config import get_config
 
@@ -35,18 +35,20 @@ def json_encoder(obj):
 
 class AWSClient(object):
 
-    def __init__(self, service_name, region_name, account_id, aws_creds=None):
+    def __init__(self, service_name, region_name, account_id, **kwargs):
         self._config = get_config()
         self._service_name = service_name
         self._region_name = region_name
         self._account_id = account_id
         self._has_credentials = False
-        if not aws_creds:
-            # If no creds, need profile name to retrieve creds from ~/.aws/credentials
+        self.aws_creds = kwargs.get('aws_creds')
+        if self.aws_creds is None:
+            # no aws_creds, need profile to get creds from ~/.aws/credentials
             self._profile = self._config['accounts'][account_id]['profile']
-        self.aws_creds = aws_creds
+        self.placebo = kwargs.get('placebo')
+        self.placebo_dir = kwargs.get('placebo_dir')
+        self.placebo_mode = kwargs.get('placebo_mode', 'record')
         self._client = self._create_client()
-        self._record_path = self._config.get('record_path', None)
 
     @property
     def service_name(self):
@@ -64,49 +66,19 @@ class AWSClient(object):
     def profile(self):
         return self._profile
 
-    def _record(self, op_name, kwargs, data):
-        """
-        This is a little hack to enable easier unit testing of the code.
-        Since botocore has its own set of tests, I'm not interested in
-        trying to test it again here.  So, this recording capability allows
-        us to save the data coming back from botocore as JSON files which
-        can then be used by the mocked awsclient in the unit test directory.
-        To enable this, add something like this to your skew config file:
-
-              record_path: ~/projects/skew/skew/tests/unit/data
-
-        and the JSON data files will get stored in this path.
-        """
-        if self._record_path:
-            path = os.path.expanduser(self._record_path)
-            path = os.path.expandvars(path)
-            path = os.path.join(path, self.service_name)
-            if not os.path.isdir(path):
-                os.mkdir(path)
-            path = os.path.join(path, self.region_name)
-            if not os.path.isdir(path):
-                os.mkdir(path)
-            path = os.path.join(path, self.account_id)
-            if not os.path.isdir(path):
-                os.mkdir(path)
-            filename = op_name
-            if kwargs:
-                for k, v in kwargs.items():
-                    if k != 'query':
-                        filename += '_{}_{}'.format(k, v)
-            filename += '.json'
-            path = os.path.join(path, filename)
-            with open(path, 'wb') as fp:
-                json.dump(data, fp, indent=4, default=json_encoder,
-                          ensure_ascii=False)
-
     def _create_client(self):
         if self.aws_creds:
             session = boto3.Session(**self.aws_creds)
         else:
             session = boto3.Session(
-                profile_name=self.profile, region_name=self.region_name)
-        return session.client(self.service_name)
+                profile_name=self.profile)
+        if self.placebo and self.placebo_dir:
+            pill = self.placebo.attach(session, self.placebo_dir)
+            if self.placebo_mode == 'record':
+                pill.record()
+            elif self.placebo_mode == 'playback':
+                pill.playback()
+        return session.client(self.service_name, region_name=self.region_name)
 
     def call(self, op_name, query=None, **kwargs):
         """
@@ -144,12 +116,21 @@ class AWSClient(object):
             data = results.build_full_result()
         else:
             op = getattr(self._client, op_name)
-            data = op(**kwargs)
+            done = False
+            data = {}
+            while not done:
+                try:
+                    data = op(**kwargs)
+                    done = True
+                except ClientError as e:
+                    if 'Throttling' in str(e):
+                        time.sleep(1)
+                except Exception:
+                    done = True
         if query:
             data = query.search(data)
-        self._record(op_name, kwargs, data)
         return data
 
 
-def get_awsclient(service_name, region_name, account_id, aws_creds=None):
-    return AWSClient(service_name, region_name, account_id, aws_creds)
+def get_awsclient(service_name, region_name, account_id, **kwargs):
+    return AWSClient(service_name, region_name, account_id, **kwargs)

@@ -23,9 +23,9 @@ LOG = logging.getLogger(__name__)
 class Resource(object):
 
     @classmethod
-    def enumerate(cls, arn, region, account, resource_id=None, aws_creds=None):
+    def enumerate(cls, arn, region, account, resource_id=None, **kwargs):
         client = skew.awsclient.get_awsclient(
-            cls.Meta.service, region, account, aws_creds=aws_creds)
+            cls.Meta.service, region, account, **kwargs)
         kwargs = {}
         do_client_side_filtering = False
         if resource_id and resource_id != '*':

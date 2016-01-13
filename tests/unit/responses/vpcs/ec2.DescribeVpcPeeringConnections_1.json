@@ -1,0 +1,10 @@
+{
+    "status_code": 200, 
+    "data": {
+        "VpcPeeringConnections": [], 
+        "ResponseMetadata": {
+            "HTTPStatusCode": 200, 
+            "RequestId": "e9826765-8432-4f48-b895-0fc61d448020"
+        }
+    }
+}

@@ -1,0 +1,139 @@
+{
+    "status_code": 200, 
+    "data": {
+        "SecurityGroups": [
+            {
+                "IpPermissionsEgress": [], 
+                "Description": "default group", 
+                "IpPermissions": [
+                    {
+                        "PrefixListIds": [], 
+                        "FromPort": 0, 
+                        "IpRanges": [], 
+                        "ToPort": 65535, 
+                        "IpProtocol": "tcp", 
+                        "UserIdGroupPairs": [
+                            {
+                                "GroupName": "default", 
+                                "UserId": "123456789012", 
+                                "GroupId": "sg-c7286cf7"
+                            }
+                        ]
+                    }, 
+                    {
+                        "PrefixListIds": [], 
+                        "FromPort": 0, 
+                        "IpRanges": [], 
+                        "ToPort": 65535, 
+                        "IpProtocol": "udp", 
+                        "UserIdGroupPairs": [
+                            {
+                                "GroupName": "default", 
+                                "UserId": "123456789012", 
+                                "GroupId": "sg-c7286cf7"
+                            }
+                        ]
+                    }, 
+                    {
+                        "PrefixListIds": [], 
+                        "FromPort": -1, 
+                        "IpRanges": [], 
+                        "ToPort": -1, 
+                        "IpProtocol": "icmp", 
+                        "UserIdGroupPairs": [
+                            {
+                                "GroupName": "default", 
+                                "UserId": "123456789012", 
+                                "GroupId": "sg-c7286cf7"
+                            }
+                        ]
+                    }
+                ], 
+                "GroupName": "default", 
+                "OwnerId": "123456789012", 
+                "GroupId": "sg-c7286cf7"
+            }, 
+            {
+                "IpPermissionsEgress": [
+                    {
+                        "IpProtocol": "-1", 
+                        "IpRanges": [
+                            {
+                                "CidrIp": "0.0.0.0/0"
+                            }
+                        ], 
+                        "UserIdGroupPairs": [], 
+                        "PrefixListIds": []
+                    }
+                ], 
+                "Description": "A group for running an iPython notebook server", 
+                "IpPermissions": [
+                    {
+                        "PrefixListIds": [], 
+                        "FromPort": 8888, 
+                        "IpRanges": [
+                            {
+                                "CidrIp": "1.2.3.4/32"
+                            }
+                        ], 
+                        "ToPort": 8888, 
+                        "IpProtocol": "tcp", 
+                        "UserIdGroupPairs": []
+                    }, 
+                    {
+                        "PrefixListIds": [], 
+                        "FromPort": 22, 
+                        "IpRanges": [
+                            {
+                                "CidrIp": "0.0.0.0/0"
+                            }
+                        ], 
+                        "ToPort": 22, 
+                        "IpProtocol": "tcp", 
+                        "UserIdGroupPairs": []
+                    }
+                ], 
+                "GroupName": "IPythonNotebook", 
+                "VpcId": "vpc-4ff5eb2d", 
+                "OwnerId": "123456789012", 
+                "GroupId": "sg-740eec11"
+            }, 
+            {
+                "IpPermissionsEgress": [
+                    {
+                        "IpProtocol": "-1", 
+                        "IpRanges": [
+                            {
+                                "CidrIp": "0.0.0.0/0"
+                            }
+                        ], 
+                        "UserIdGroupPairs": [], 
+                        "PrefixListIds": []
+                    }
+                ], 
+                "Description": "default VPC security group", 
+                "IpPermissions": [
+                    {
+                        "IpProtocol": "-1", 
+                        "IpRanges": [], 
+                        "UserIdGroupPairs": [
+                            {
+                                "UserId": "123456789012", 
+                                "GroupId": "sg-cc09eba9"
+                            }
+                        ], 
+                        "PrefixListIds": []
+                    }
+                ], 
+                "GroupName": "default", 
+                "VpcId": "vpc-4ff5eb2d", 
+                "OwnerId": "123456789012", 
+                "GroupId": "sg-cc09eba9"
+            }
+        ], 
+        "ResponseMetadata": {
+            "HTTPStatusCode": 200, 
+            "RequestId": "4e4c6b4b-9e97-448b-bf1f-09760c584f2e"
+        }
+    }
+}

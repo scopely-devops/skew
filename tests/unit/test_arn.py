@@ -15,15 +15,16 @@ import unittest
 import os
 
 import mock
+import placebo
 
 from skew import scan
-from tests.unit.mock_awsclient import get_awsclient
-import skew.awsclient
-
-skew.awsclient.get_awsclient = get_awsclient
 
 
 class TestARN(unittest.TestCase):
+
+    def _get_response_path(self, test_case):
+        p = os.path.join(os.path.dirname(__file__), 'responses')
+        return os.path.join(p, test_case)
 
     def setUp(self):
         self.environ = {}
@@ -39,107 +40,157 @@ class TestARN(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test_ec2_instance(self):
-        arn = scan('arn:aws:ec2:us-west-2:123456789012:instance/*')
+    def test_ec2(self):
+        placebo_cfg = {
+            'placebo': placebo,
+            'placebo_dir': self._get_response_path('instances_1'),
+            'placebo_mode': 'playback'}
+        arn = scan('arn:aws:ec2:us-west-2:123456789012:instance/*',
+                   **placebo_cfg)
         # Fetch all Instance resources
         l = list(arn)
         self.assertEqual(len(l), 2)
-        # Fetch non-existant resource
-        arn = scan('arn:aws:ec2:us-west-2:123456789012:instance/i-decafbad')
-        l = list(arn)
-        self.assertEqual(len(l), 0)
         # Fetch a single resource
-        arn = scan('arn:aws:ec2:us-west-2:123456789012:instance/i-30f39af5')
+        placebo_cfg = {
+            'placebo': placebo,
+            'placebo_dir': self._get_response_path('instances_2'),
+            'placebo_mode': 'playback'}
+        arn = scan('arn:aws:ec2:us-west-2:123456789012:instance/i-db530902',
+                   **placebo_cfg)
         l = list(arn)
         self.assertEqual(len(l), 1)
         # check filters
-        arn = scan('arn:aws:ec2:us-west-2:123456789012:instance/i-30f39af5|InstanceType')
+        arn = scan('arn:aws:ec2:us-west-2:123456789012:instance/i-db530902|InstanceType',
+                   **placebo_cfg)
         l = list(arn)
         self.assertEqual(len(l), 1)
         r = l[0]
         self.assertEqual(r.filtered_data, 't2.small')
 
     def test_ec2_volumes(self):
-        arn = scan('arn:aws:ec2::234567890123:volume/*')
+        placebo_cfg = {
+            'placebo': placebo,
+            'placebo_dir': self._get_response_path('volumes'),
+            'placebo_mode': 'playback'}
+        arn = scan('arn:aws:ec2:us-west-2:123456789012:volume/*',
+                   **placebo_cfg)
         l = list(arn)
-        self.assertEqual(len(l), 1)
+        self.assertEqual(len(l), 4)
         r = l[0]
-        self.assertEqual(r.data['VolumeId'], "vol-ea3e1724")
+        self.assertEqual(r.data['VolumeId'], "vol-b85e475f")
 
-    def test_ec2_images(self):
-        arn = scan('arn:aws:ec2:us-west-2:234567890123:image/*')
-        l = list(arn)
-        self.assertEqual(len(l), 1)
+    # def test_ec2_images(self):
+    #     arn = scan('arn:aws:ec2:us-west-2:234567890123:image/*')
+    #     l = list(arn)
+    #     self.assertEqual(len(l), 1)
 
     def test_ec2_keypairs(self):
-        arn = scan('arn:aws:ec2:*:234567890123:key-pair/*')
+        placebo_cfg = {
+            'placebo': placebo,
+            'placebo_dir': self._get_response_path('keypairs'),
+            'placebo_mode': 'playback'}
+        arn = scan('arn:aws:ec2:us-west-2:123456789012:key-pair/*',
+                   debug=True, **placebo_cfg)
         l = list(arn)
         self.assertEqual(len(l), 2)
+        self.assertEqual(l[0].id, 'admin')
+        self.assertEqual(l[1].id, 'FooBar')
+        self.assertEqual(
+            l[0].data['KeyFingerprint'],
+            "85:83:08:25:fa:96:45:ea:c9:15:04:12:af:45:3f:c0:ef:e8:b8:ce")
 
     def test_ec2_securitygroup(self):
-        arn = scan('arn:aws:ec2:*:123456789012:security-group/*')
+        placebo_cfg = {
+            'placebo': placebo,
+            'placebo_dir': self._get_response_path('secgrp'),
+            'placebo_mode': 'playback'}
+        arn = scan('arn:aws:ec2:us-west-2:123456789012:security-group/*',
+                   **placebo_cfg)
         l = list(arn)
-        self.assertEqual(len(l), 10)
+        self.assertEqual(len(l), 3)
 
     def test_elb_loadbalancer(self):
-        arn = scan('arn:aws:elb:us-west-2:123456789012:loadbalancer/*')
+        placebo_cfg = {
+            'placebo': placebo,
+            'placebo_dir': self._get_response_path('elbs'),
+            'placebo_mode': 'playback'}
+        arn = scan('arn:aws:elb:us-west-2:123456789012:loadbalancer/*',
+                   **placebo_cfg)
         l = list(arn)
-        self.assertEqual(len(l), 1)
-        arn = scan('arn:aws:elb:us-west-2:234567890123:loadbalancer/*')
+        self.assertEqual(len(l), 6)
+
+    def test_ec2_vpcs(self):
+        placebo_cfg = {
+            'placebo': placebo,
+            'placebo_dir': self._get_response_path('vpcs'),
+            'placebo_mode': 'playback'}
+        arn = scan('arn:aws:ec2:us-west-2:123456789012:vpc/*',
+                   **placebo_cfg)
+        l = list(arn)
+        self.assertEqual(len(l), 3)
+
+    def test_ec2_routetable(self):
+        placebo_cfg = {
+            'placebo': placebo,
+            'placebo_dir': self._get_response_path('routetables'),
+            'placebo_mode': 'playback'}
+        arn = scan('arn:aws:ec2:us-west-2:123456789012:route-table/*',
+                   **placebo_cfg)
         l = list(arn)
         self.assertEqual(len(l), 5)
 
-    def test_ec2_vpcs(self):
-        arn = scan('arn:aws:ec2:us-west-2:123456789012:vpc/*')
-        l = list(arn)
-        self.assertEqual(len(l), 2)
-
-    def test_ec2_routetable(self):
-        arn = scan('arn:aws:ec2:us-west-2:123456789012:route-table/*')
-        l = list(arn)
-        self.assertEqual(len(l), 3)
-
     def test_ec2_network_acls(self):
-        arn = scan('arn:aws:ec2:us-west-2:123456789012:network-acl/*')
+        placebo_cfg = {
+            'placebo': placebo,
+            'placebo_dir': self._get_response_path('networkacls'),
+            'placebo_mode': 'playback'}
+        arn = scan('arn:aws:ec2:us-west-2:123456789012:network-acl/*',
+                   **placebo_cfg)
         l = list(arn)
-        self.assertEqual(len(l), 4)
+        self.assertEqual(len(l), 8)
 
     def test_iam_users(self):
-        arn = scan('arn:aws:iam:*:234567890123:user/*')
-        l = list(arn)
-        self.assertEqual(len(l), 3)
-        arn = scan('arn:aws:iam:*:234567890123:user/foo')
-        l = list(arn)
-        self.assertEqual(len(l), 1)
-
-    def test_s3_buckets(self):
-        arn = scan('arn:aws:s3:us-east-1:234567890123:bucket/*')
+        placebo_cfg = {
+            'placebo': placebo,
+            'placebo_dir': self._get_response_path('users'),
+            'placebo_mode': 'playback'}
+        arn = scan('arn:aws:iam:*:234567890123:user/*',
+                   **placebo_cfg)
         l = list(arn)
         self.assertEqual(len(l), 4)
-        bucket_resource = l[1]
-        keys = list(bucket_resource)
-        self.assertEqual(len(keys), 4)
+
+    def test_s3_buckets(self):
+        placebo_cfg = {
+            'placebo': placebo,
+            'placebo_dir': self._get_response_path('buckets'),
+            'placebo_mode': 'playback'}
+        arn = scan('arn:aws:s3:us-east-1:234567890123:bucket/*',
+                   **placebo_cfg)
+        l = list(arn)
+        self.assertEqual(len(l), 5)
 
     def test_iam_groups(self):
-        arn = scan('arn:aws:iam::123456789012:group/*')
+        placebo_cfg = {
+            'placebo': placebo,
+            'placebo_dir': self._get_response_path('groups'),
+            'placebo_mode': 'playback'}
+        arn = scan('arn:aws:iam::234567890123:group/*',
+                   **placebo_cfg)
         l = list(arn)
-        self.assertEqual(len(l), 2)
+        self.assertEqual(len(l), 3)
         group_resource = l[0]
         self.assertEqual(group_resource.arn,
-                         'arn:aws:iam::123456789012:group/Administrators')
-
-    def test_route53_hostedzone(self):
-        arn = scan('arn:aws:route53::123456789012:hostedzone/*')
-        l = list(arn)
-        self.assertEqual(len(l), 2)
-        zone_resource = l[0]
-        self.assertEqual(zone_resource.arn,
-                         'arn:aws:route53:::hostedzone/FFFF865FFFF3')
+                         'arn:aws:iam::234567890123:group/Administrators')
 
     def test_cloudformation_stacks(self):
-        arn = scan('arn:aws:cloudformation:us-west-2:123456789012:stack/*')
+        placebo_cfg = {
+            'placebo': placebo,
+            'placebo_dir': self._get_response_path('stacks'),
+            'placebo_mode': 'playback'}
+        arn = scan('arn:aws:cloudformation:us-west-2:123456789012:stack/*',
+                   **placebo_cfg)
         l = list(arn)
         self.assertEqual(len(l), 1)
         stack_resource = l[0]
         resources = list(stack_resource)
-        self.assertEqual(len(resources), 6)
+        self.assertEqual(len(resources), 4)

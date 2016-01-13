@@ -1,0 +1,81 @@
+{
+    "status_code": 200, 
+    "data": {
+        "Owner": {
+            "DisplayName": "foobar", 
+            "ID": "12345678901234567890"
+        }, 
+        "Buckets": [
+            {
+                "CreationDate": {
+                    "hour": 5, 
+                    "__class__": "datetime", 
+                    "month": 10, 
+                    "second": 5, 
+                    "microsecond": 0, 
+                    "year": 2015, 
+                    "day": 3, 
+                    "minute": 15
+                }, 
+                "Name": "foobar.1"
+            }, 
+            {
+                "CreationDate": {
+                    "hour": 20, 
+                    "__class__": "datetime", 
+                    "month": 11, 
+                    "second": 57, 
+                    "microsecond": 0, 
+                    "year": 2015, 
+                    "day": 25, 
+                    "minute": 0
+                }, 
+                "Name": "foobar.2"
+            }, 
+            {
+                "CreationDate": {
+                    "hour": 22, 
+                    "__class__": "datetime", 
+                    "month": 8, 
+                    "second": 17, 
+                    "microsecond": 0, 
+                    "year": 2015, 
+                    "day": 17, 
+                    "minute": 25
+                }, 
+                "Name": "foobar.3"
+            }, 
+            {
+                "CreationDate": {
+                    "hour": 5, 
+                    "__class__": "datetime", 
+                    "month": 5, 
+                    "second": 9, 
+                    "microsecond": 0, 
+                    "year": 2015, 
+                    "day": 1, 
+                    "minute": 26
+                }, 
+                "Name": "foobar.4"
+            }, 
+            {
+                "CreationDate": {
+                    "hour": 20, 
+                    "__class__": "datetime", 
+                    "month": 5, 
+                    "second": 17, 
+                    "microsecond": 0, 
+                    "year": 2015, 
+                    "day": 12, 
+                    "minute": 5
+                }, 
+                "Name": "foobar.5"
+            }
+        ], 
+        "ResponseMetadata": {
+            "HTTPStatusCode": 200, 
+            "HostId": "G4fIQCAT7FKq6O37x/RN6KUJY6sCKv6qr3/2mPDFceHWwLMLI8xAICRB7NhZRrEd9wOLH1dLbeI=", 
+            "RequestId": "ED1C96C5020AD68D"
+        }
+    }
+}
