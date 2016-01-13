@@ -81,7 +81,7 @@
                         "Key": "Environment"
                     }, 
                     {
-                        "Value": "arn:aws:cloudformation:us-west-2:860421987956:stack/DevTest-VPC/f40833d0-8417-11e4-8e98-50fa5e742444", 
+                        "Value": "arn:aws:cloudformation:us-west-2:123456789012:stack/DevTest-VPC/f40833d0-8417-11e4-8e98-50fa5e742444", 
                         "Key": "aws:cloudformation:stack-id"
                     }, 
                     {
@@ -169,7 +169,7 @@
                         "Key": "aws:cloudformation:stack-name"
                     }, 
                     {
-                        "Value": "arn:aws:cloudformation:us-west-2:860421987956:stack/cyan1-delta-hello-world/b2fd9dd0-f41a-11e4-8e28-5088484a585d", 
+                        "Value": "arn:aws:cloudformation:us-west-2:123456789012:stack/cyan1-delta-hello-world/b2fd9dd0-f41a-11e4-8e28-5088484a585d", 
                         "Key": "aws:cloudformation:stack-id"
                     }
                 ], 

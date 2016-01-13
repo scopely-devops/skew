@@ -58,7 +58,7 @@
                 ], 
                 "Scheme": "internet-facing", 
                 "SourceSecurityGroup": {
-                    "OwnerAlias": "860421987956", 
+                    "OwnerAlias": "123456789012", 
                     "GroupName": "DevTest-Example-App-Resources-elbSecurityGroup-17ZVI99H5520V"
                 }
             }, 
@@ -116,7 +116,7 @@
                 ], 
                 "Scheme": "internet-facing", 
                 "SourceSecurityGroup": {
-                    "OwnerAlias": "860421987956", 
+                    "OwnerAlias": "123456789012", 
                     "GroupName": "cyan1-delta-hello-world-elbSecurityGroup-V9TCAF6F13B8"
                 }
             }, 
@@ -176,7 +176,7 @@
                 ], 
                 "Scheme": "internet-facing", 
                 "SourceSecurityGroup": {
-                    "OwnerAlias": "860421987956", 
+                    "OwnerAlias": "123456789012", 
                     "GroupName": "DevTest-u4u-pas256-dev-Resources-elbSecurityGroup-1MCBCYAJ5LAPS"
                 }
             }, 
@@ -236,7 +236,7 @@
                 ], 
                 "Scheme": "internet-facing", 
                 "SourceSecurityGroup": {
-                    "OwnerAlias": "860421987956", 
+                    "OwnerAlias": "123456789012", 
                     "GroupName": "DevTest-InviteBot-Resources-elbSecurityGroup-19C16N589LQWM"
                 }
             }, 
@@ -296,7 +296,7 @@
                 ], 
                 "Scheme": "internet-facing", 
                 "SourceSecurityGroup": {
-                    "OwnerAlias": "860421987956", 
+                    "OwnerAlias": "123456789012", 
                     "GroupName": "DevTest-MercatorBot-Resources-elbSecurityGroup-9UTR15I1O9FR"
                 }
             }, 
@@ -360,7 +360,7 @@
                 ], 
                 "Scheme": "internet-facing", 
                 "SourceSecurityGroup": {
-                    "OwnerAlias": "860421987956", 
+                    "OwnerAlias": "123456789012", 
                     "GroupName": "DevTest-MercatorSurvey-Resources-elbSecurityGroup-GNV5KXPYVV8M"
                 }
             }
