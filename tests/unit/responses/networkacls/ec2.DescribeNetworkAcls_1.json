@@ -1,0 +1,503 @@
+{
+    "status_code": 200, 
+    "data": {
+        "NetworkAcls": [
+            {
+                "Associations": [], 
+                "NetworkAclId": "acl-fe6bb39b", 
+                "VpcId": "vpc-7f5e861a", 
+                "Tags": [], 
+                "Entries": [
+                    {
+                        "CidrBlock": "0.0.0.0/0", 
+                        "RuleNumber": 100, 
+                        "Protocol": "-1", 
+                        "Egress": true, 
+                        "RuleAction": "allow"
+                    }, 
+                    {
+                        "CidrBlock": "0.0.0.0/0", 
+                        "RuleNumber": 32767, 
+                        "Protocol": "-1", 
+                        "Egress": true, 
+                        "RuleAction": "deny"
+                    }, 
+                    {
+                        "CidrBlock": "0.0.0.0/0", 
+                        "RuleNumber": 100, 
+                        "Protocol": "-1", 
+                        "Egress": false, 
+                        "RuleAction": "allow"
+                    }, 
+                    {
+                        "CidrBlock": "0.0.0.0/0", 
+                        "RuleNumber": 32767, 
+                        "Protocol": "-1", 
+                        "Egress": false, 
+                        "RuleAction": "deny"
+                    }
+                ], 
+                "IsDefault": true
+            }, 
+            {
+                "Associations": [
+                    {
+                        "SubnetId": "subnet-d99628ae", 
+                        "NetworkAclId": "acl-f2bc3097", 
+                        "NetworkAclAssociationId": "aclassoc-20fe3044"
+                    }, 
+                    {
+                        "SubnetId": "subnet-4aee762f", 
+                        "NetworkAclId": "acl-f2bc3097", 
+                        "NetworkAclAssociationId": "aclassoc-21fe3045"
+                    }
+                ], 
+                "NetworkAclId": "acl-f2bc3097", 
+                "VpcId": "vpc-06901063", 
+                "Tags": [
+                    {
+                        "Value": "cyan1-delta-hello-world", 
+                        "Key": "aws:cloudformation:stack-name"
+                    }, 
+                    {
+                        "Value": "CloudNative", 
+                        "Key": "Vendor"
+                    }, 
+                    {
+                        "Value": "publicEc2SubnetsAcl", 
+                        "Key": "aws:cloudformation:logical-id"
+                    }, 
+                    {
+                        "Value": "arn:aws:cloudformation:us-west-2:860421987956:stack/cyan1-delta-hello-world/b2fd9dd0-f41a-11e4-8e28-5088484a585d", 
+                        "Key": "aws:cloudformation:stack-id"
+                    }, 
+                    {
+                        "Value": "Public EC2 ACL", 
+                        "Key": "Name"
+                    }
+                ], 
+                "Entries": [
+                    {
+                        "CidrBlock": "0.0.0.0/0", 
+                        "RuleNumber": 100, 
+                        "Protocol": "-1", 
+                        "Egress": true, 
+                        "RuleAction": "allow"
+                    }, 
+                    {
+                        "CidrBlock": "0.0.0.0/0", 
+                        "RuleNumber": 32767, 
+                        "Protocol": "-1", 
+                        "Egress": true, 
+                        "RuleAction": "deny"
+                    }, 
+                    {
+                        "CidrBlock": "0.0.0.0/0", 
+                        "RuleNumber": 100, 
+                        "Protocol": "-1", 
+                        "Egress": false, 
+                        "RuleAction": "allow"
+                    }, 
+                    {
+                        "CidrBlock": "0.0.0.0/0", 
+                        "RuleNumber": 32767, 
+                        "Protocol": "-1", 
+                        "Egress": false, 
+                        "RuleAction": "deny"
+                    }
+                ], 
+                "IsDefault": false
+            }, 
+            {
+                "Associations": [
+                    {
+                        "SubnetId": "subnet-c38361b4", 
+                        "NetworkAclId": "acl-64c23f01", 
+                        "NetworkAclAssociationId": "aclassoc-394af75c"
+                    }, 
+                    {
+                        "SubnetId": "subnet-41e42924", 
+                        "NetworkAclId": "acl-64c23f01", 
+                        "NetworkAclAssociationId": "aclassoc-384af75d"
+                    }, 
+                    {
+                        "SubnetId": "subnet-f61416b0", 
+                        "NetworkAclId": "acl-64c23f01", 
+                        "NetworkAclAssociationId": "aclassoc-3e4af75b"
+                    }
+                ], 
+                "NetworkAclId": "acl-64c23f01", 
+                "VpcId": "vpc-2b86744e", 
+                "Tags": [], 
+                "Entries": [
+                    {
+                        "CidrBlock": "0.0.0.0/0", 
+                        "RuleNumber": 100, 
+                        "Protocol": "-1", 
+                        "Egress": true, 
+                        "RuleAction": "allow"
+                    }, 
+                    {
+                        "CidrBlock": "0.0.0.0/0", 
+                        "RuleNumber": 32767, 
+                        "Protocol": "-1", 
+                        "Egress": true, 
+                        "RuleAction": "deny"
+                    }, 
+                    {
+                        "CidrBlock": "0.0.0.0/0", 
+                        "RuleNumber": 100, 
+                        "Protocol": "-1", 
+                        "Egress": false, 
+                        "RuleAction": "allow"
+                    }, 
+                    {
+                        "CidrBlock": "0.0.0.0/0", 
+                        "RuleNumber": 32767, 
+                        "Protocol": "-1", 
+                        "Egress": false, 
+                        "RuleAction": "deny"
+                    }
+                ], 
+                "IsDefault": true
+            }, 
+            {
+                "Associations": [
+                    {
+                        "SubnetId": "subnet-c5cf399c", 
+                        "NetworkAclId": "acl-b56bb3d0", 
+                        "NetworkAclAssociationId": "aclassoc-8fabfdea"
+                    }, 
+                    {
+                        "SubnetId": "subnet-9312c3e4", 
+                        "NetworkAclId": "acl-b56bb3d0", 
+                        "NetworkAclAssociationId": "aclassoc-81abfde4"
+                    }, 
+                    {
+                        "SubnetId": "subnet-6b56e50e", 
+                        "NetworkAclId": "acl-b56bb3d0", 
+                        "NetworkAclAssociationId": "aclassoc-82abfde7"
+                    }
+                ], 
+                "NetworkAclId": "acl-b56bb3d0", 
+                "VpcId": "vpc-7f5e861a", 
+                "Tags": [
+                    {
+                        "Value": "Public EC2 ACL", 
+                        "Key": "Name"
+                    }, 
+                    {
+                        "Value": "DevTest", 
+                        "Key": "Environment"
+                    }, 
+                    {
+                        "Value": "publicEc2SubnetsAcl", 
+                        "Key": "aws:cloudformation:logical-id"
+                    }, 
+                    {
+                        "Value": "DevTest-EC2-Subnets", 
+                        "Key": "aws:cloudformation:stack-name"
+                    }, 
+                    {
+                        "Value": "arn:aws:cloudformation:us-west-2:860421987956:stack/DevTest-EC2-Subnets/c6abd8f0-8418-11e4-9e4e-5088487b0895", 
+                        "Key": "aws:cloudformation:stack-id"
+                    }
+                ], 
+                "Entries": [
+                    {
+                        "CidrBlock": "0.0.0.0/0", 
+                        "RuleNumber": 100, 
+                        "Protocol": "-1", 
+                        "Egress": true, 
+                        "RuleAction": "allow"
+                    }, 
+                    {
+                        "CidrBlock": "0.0.0.0/0", 
+                        "RuleNumber": 32767, 
+                        "Protocol": "-1", 
+                        "Egress": true, 
+                        "RuleAction": "deny"
+                    }, 
+                    {
+                        "CidrBlock": "0.0.0.0/0", 
+                        "RuleNumber": 100, 
+                        "Protocol": "-1", 
+                        "Egress": false, 
+                        "RuleAction": "allow"
+                    }, 
+                    {
+                        "CidrBlock": "0.0.0.0/0", 
+                        "RuleNumber": 32767, 
+                        "Protocol": "-1", 
+                        "Egress": false, 
+                        "RuleAction": "deny"
+                    }
+                ], 
+                "IsDefault": false
+            }, 
+            {
+                "Associations": [
+                    {
+                        "SubnetId": "subnet-c2cf399b", 
+                        "NetworkAclId": "acl-aa6bb3cf", 
+                        "NetworkAclAssociationId": "aclassoc-80abfde5"
+                    }, 
+                    {
+                        "SubnetId": "subnet-9412c3e3", 
+                        "NetworkAclId": "acl-aa6bb3cf", 
+                        "NetworkAclAssociationId": "aclassoc-83abfde6"
+                    }, 
+                    {
+                        "SubnetId": "subnet-6a56e50f", 
+                        "NetworkAclId": "acl-aa6bb3cf", 
+                        "NetworkAclAssociationId": "aclassoc-8dabfde8"
+                    }
+                ], 
+                "NetworkAclId": "acl-aa6bb3cf", 
+                "VpcId": "vpc-7f5e861a", 
+                "Tags": [
+                    {
+                        "Value": "DevTest", 
+                        "Key": "Environment"
+                    }, 
+                    {
+                        "Value": "privateEc2SubnetsAcl", 
+                        "Key": "aws:cloudformation:logical-id"
+                    }, 
+                    {
+                        "Value": "DevTest-EC2-Subnets", 
+                        "Key": "aws:cloudformation:stack-name"
+                    }, 
+                    {
+                        "Value": "arn:aws:cloudformation:us-west-2:860421987956:stack/DevTest-EC2-Subnets/c6abd8f0-8418-11e4-9e4e-5088487b0895", 
+                        "Key": "aws:cloudformation:stack-id"
+                    }, 
+                    {
+                        "Value": "Private EC2 ACL", 
+                        "Key": "Name"
+                    }
+                ], 
+                "Entries": [
+                    {
+                        "CidrBlock": "0.0.0.0/0", 
+                        "RuleNumber": 100, 
+                        "Protocol": "-1", 
+                        "Egress": true, 
+                        "RuleAction": "allow"
+                    }, 
+                    {
+                        "CidrBlock": "0.0.0.0/0", 
+                        "RuleNumber": 32767, 
+                        "Protocol": "-1", 
+                        "Egress": true, 
+                        "RuleAction": "deny"
+                    }, 
+                    {
+                        "CidrBlock": "0.0.0.0/0", 
+                        "RuleNumber": 100, 
+                        "Protocol": "-1", 
+                        "Egress": false, 
+                        "RuleAction": "allow"
+                    }, 
+                    {
+                        "CidrBlock": "0.0.0.0/0", 
+                        "RuleNumber": 32767, 
+                        "Protocol": "-1", 
+                        "Egress": false, 
+                        "RuleAction": "deny"
+                    }
+                ], 
+                "IsDefault": false
+            }, 
+            {
+                "Associations": [
+                    {
+                        "SubnetId": "subnet-7556e510", 
+                        "NetworkAclId": "acl-b66bb3d3", 
+                        "NetworkAclAssociationId": "aclassoc-94abfdf1"
+                    }, 
+                    {
+                        "SubnetId": "subnet-9212c3e5", 
+                        "NetworkAclId": "acl-b66bb3d3", 
+                        "NetworkAclAssociationId": "aclassoc-91abfdf4"
+                    }, 
+                    {
+                        "SubnetId": "subnet-c6cf399f", 
+                        "NetworkAclId": "acl-b66bb3d3", 
+                        "NetworkAclAssociationId": "aclassoc-97abfdf2"
+                    }
+                ], 
+                "NetworkAclId": "acl-b66bb3d3", 
+                "VpcId": "vpc-7f5e861a", 
+                "Tags": [
+                    {
+                        "Value": "DevTest-ELB-Subnets", 
+                        "Key": "aws:cloudformation:stack-name"
+                    }, 
+                    {
+                        "Value": "privateElbSubnetsAcl", 
+                        "Key": "aws:cloudformation:logical-id"
+                    }, 
+                    {
+                        "Value": "arn:aws:cloudformation:us-west-2:860421987956:stack/DevTest-ELB-Subnets/cdd13940-8418-11e4-8b57-50e2414b0a7c", 
+                        "Key": "aws:cloudformation:stack-id"
+                    }, 
+                    {
+                        "Value": "DevTest", 
+                        "Key": "Environment"
+                    }, 
+                    {
+                        "Value": "Private ELB ACL", 
+                        "Key": "Name"
+                    }
+                ], 
+                "Entries": [
+                    {
+                        "CidrBlock": "0.0.0.0/0", 
+                        "RuleNumber": 100, 
+                        "Protocol": "-1", 
+                        "Egress": true, 
+                        "RuleAction": "allow"
+                    }, 
+                    {
+                        "CidrBlock": "0.0.0.0/0", 
+                        "RuleNumber": 32767, 
+                        "Protocol": "-1", 
+                        "Egress": true, 
+                        "RuleAction": "deny"
+                    }, 
+                    {
+                        "CidrBlock": "0.0.0.0/0", 
+                        "RuleNumber": 100, 
+                        "Protocol": "-1", 
+                        "Egress": false, 
+                        "RuleAction": "allow"
+                    }, 
+                    {
+                        "CidrBlock": "0.0.0.0/0", 
+                        "RuleNumber": 32767, 
+                        "Protocol": "-1", 
+                        "Egress": false, 
+                        "RuleAction": "deny"
+                    }
+                ], 
+                "IsDefault": false
+            }, 
+            {
+                "Associations": [], 
+                "NetworkAclId": "acl-e8bc308d", 
+                "VpcId": "vpc-06901063", 
+                "Tags": [], 
+                "Entries": [
+                    {
+                        "CidrBlock": "0.0.0.0/0", 
+                        "RuleNumber": 100, 
+                        "Protocol": "-1", 
+                        "Egress": true, 
+                        "RuleAction": "allow"
+                    }, 
+                    {
+                        "CidrBlock": "0.0.0.0/0", 
+                        "RuleNumber": 32767, 
+                        "Protocol": "-1", 
+                        "Egress": true, 
+                        "RuleAction": "deny"
+                    }, 
+                    {
+                        "CidrBlock": "0.0.0.0/0", 
+                        "RuleNumber": 100, 
+                        "Protocol": "-1", 
+                        "Egress": false, 
+                        "RuleAction": "allow"
+                    }, 
+                    {
+                        "CidrBlock": "0.0.0.0/0", 
+                        "RuleNumber": 32767, 
+                        "Protocol": "-1", 
+                        "Egress": false, 
+                        "RuleAction": "deny"
+                    }
+                ], 
+                "IsDefault": true
+            }, 
+            {
+                "Associations": [
+                    {
+                        "SubnetId": "subnet-7456e511", 
+                        "NetworkAclId": "acl-b16bb3d4", 
+                        "NetworkAclAssociationId": "aclassoc-8aabfdef"
+                    }, 
+                    {
+                        "SubnetId": "subnet-9112c3e6", 
+                        "NetworkAclId": "acl-b16bb3d4", 
+                        "NetworkAclAssociationId": "aclassoc-96abfdf3"
+                    }, 
+                    {
+                        "SubnetId": "subnet-c7cf399e", 
+                        "NetworkAclId": "acl-b16bb3d4", 
+                        "NetworkAclAssociationId": "aclassoc-95abfdf0"
+                    }
+                ], 
+                "NetworkAclId": "acl-b16bb3d4", 
+                "VpcId": "vpc-7f5e861a", 
+                "Tags": [
+                    {
+                        "Value": "arn:aws:cloudformation:us-west-2:860421987956:stack/DevTest-ELB-Subnets/cdd13940-8418-11e4-8b57-50e2414b0a7c", 
+                        "Key": "aws:cloudformation:stack-id"
+                    }, 
+                    {
+                        "Value": "publicElbSubnetsAcl", 
+                        "Key": "aws:cloudformation:logical-id"
+                    }, 
+                    {
+                        "Value": "DevTest-ELB-Subnets", 
+                        "Key": "aws:cloudformation:stack-name"
+                    }, 
+                    {
+                        "Value": "Public ELB ACL", 
+                        "Key": "Name"
+                    }, 
+                    {
+                        "Value": "DevTest", 
+                        "Key": "Environment"
+                    }
+                ], 
+                "Entries": [
+                    {
+                        "CidrBlock": "0.0.0.0/0", 
+                        "RuleNumber": 100, 
+                        "Protocol": "-1", 
+                        "Egress": true, 
+                        "RuleAction": "allow"
+                    }, 
+                    {
+                        "CidrBlock": "0.0.0.0/0", 
+                        "RuleNumber": 32767, 
+                        "Protocol": "-1", 
+                        "Egress": true, 
+                        "RuleAction": "deny"
+                    }, 
+                    {
+                        "CidrBlock": "0.0.0.0/0", 
+                        "RuleNumber": 100, 
+                        "Protocol": "-1", 
+                        "Egress": false, 
+                        "RuleAction": "allow"
+                    }, 
+                    {
+                        "CidrBlock": "0.0.0.0/0", 
+                        "RuleNumber": 32767, 
+                        "Protocol": "-1", 
+                        "Egress": false, 
+                        "RuleAction": "deny"
+                    }
+                ], 
+                "IsDefault": false
+            }
+        ], 
+        "ResponseMetadata": {
+            "HTTPStatusCode": 200, 
+            "RequestId": "3761ecff-aba1-445f-ba8b-4437339ad5c1"
+        }
+    }
+}

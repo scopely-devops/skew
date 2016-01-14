@@ -1,0 +1,57 @@
+{
+    "status_code": 200, 
+    "data": {
+        "Stacks": [
+            {
+                "StackId": "arn:aws:cloudformation:us-west-2:123456789012:stack/foobar-tables/117c58a0-b56e-11e5-a63a-503f2a2ceeae", 
+                "Description": "Create all DynamoDB tables needed by FooBar", 
+                "Tags": [], 
+                "Outputs": [
+                    {
+                        "Description": "The Foo table", 
+                        "OutputKey": "foo", 
+                        "OutputValue": "foo"
+                    }, 
+                    {
+                        "Description": "The Bar table", 
+                        "OutputKey": "bar", 
+                        "OutputValue": "bar"
+                    }, 
+                    {
+                        "Description": "The Fie table", 
+                        "OutputKey": "fie", 
+                        "OutputValue": "fie"
+                    }
+                ], 
+                "CreationTime": {
+                    "hour": 18, 
+                    "__class__": "datetime", 
+                    "month": 1, 
+                    "second": 4, 
+                    "microsecond": 921000, 
+                    "year": 2016, 
+                    "day": 7, 
+                    "minute": 40
+                }, 
+                "StackName": "foobar-tables", 
+                "NotificationARNs": [], 
+                "StackStatus": "UPDATE_COMPLETE", 
+                "DisableRollback": false, 
+                "LastUpdatedTime": {
+                    "hour": 23, 
+                    "__class__": "datetime", 
+                    "month": 1, 
+                    "second": 39, 
+                    "microsecond": 255000, 
+                    "year": 2016, 
+                    "day": 8, 
+                    "minute": 0
+                }
+            }
+        ], 
+        "ResponseMetadata": {
+            "HTTPStatusCode": 200, 
+            "RequestId": "f7857c47-ba3d-11e5-bca7-5353f1afe730"
+        }
+    }
+}

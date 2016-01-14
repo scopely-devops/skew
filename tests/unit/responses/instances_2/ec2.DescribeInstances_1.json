@@ -1,0 +1,161 @@
+{
+    "status_code": 200, 
+    "data": {
+        "Reservations": [
+            {
+                "OwnerId": "123456789012", 
+                "ReservationId": "r-86e33840", 
+                "Groups": [], 
+                "RequesterId": "226008221399", 
+                "Instances": [
+                    {
+                        "Monitoring": {
+                            "State": "enabled"
+                        }, 
+                        "PublicDnsName": "ec2-00-000-00-000.us-west-2.compute.amazonaws.com", 
+                        "State": {
+                            "Code": 272, 
+                            "Name": "running"
+                        }, 
+                        "EbsOptimized": false, 
+                        "LaunchTime": {
+                            "hour": 0, 
+                            "__class__": "datetime", 
+                            "month": 12, 
+                            "second": 7, 
+                            "microsecond": 0, 
+                            "year": 2015, 
+                            "day": 31, 
+                            "minute": 21
+                        }, 
+                        "PublicIpAddress": "1.2.3.4", 
+                        "PrivateIpAddress": "10.0.11.168", 
+                        "ProductCodes": [], 
+                        "VpcId": "vpc-7f5e861a", 
+                        "StateTransitionReason": "", 
+                        "InstanceId": "i-db530902", 
+                        "ImageId": "ami-d74357b6", 
+                        "PrivateDnsName": "ip-10-0-11-168.us-west-2.compute.internal", 
+                        "KeyName": "admin", 
+                        "SecurityGroups": [
+                            {
+                                "GroupName": "FooBar", 
+                                "GroupId": "sg-39efad5d"
+                            }
+                        ], 
+                        "ClientToken": "98c72e0f-d01b-4a32-b140-e0be2deb33d7_subnet-9312c3e4_1", 
+                        "SubnetId": "subnet-9312c3e4", 
+                        "InstanceType": "t2.small", 
+                        "NetworkInterfaces": [
+                            {
+                                "Status": "in-use", 
+                                "MacAddress": "06:ef:48:f7:c4:ab", 
+                                "SourceDestCheck": true, 
+                                "VpcId": "vpc-7f5e861a", 
+                                "Description": "", 
+                                "Association": {
+                                    "PublicIp": "1.2.3.4", 
+                                    "PublicDnsName": "ec2-00-000-00-000.us-west-2.compute.amazonaws.com", 
+                                    "IpOwnerId": "amazon"
+                                }, 
+                                "NetworkInterfaceId": "eni-f58a5ebe", 
+                                "PrivateIpAddresses": [
+                                    {
+                                        "PrivateDnsName": "ip-10-0-11-168.us-west-2.compute.internal", 
+                                        "Association": {
+                                            "PublicIp": "1.2.3.4", 
+                                            "PublicDnsName": "ec2-00-000-00-000.us-west-2.compute.amazonaws.com", 
+                                            "IpOwnerId": "amazon"
+                                        }, 
+                                        "Primary": true, 
+                                        "PrivateIpAddress": "10.0.11.168"
+                                    }
+                                ], 
+                                "PrivateDnsName": "ip-10-0-11-168.us-west-2.compute.internal", 
+                                "Attachment": {
+                                    "Status": "attached", 
+                                    "DeviceIndex": 0, 
+                                    "DeleteOnTermination": true, 
+                                    "AttachmentId": "eni-attach-e3eb1cef", 
+                                    "AttachTime": {
+                                        "hour": 0, 
+                                        "__class__": "datetime", 
+                                        "month": 12, 
+                                        "second": 7, 
+                                        "microsecond": 0, 
+                                        "year": 2015, 
+                                        "day": 31, 
+                                        "minute": 21
+                                    }
+                                }, 
+                                "Groups": [
+                                    {
+                                        "GroupName": "FooBar", 
+                                        "GroupId": "sg-39efad5d"
+                                    }
+                                ], 
+                                "SubnetId": "subnet-9312c3e4", 
+                                "OwnerId": "123456789012", 
+                                "PrivateIpAddress": "10.0.11.168"
+                            }
+                        ], 
+                        "SourceDestCheck": true, 
+                        "Placement": {
+                            "Tenancy": "default", 
+                            "GroupName": "", 
+                            "AvailabilityZone": "us-west-2a"
+                        }, 
+                        "Hypervisor": "xen", 
+                        "BlockDeviceMappings": [
+                            {
+                                "DeviceName": "/dev/xvda", 
+                                "Ebs": {
+                                    "Status": "attached", 
+                                    "DeleteOnTermination": true, 
+                                    "VolumeId": "vol-aac7336a", 
+                                    "AttachTime": {
+                                        "hour": 0, 
+                                        "__class__": "datetime", 
+                                        "month": 12, 
+                                        "second": 10, 
+                                        "microsecond": 0, 
+                                        "year": 2015, 
+                                        "day": 31, 
+                                        "minute": 21
+                                    }
+                                }
+                            }
+                        ], 
+                        "Architecture": "x86_64", 
+                        "RootDeviceType": "ebs", 
+                        "IamInstanceProfile": {
+                            "Id": "AIPAIIC7YPOPHECAPLMVS", 
+                            "Arn": "arn:aws:iam::123456789012:instance-profile/FooBar"
+                        }, 
+                        "RootDeviceName": "/dev/xvda", 
+                        "VirtualizationType": "hvm", 
+                        "Tags": [
+                            {
+                                "Value": "FooBar", 
+                                "Key": "aws:cloudformation:stack-name"
+                            }, 
+                            {
+                                "Value": "ecsAsg", 
+                                "Key": "aws:cloudformation:logical-id"
+                            }, 
+                            {
+                                "Value": "DevTest", 
+                                "Key": "Environment"
+                            }
+                        ], 
+                        "AmiLaunchIndex": 0
+                    }
+                ]
+            }
+        ], 
+        "ResponseMetadata": {
+            "HTTPStatusCode": 200, 
+            "RequestId": "bea049ac-1dfb-4362-b016-193e1525c8b8"
+        }
+    }
+}

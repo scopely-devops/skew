@@ -1,0 +1,79 @@
+{
+    "status_code": 200, 
+    "data": {
+        "Vpcs": [
+            {
+                "VpcId": "vpc-7f5e861a", 
+                "InstanceTenancy": "default", 
+                "Tags": [
+                    {
+                        "Value": "arn:aws:cloudformation:us-west-2:123456789012:stack/DevTest-VPC/f40833d0-8417-11e4-8e98-50fa5e742444", 
+                        "Key": "aws:cloudformation:stack-id"
+                    }, 
+                    {
+                        "Value": "DevTest", 
+                        "Key": "Environment"
+                    }, 
+                    {
+                        "Value": "DevTest-VPC", 
+                        "Key": "aws:cloudformation:stack-name"
+                    }, 
+                    {
+                        "Value": "DevTest VPC", 
+                        "Key": "Name"
+                    }, 
+                    {
+                        "Value": "theVpc", 
+                        "Key": "aws:cloudformation:logical-id"
+                    }
+                ], 
+                "State": "available", 
+                "DhcpOptionsId": "dopt-6fa84c0a", 
+                "CidrBlock": "10.0.0.0/16", 
+                "IsDefault": false
+            }, 
+            {
+                "VpcId": "vpc-06901063", 
+                "InstanceTenancy": "default", 
+                "Tags": [
+                    {
+                        "Value": "theVpc", 
+                        "Key": "aws:cloudformation:logical-id"
+                    }, 
+                    {
+                        "Value": "Hello World VPC", 
+                        "Key": "Name"
+                    }, 
+                    {
+                        "Value": "arn:aws:cloudformation:us-west-2:123456789012:stack/cyan1-delta-hello-world/b2fd9dd0-f41a-11e4-8e28-5088484a585d", 
+                        "Key": "aws:cloudformation:stack-id"
+                    }, 
+                    {
+                        "Value": "cyan1-delta-hello-world", 
+                        "Key": "aws:cloudformation:stack-name"
+                    }, 
+                    {
+                        "Value": "CloudNative", 
+                        "Key": "Vendor"
+                    }
+                ], 
+                "State": "available", 
+                "DhcpOptionsId": "dopt-195db47c", 
+                "CidrBlock": "10.0.0.0/16", 
+                "IsDefault": false
+            }, 
+            {
+                "VpcId": "vpc-2b86744e", 
+                "InstanceTenancy": "default", 
+                "State": "available", 
+                "DhcpOptionsId": "dopt-0cffed6e", 
+                "CidrBlock": "172.31.0.0/16", 
+                "IsDefault": true
+            }
+        ], 
+        "ResponseMetadata": {
+            "HTTPStatusCode": 200, 
+            "RequestId": "0e5a176a-9344-4141-a937-8411c24c8aee"
+        }
+    }
+}

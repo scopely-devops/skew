@@ -1,0 +1,149 @@
+{
+    "status_code": 200, 
+    "data": {
+        "ResponseMetadata": {
+            "HTTPStatusCode": 200, 
+            "RequestId": "d856b1fe-1716-462d-bc63-aad062316190"
+        }, 
+        "Volumes": [
+            {
+                "AvailabilityZone": "us-west-2c", 
+                "Attachments": [], 
+                "Encrypted": false, 
+                "VolumeType": "gp2", 
+                "VolumeId": "vol-b85e475f", 
+                "State": "available", 
+                "Iops": 24, 
+                "SnapshotId": "snap-bfb086e1", 
+                "CreateTime": {
+                    "hour": 6, 
+                    "__class__": "datetime", 
+                    "month": 9, 
+                    "second": 19, 
+                    "microsecond": 569000, 
+                    "year": 2015, 
+                    "day": 23, 
+                    "minute": 20
+                }, 
+                "Size": 8
+            }, 
+            {
+                "AvailabilityZone": "us-west-2c", 
+                "Attachments": [
+                    {
+                        "AttachTime": {
+                            "hour": 0, 
+                            "__class__": "datetime", 
+                            "month": 12, 
+                            "second": 41, 
+                            "microsecond": 0, 
+                            "year": 2015, 
+                            "day": 31, 
+                            "minute": 22
+                        }, 
+                        "InstanceId": "i-c81fb512", 
+                        "VolumeId": "vol-a3510945", 
+                        "State": "attached", 
+                        "DeleteOnTermination": true, 
+                        "Device": "/dev/xvda"
+                    }
+                ], 
+                "Encrypted": false, 
+                "VolumeType": "gp2", 
+                "VolumeId": "vol-a3510945", 
+                "State": "in-use", 
+                "Iops": 90, 
+                "SnapshotId": "snap-8c9ecb15", 
+                "CreateTime": {
+                    "hour": 0, 
+                    "__class__": "datetime", 
+                    "month": 12, 
+                    "second": 41, 
+                    "microsecond": 428000, 
+                    "year": 2015, 
+                    "day": 31, 
+                    "minute": 22
+                }, 
+                "Size": 30
+            }, 
+            {
+                "AvailabilityZone": "us-west-2a", 
+                "Attachments": [
+                    {
+                        "AttachTime": {
+                            "hour": 21, 
+                            "__class__": "datetime", 
+                            "month": 11, 
+                            "second": 35, 
+                            "microsecond": 0, 
+                            "year": 2015, 
+                            "day": 4, 
+                            "minute": 18
+                        }, 
+                        "InstanceId": "i-100ec2c9", 
+                        "VolumeId": "vol-09f36bc8", 
+                        "State": "attached", 
+                        "DeleteOnTermination": true, 
+                        "Device": "/dev/sda1"
+                    }
+                ], 
+                "Encrypted": false, 
+                "VolumeType": "gp2", 
+                "VolumeId": "vol-09f36bc8", 
+                "State": "in-use", 
+                "Iops": 24, 
+                "SnapshotId": "snap-6fa83432", 
+                "CreateTime": {
+                    "hour": 21, 
+                    "__class__": "datetime", 
+                    "month": 11, 
+                    "second": 35, 
+                    "microsecond": 213000, 
+                    "year": 2015, 
+                    "day": 4, 
+                    "minute": 18
+                }, 
+                "Size": 8
+            }, 
+            {
+                "AvailabilityZone": "us-west-2a", 
+                "Attachments": [
+                    {
+                        "AttachTime": {
+                            "hour": 0, 
+                            "__class__": "datetime", 
+                            "month": 12, 
+                            "second": 10, 
+                            "microsecond": 0, 
+                            "year": 2015, 
+                            "day": 31, 
+                            "minute": 21
+                        }, 
+                        "InstanceId": "i-db530902", 
+                        "VolumeId": "vol-aac7336a", 
+                        "State": "attached", 
+                        "DeleteOnTermination": true, 
+                        "Device": "/dev/xvda"
+                    }
+                ], 
+                "Encrypted": false, 
+                "VolumeType": "gp2", 
+                "VolumeId": "vol-aac7336a", 
+                "State": "in-use", 
+                "Iops": 90, 
+                "SnapshotId": "snap-8c9ecb15", 
+                "CreateTime": {
+                    "hour": 0, 
+                    "__class__": "datetime", 
+                    "month": 12, 
+                    "second": 10, 
+                    "microsecond": 749000, 
+                    "year": 2015, 
+                    "day": 31, 
+                    "minute": 21
+                }, 
+                "Size": 30
+            }
+        ]
+    }
+}

@@ -1,0 +1,250 @@
+{
+    "status_code": 200, 
+    "data": {
+        "ResponseMetadata": {
+            "HTTPStatusCode": 200, 
+            "RequestId": "5367ca88-d88c-4ff0-b393-1f3399c00bd1"
+        }, 
+        "RouteTables": [
+            {
+                "Associations": [
+                    {
+                        "RouteTableAssociationId": "rtbassoc-5896533d", 
+                        "Main": true, 
+                        "RouteTableId": "rtb-48936c2d"
+                    }
+                ], 
+                "RouteTableId": "rtb-48936c2d", 
+                "VpcId": "vpc-2b86744e", 
+                "PropagatingVgws": [], 
+                "Tags": [], 
+                "Routes": [
+                    {
+                        "GatewayId": "local", 
+                        "DestinationCidrBlock": "172.31.0.0/16", 
+                        "State": "active", 
+                        "Origin": "CreateRouteTable"
+                    }, 
+                    {
+                        "GatewayId": "igw-e200ee87", 
+                        "DestinationCidrBlock": "0.0.0.0/0", 
+                        "State": "active", 
+                        "Origin": "CreateRoute"
+                    }
+                ]
+            }, 
+            {
+                "Associations": [
+                    {
+                        "SubnetId": "subnet-c5cf399c", 
+                        "RouteTableAssociationId": "rtbassoc-7867ce1d", 
+                        "Main": false, 
+                        "RouteTableId": "rtb-cfab0faa"
+                    }, 
+                    {
+                        "SubnetId": "subnet-9112c3e6", 
+                        "RouteTableAssociationId": "rtbassoc-4667ce23", 
+                        "Main": false, 
+                        "RouteTableId": "rtb-cfab0faa"
+                    }, 
+                    {
+                        "SubnetId": "subnet-7456e511", 
+                        "RouteTableAssociationId": "rtbassoc-4567ce20", 
+                        "Main": false, 
+                        "RouteTableId": "rtb-cfab0faa"
+                    }, 
+                    {
+                        "SubnetId": "subnet-c7cf399e", 
+                        "RouteTableAssociationId": "rtbassoc-7a67ce1f", 
+                        "Main": false, 
+                        "RouteTableId": "rtb-cfab0faa"
+                    }, 
+                    {
+                        "SubnetId": "subnet-6b56e50e", 
+                        "RouteTableAssociationId": "rtbassoc-7f67ce1a", 
+                        "Main": false, 
+                        "RouteTableId": "rtb-cfab0faa"
+                    }, 
+                    {
+                        "SubnetId": "subnet-9312c3e4", 
+                        "RouteTableAssociationId": "rtbassoc-7967ce1c", 
+                        "Main": false, 
+                        "RouteTableId": "rtb-cfab0faa"
+                    }
+                ], 
+                "RouteTableId": "rtb-cfab0faa", 
+                "VpcId": "vpc-7f5e861a", 
+                "PropagatingVgws": [], 
+                "Tags": [
+                    {
+                        "Value": "DevTest", 
+                        "Key": "Environment"
+                    }, 
+                    {
+                        "Value": "arn:aws:cloudformation:us-west-2:123456789012:stack/DevTest-VPC/f40833d0-8417-11e4-8e98-50fa5e742444", 
+                        "Key": "aws:cloudformation:stack-id"
+                    }, 
+                    {
+                        "Value": "Public route table", 
+                        "Key": "Name"
+                    }, 
+                    {
+                        "Value": "publicRouteTable", 
+                        "Key": "aws:cloudformation:logical-id"
+                    }, 
+                    {
+                        "Value": "DevTest-VPC", 
+                        "Key": "aws:cloudformation:stack-name"
+                    }
+                ], 
+                "Routes": [
+                    {
+                        "GatewayId": "local", 
+                        "DestinationCidrBlock": "10.0.0.0/16", 
+                        "State": "active", 
+                        "Origin": "CreateRouteTable"
+                    }, 
+                    {
+                        "GatewayId": "igw-f8995a9d", 
+                        "DestinationCidrBlock": "0.0.0.0/0", 
+                        "State": "active", 
+                        "Origin": "CreateRoute"
+                    }
+                ]
+            }, 
+            {
+                "Associations": [
+                    {
+                        "RouteTableAssociationId": "rtbassoc-039df866", 
+                        "Main": true, 
+                        "RouteTableId": "rtb-dda12bb8"
+                    }
+                ], 
+                "RouteTableId": "rtb-dda12bb8", 
+                "VpcId": "vpc-06901063", 
+                "PropagatingVgws": [], 
+                "Tags": [], 
+                "Routes": [
+                    {
+                        "GatewayId": "local", 
+                        "DestinationCidrBlock": "10.0.0.0/16", 
+                        "State": "active", 
+                        "Origin": "CreateRouteTable"
+                    }
+                ]
+            }, 
+            {
+                "Associations": [
+                    {
+                        "SubnetId": "subnet-d99628ae", 
+                        "RouteTableAssociationId": "rtbassoc-169df873", 
+                        "Main": false, 
+                        "RouteTableId": "rtb-a4a12bc1"
+                    }, 
+                    {
+                        "SubnetId": "subnet-4aee762f", 
+                        "RouteTableAssociationId": "rtbassoc-119df874", 
+                        "Main": false, 
+                        "RouteTableId": "rtb-a4a12bc1"
+                    }
+                ], 
+                "RouteTableId": "rtb-a4a12bc1", 
+                "VpcId": "vpc-06901063", 
+                "PropagatingVgws": [], 
+                "Tags": [
+                    {
+                        "Value": "CloudNative", 
+                        "Key": "Vendor"
+                    }, 
+                    {
+                        "Value": "Public route table", 
+                        "Key": "Name"
+                    }, 
+                    {
+                        "Value": "publicRouteTable", 
+                        "Key": "aws:cloudformation:logical-id"
+                    }, 
+                    {
+                        "Value": "cyan1-delta-hello-world", 
+                        "Key": "aws:cloudformation:stack-name"
+                    }, 
+                    {
+                        "Value": "arn:aws:cloudformation:us-west-2:123456789012:stack/cyan1-delta-hello-world/b2fd9dd0-f41a-11e4-8e28-5088484a585d", 
+                        "Key": "aws:cloudformation:stack-id"
+                    }
+                ], 
+                "Routes": [
+                    {
+                        "GatewayId": "local", 
+                        "DestinationCidrBlock": "10.0.0.0/16", 
+                        "State": "active", 
+                        "Origin": "CreateRouteTable"
+                    }, 
+                    {
+                        "GatewayId": "igw-5919b83c", 
+                        "DestinationCidrBlock": "0.0.0.0/0", 
+                        "State": "active", 
+                        "Origin": "CreateRoute"
+                    }
+                ]
+            }, 
+            {
+                "Associations": [
+                    {
+                        "SubnetId": "subnet-c2cf399b", 
+                        "RouteTableAssociationId": "rtbassoc-7c67ce19", 
+                        "Main": false, 
+                        "RouteTableId": "rtb-cdab0fa8"
+                    }, 
+                    {
+                        "SubnetId": "subnet-c6cf399f", 
+                        "RouteTableAssociationId": "rtbassoc-4467ce21", 
+                        "Main": false, 
+                        "RouteTableId": "rtb-cdab0fa8"
+                    }, 
+                    {
+                        "RouteTableAssociationId": "rtbassoc-a864cdcd", 
+                        "Main": true, 
+                        "RouteTableId": "rtb-cdab0fa8"
+                    }, 
+                    {
+                        "SubnetId": "subnet-9212c3e5", 
+                        "RouteTableAssociationId": "rtbassoc-4767ce22", 
+                        "Main": false, 
+                        "RouteTableId": "rtb-cdab0fa8"
+                    }, 
+                    {
+                        "SubnetId": "subnet-6a56e50f", 
+                        "RouteTableAssociationId": "rtbassoc-7e67ce1b", 
+                        "Main": false, 
+                        "RouteTableId": "rtb-cdab0fa8"
+                    }, 
+                    {
+                        "SubnetId": "subnet-9412c3e3", 
+                        "RouteTableAssociationId": "rtbassoc-7d67ce18", 
+                        "Main": false, 
+                        "RouteTableId": "rtb-cdab0fa8"
+                    }, 
+                    {
+                        "SubnetId": "subnet-7556e510", 
+                        "RouteTableAssociationId": "rtbassoc-7b67ce1e", 
+                        "Main": false, 
+                        "RouteTableId": "rtb-cdab0fa8"
+                    }
+                ], 
+                "RouteTableId": "rtb-cdab0fa8", 
+                "VpcId": "vpc-7f5e861a", 
+                "PropagatingVgws": [], 
+                "Tags": [], 
+                "Routes": [
+                    {
+                        "GatewayId": "local", 
+                        "DestinationCidrBlock": "10.0.0.0/16", 
+                        "State": "active", 
+                        "Origin": "CreateRouteTable"
+                    }
+                ]
+            }
+        ]
+    }
+}

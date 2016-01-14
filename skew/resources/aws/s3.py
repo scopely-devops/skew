@@ -23,10 +23,10 @@ class Bucket(AWSResource):
     _location_cache = {}
 
     @classmethod
-    def enumerate(cls, arn, region, account, resource_id=None, aws_creds=None):
+    def enumerate(cls, arn, region, account, resource_id=None, **kwargs):
         resources = super(Bucket, cls).enumerate(arn, region, account,
                                                  resource_id,
-                                                 aws_creds=aws_creds)
+                                                 **kwargs)
         region_resources = []
         if region is None:
             region = 'us-east-1'

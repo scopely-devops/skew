@@ -1,0 +1,60 @@
+{
+    "status_code": 200, 
+    "data": {
+        "ResponseMetadata": {
+            "HTTPStatusCode": 200, 
+            "RequestId": "7b30fc17-ba3c-11e5-84d2-1f83828f2439"
+        }, 
+        "IsTruncated": false, 
+        "Groups": [
+            {
+                "Path": "/", 
+                "CreateDate": {
+                    "hour": 4, 
+                    "__class__": "datetime", 
+                    "month": 5, 
+                    "second": 13, 
+                    "microsecond": 0, 
+                    "year": 2015, 
+                    "day": 1, 
+                    "minute": 55
+                }, 
+                "GroupId": "AGPAJPEN42SMQRU5UWRGS", 
+                "Arn": "arn:aws:iam::234567890123:group/Administrators", 
+                "GroupName": "Administrators"
+            }, 
+            {
+                "Path": "/", 
+                "CreateDate": {
+                    "hour": 21, 
+                    "__class__": "datetime", 
+                    "month": 5, 
+                    "second": 58, 
+                    "microsecond": 0, 
+                    "year": 2015, 
+                    "day": 5, 
+                    "minute": 44
+                }, 
+                "GroupId": "AGPAJG5SZVVECMBTC5ESY", 
+                "Arn": "arn:aws:iam::234567890123:group/FooBarAdmin", 
+                "GroupName": "FooBarAdmin"
+            }, 
+            {
+                "Path": "/", 
+                "CreateDate": {
+                    "hour": 19, 
+                    "__class__": "datetime", 
+                    "month": 11, 
+                    "second": 11, 
+                    "microsecond": 0, 
+                    "year": 2015, 
+                    "day": 30, 
+                    "minute": 12
+                }, 
+                "GroupId": "AGPAJR2DDEWJWVUUZ7IRQ", 
+                "Arn": "arn:aws:iam::234567890123:group/FieBaz", 
+                "GroupName": "FieBaz"
+            }
+        ]
+    }
+}

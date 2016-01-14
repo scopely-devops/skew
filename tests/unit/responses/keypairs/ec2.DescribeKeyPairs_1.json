@@ -1,0 +1,19 @@
+{
+    "status_code": 200, 
+    "data": {
+        "KeyPairs": [
+            {
+                "KeyName": "admin", 
+                "KeyFingerprint": "85:83:08:25:fa:96:45:ea:c9:15:04:12:af:45:3f:c0:ef:e8:b8:ce"
+            }, 
+            {
+                "KeyName": "FooBar", 
+                "KeyFingerprint": "9b:02:68:c2:ff:32:38:1a:49:ec:c4:b5:b3:98:36:cf:cd:1f:73:cc"
+            }
+        ], 
+        "ResponseMetadata": {
+            "HTTPStatusCode": 200, 
+            "RequestId": "2fb7f483-e17b-47d7-b0aa-0f2062770016"
+        }
+    }
+}
