@@ -279,7 +279,7 @@ class ARN(object):
             arn_string, query = arn_string.split('|')
             self.query = jmespath.compile(query)
         pairs = zip_longest(
-            self.ComponentClasses, arn_string.split(':', 6), fillvalue='*')
+            self.ComponentClasses, arn_string.split(':', 5), fillvalue='*')
         self._components = [c(n, self) for c, n in pairs]
 
     @property
