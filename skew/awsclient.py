@@ -123,8 +123,11 @@ class AWSClient(object):
                     data = op(**kwargs)
                     done = True
                 except ClientError as e:
+                    LOG.debug(e, kwargs)
                     if 'Throttling' in str(e):
                         time.sleep(1)
+                    elif 'AccessDenied' in str(e):
+                        done = True
                 except Exception:
                     done = True
         if query:
