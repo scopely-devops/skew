@@ -17,6 +17,7 @@ import importlib
 # Maps resources names as they appear in ARN's to the path name
 # of the Python class representing that resource.
 ResourceTypes = {
+    'aws.apigateway.restapis': 'aws.apigateway.RestAPI',
     'aws.autoscaling.autoScalingGroup': 'aws.autoscaling.AutoScalingGroup',
     'aws.autoscaling.launchConfigurationName': 'aws.autoscaling.LaunchConfiguration',
     'aws.cloudformation.stack': 'aws.cloudformation.Stack',
@@ -38,7 +39,10 @@ ResourceTypes = {
     'aws.elasticache.cluster': 'aws.elasticache.Cluster',
     'aws.elasticache.subnet-group': 'aws.elasticache.SubnetGroup',
     'aws.elasticache.snapshot': 'aws.elasticache.Snapshot',
+    'aws.elasticbeanstalk.application': 'aws.elasticbeanstalk.Application',
+    'aws.elasticbeanstalk.environment': 'aws.elasticbeanstalk.Environment',
     'aws.elb.loadbalancer': 'aws.elb.LoadBalancer',
+    'aws.firehose.deliverystream': 'aws.firehose.DeliveryStream',
     'aws.iam.group': 'aws.iam.Group',
     'aws.iam.instance-profile': 'aws.iam.InstanceProfile',
     'aws.iam.role': 'aws.iam.Role',
@@ -47,13 +51,15 @@ ResourceTypes = {
     'aws.iam.server-certificate': 'aws.iam.ServerCertificate',
     'aws.kinesis.stream': 'aws.kinesis.Stream',
     'aws.lambda.function': 'aws.lambda.Function',
-    'aws.sqs.queue': 'aws.sqs.Queue',
     'aws.rds.db': 'aws.rds.DBInstance',
     'aws.rds.secgrp': 'aws.rds.DBSecurityGroup',
     'aws.redshift.cluster': 'aws.redshift.Cluster',
     'aws.route53.hostedzone': 'aws.route53.HostedZone',
     'aws.route53.healthcheck': 'aws.route53.HealthCheck',
-    'aws.s3.bucket': 'aws.s3.Bucket'
+    'aws.s3.bucket': 'aws.s3.Bucket',
+    'aws.sqs.queue': 'aws.sqs.Queue',
+    'aws.sns.subscription': 'aws.sns.Subscription',
+    'aws.sns.topic': 'aws.sns.Topic'
 }
 
 
