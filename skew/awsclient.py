@@ -43,6 +43,9 @@ class AWSClient(object):
         self._has_credentials = False
         self.aws_creds = kwargs.get('aws_creds')
         if self.aws_creds is None:
+            self.aws_creds = self._config['accounts'][account_id].get(
+                'credentials')
+        if self.aws_creds is None:
             # no aws_creds, need profile to get creds from ~/.aws/credentials
             self._profile = self._config['accounts'][account_id]['profile']
         self.placebo = kwargs.get('placebo')
