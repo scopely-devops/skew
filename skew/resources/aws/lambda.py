@@ -45,6 +45,12 @@ class Function(AWSResource):
         date = 'LastModified'
         dimension = 'FunctionName'
 
+    @classmethod
+    def filter(cls, arn, resource_id, data):
+        function_name = data.get(cls.Meta.id)
+        LOG.debug('%s == %s', resource_id, function_name)
+        return resource_id == function_name
+
     @property
     def arn(self):
         return self.data.get('FunctionArn')

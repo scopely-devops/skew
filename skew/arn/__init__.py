@@ -84,13 +84,19 @@ class ARNComponent(object):
 class Resource(ARNComponent):
 
     def _split_resource(self, resource):
+        LOG.debug('split_resource: %s', resource)
         if '/' in resource:
             resource_type, resource_id = resource.split('/', 1)
         elif ':' in resource:
             resource_type, resource_id = resource.split(':', 1)
         else:
-            resource_type = resource
-            resource_id = None
+            # TODO: Some services use ARN's that include only a resource
+            # identifier (i.e. no resource type).  SNS is one example but
+            # there are others.  We need to refactor this code to allow
+            # the splitting of the resource part of the ARN to be handled
+            # by the individual resource classes rather than here.
+            resource_type = None
+            resource_id = resource
         return (resource_type, resource_id)
 
     def match(self, pattern, context=None):

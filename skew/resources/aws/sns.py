@@ -9,9 +9,14 @@
 # ANY KIND, either express or implied. See the License for the specific
 # language governing permissions and limitations under the License.
 
-from skew.resources.aws import AWSResource
+import logging
 
 import jmespath
+
+from skew.resources.aws import AWSResource
+
+LOG = logging.getLogger(__name__)
+
 
 class Topic(AWSResource):
 
@@ -26,6 +31,12 @@ class Topic(AWSResource):
         name = 'DisplayName'
         date = None
         dimension = 'TopicName'
+
+    @classmethod
+    def filter(cls, arn, resource_id, data):
+        topic_arn = data.get(cls.Meta.id)
+        LOG.debug('%s == %s', arn, topic_arn)
+        return arn == topic_arn
 
     @property
     def arn(self):
@@ -42,6 +53,7 @@ class Topic(AWSResource):
 
         self.data = jmespath.search(detail_path, data)
 
+
 class Subscription(AWSResource):
 
     invalid_arns = ['PendingConfirmation', 'Deleted']
@@ -50,7 +62,8 @@ class Subscription(AWSResource):
         service = 'sns'
         type = 'subscription'
         enum_spec = ('list_subscriptions', 'Subscriptions', None)
-        detail_spec = ('get_subscription_attributes', 'SubscriptionArn', 'Attributes')
+        detail_spec = ('get_subscription_attributes', 'SubscriptionArn',
+                       'Attributes')
         id = 'SubscriptionArn'
         filter_name = None
         filter_type = None
@@ -64,8 +77,8 @@ class Subscription(AWSResource):
 
     @classmethod
     def enumerate(cls, arn, region, account, resource_id=None, **kwargs):
-        resources = super(Subscription, cls).enumerate(arn, region, account,
-                                                   resource_id, **kwargs)
+        resources = super(Subscription, cls).enumerate(
+            arn, region, account, resource_id, **kwargs)
 
         return [r for r in resources if r.id not in cls.invalid_arns]
 

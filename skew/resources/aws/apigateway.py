@@ -9,7 +9,11 @@
 # ANY KIND, either express or implied. See the License for the specific
 # language governing permissions and limitations under the License.
 
+import logging
+
 from skew.resources.aws import AWSResource
+
+LOG = logging.getLogger(__name__)
 
 
 class RestAPI(AWSResource):
@@ -25,3 +29,9 @@ class RestAPI(AWSResource):
         name = 'name'
         date = 'createdDate'
         dimension = 'GatewayName'
+
+    @classmethod
+    def filter(cls, arn, resource_id, data):
+        api_id = data.get(cls.Meta.id)
+        LOG.debug('%s == %s', resource_id, api_id)
+        return resource_id == api_id

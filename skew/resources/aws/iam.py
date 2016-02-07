@@ -43,7 +43,7 @@ class Group(IAMResource):
         dimension = None
 
     @classmethod
-    def filter(cls, resource_id, data):
+    def filter(cls, arn, resource_id, data):
         LOG.debug('%s == %s', resource_id, data)
         return resource_id == data['GroupName']
 
@@ -62,7 +62,7 @@ class User(IAMResource):
         dimension = None
 
     @classmethod
-    def filter(cls, resource_id, data):
+    def filter(cls, arn, resource_id, data):
         LOG.debug('%s == %s', resource_id, data)
         return resource_id == data['UserName']
 
@@ -81,7 +81,7 @@ class Role(IAMResource):
         dimension = None
 
     @classmethod
-    def filter(cls, resource_id, data):
+    def filter(cls, arn, resource_id, data):
         LOG.debug('%s == %s', resource_id, data)
         return resource_id == data['RoleName']
 
@@ -100,7 +100,7 @@ class InstanceProfile(IAMResource):
         dimension = None
 
     @classmethod
-    def filter(cls, resource_id, data):
+    def filter(cls, arn, resource_id, data):
         LOG.debug('%s == %s', resource_id, data)
         return resource_id == data['InstanceProfileId']
 
@@ -119,7 +119,7 @@ class Policy(IAMResource):
         dimension = None
 
     @classmethod
-    def filter(cls, resource_id, data):
+    def filter(cls, arn, resource_id, data):
         LOG.debug('%s == %s', resource_id, data)
         return resource_id == data['UserName']
 
@@ -140,6 +140,6 @@ class ServerCertificate(IAMResource):
         dimension = None
 
     @classmethod
-    def filter(cls, resource_id, data):
+    def filter(cls, arn, resource_id, data):
         LOG.debug('%s == %s', resource_id, data)
         return resource_id == data['ServerCertificateName']

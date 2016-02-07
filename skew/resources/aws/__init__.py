@@ -85,7 +85,7 @@ class AWSResource(Resource):
         type = 'awsresource'
 
     @classmethod
-    def filter(cls, resource_id, data):
+    def filter(cls, arn, resource_id, data):
         pass
 
     def __init__(self, client, data, query=None):

@@ -36,7 +36,7 @@ class Table(AWSResource):
         dimension = 'TableName'
 
     @classmethod
-    def filter(cls, resource_id, data):
+    def filter(cls, arn, resource_id, data):
         LOG.debug('%s == %s', resource_id, data)
         return resource_id == data
 
