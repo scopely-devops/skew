@@ -56,7 +56,7 @@ class Resource(object):
                     # class should provide a filter method that will
                     # return True if the returned data matches the
                     # resource ID we are looking for.
-                    if not cls.filter(resource_id, d):
+                    if not cls.filter(arn, resource_id, d):
                         continue
                 resources.append(cls(client, d, arn.query))
         return resources

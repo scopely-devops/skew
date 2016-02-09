@@ -1,6 +1,3 @@
-# Copyright (c) 2014 Scopely, Inc.
-# Copyright (c) 2015 Mitch Garnaat
-#
 # Licensed under the Apache License, Version 2.0 (the "License"). You
 # may not use this file except in compliance with the License. A copy of
 # the License is located at
@@ -12,36 +9,26 @@
 # ANY KIND, either express or implied. See the License for the specific
 # language governing permissions and limitations under the License.
 
-import logging
+from skew.resources.aws import AWSResource
 
 import jmespath
 
-from skew.resources.aws import AWSResource
-
-
-LOG = logging.getLogger(__name__)
-
-
-class Table(AWSResource):
+class DeliveryStream(AWSResource):
 
     class Meta(object):
-        service = 'dynamodb'
-        type = 'table'
-        enum_spec = ('list_tables', 'TableNames', None)
-        detail_spec = ('describe_table', 'TableName', 'Table')
-        id = 'Table'
+        service = 'firehose'
+        type = 'deliverystream'
+        enum_spec = ('list_delivery_streams', 'DeliveryStreamNames', None)
+        detail_spec = ('describe_delivery_stream', 'DeliveryStreamName', 'DeliveryStreamDescription')
+        id = 'DeliveryStreamName'
         filter_name = None
-        name = 'TableName'
-        date = 'CreationDateTime'
-        dimension = 'TableName'
-
-    @classmethod
-    def filter(cls, arn, resource_id, data):
-        LOG.debug('%s == %s', resource_id, data)
-        return resource_id == data
+        filter_type = None
+        name = 'DeliveryStreamName'
+        date = 'CreateTimestamp'
+        dimension = 'DeliveryStreamName'
 
     def __init__(self, client, data, query=None):
-        super(Table, self).__init__(client, data, query)
+        super(DeliveryStream, self).__init__(client, data, query)
         self._id = data
         detail_op, param_name, detail_path = self.Meta.detail_spec
         params = {param_name: self.id}

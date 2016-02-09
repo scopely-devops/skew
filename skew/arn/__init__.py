@@ -84,13 +84,19 @@ class ARNComponent(object):
 class Resource(ARNComponent):
 
     def _split_resource(self, resource):
+        LOG.debug('split_resource: %s', resource)
         if '/' in resource:
             resource_type, resource_id = resource.split('/', 1)
         elif ':' in resource:
             resource_type, resource_id = resource.split(':', 1)
         else:
-            resource_type = resource
-            resource_id = None
+            # TODO: Some services use ARN's that include only a resource
+            # identifier (i.e. no resource type).  SNS is one example but
+            # there are others.  We need to refactor this code to allow
+            # the splitting of the resource part of the ARN to be handled
+            # by the individual resource classes rather than here.
+            resource_type = None
+            resource_id = resource
         return (resource_type, resource_id)
 
     def match(self, pattern, context=None):
@@ -168,7 +174,9 @@ class Region(ARNComponent):
         'kinesis': _region_names_limited,
         'iam': _no_region_required,
         'route53': _no_region_required,
-        'lambda': ['us-east-1', 'us-west-2', 'eu-west-1', 'ap-northeast-1']
+        'lambda': ['us-east-1', 'us-west-2', 'eu-west-1', 'ap-northeast-1'],
+        'firehose': ['us-east-1', 'us-west-2', 'eu-west-1'],
+        'apigateway': ['us-east-1', 'us-west-2', 'eu-west-1', 'ap-northeast-1'],
     }
 
     def choices(self, context=None):
@@ -279,7 +287,7 @@ class ARN(object):
             arn_string, query = arn_string.split('|')
             self.query = jmespath.compile(query)
         pairs = zip_longest(
-            self.ComponentClasses, arn_string.split(':', 6), fillvalue='*')
+            self.ComponentClasses, arn_string.split(':', 5), fillvalue='*')
         self._components = [c(n, self) for c, n in pairs]
 
     @property
