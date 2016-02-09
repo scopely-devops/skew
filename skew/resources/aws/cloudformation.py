@@ -24,9 +24,12 @@ class Stack(AWSResource):
         for stack in resources:
             stack.data['Resources'] = []
             for stack_resource in stack:
+                resource_id = stack_resource.get('PhysicalResourceId')
+                if not resource_id:
+                    resource_id = stack_resource.get('LogicalResourceId')
                 stack.data['Resources'].append(
                     {
-                        'id': stack_resource['PhysicalResourceId'],
+                        'id': resource_id,
                         'type': stack_resource['ResourceType']
                     }
                 )
