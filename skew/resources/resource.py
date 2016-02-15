@@ -50,7 +50,7 @@ class Resource(object):
         LOG.debug('enum_op=%s' % enum_op)
         try:
             data = client.call(enum_op, query=path, **kwargs)
-        except ClientError, e:
+        except ClientError as e:
             data = {}
             # if the error is because the resource was not found, be quiet
             if 'NotFound' not in e.response['Error']['Code']:
