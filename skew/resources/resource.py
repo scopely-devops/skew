@@ -17,6 +17,8 @@ import jmespath
 
 import skew.awsclient
 
+from botocore.exceptions import ClientError
+
 LOG = logging.getLogger(__name__)
 
 
@@ -46,7 +48,13 @@ class Resource(object):
         if extra_args:
             kwargs.update(extra_args)
         LOG.debug('enum_op=%s' % enum_op)
-        data = client.call(enum_op, query=path, **kwargs)
+        try:
+            data = client.call(enum_op, query=path, **kwargs)
+        except ClientError as e:
+            data = {}
+            # if the error is because the resource was not found, be quiet
+            if 'NotFound' not in e.response['Error']['Code']:
+                raise
         LOG.debug(data)
         resources = []
         if data:

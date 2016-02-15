@@ -67,6 +67,17 @@ class TestARN(unittest.TestCase):
         r = l[0]
         self.assertEqual(r.filtered_data, 't2.small')
 
+    def test_ec2_instance_not_found(self):
+        placebo_cfg = {
+            'placebo': placebo,
+            'placebo_dir': self._get_response_path('instances_3'),
+            'placebo_mode': 'playback'}
+        arn = scan('arn:aws:ec2:us-west-2:123456789012:instance/i-87654321',
+                   **placebo_cfg)
+        # Fetch all Instance resources
+        l = list(arn)
+        self.assertEqual(len(l), 0)
+
     def test_ec2_volumes(self):
         placebo_cfg = {
             'placebo': placebo,
