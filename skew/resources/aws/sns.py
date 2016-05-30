@@ -42,8 +42,8 @@ class Topic(AWSResource):
     def arn(self):
         return self.data.get('TopicArn')
 
-    def __init__(self, client, data, query=None):
-        super(Topic, self).__init__(client, data, query)
+    def __init__(self, session_factory, client, data, query=None):
+        super(Topic, self).__init__(session_factory, client, data, query)
 
         self._id = data['TopicArn'].split(':', 5)[5]
 
@@ -76,14 +76,14 @@ class Subscription(AWSResource):
         return self.data.get('SubscriptionArn')
 
     @classmethod
-    def enumerate(cls, arn, region, account, resource_id=None, **kwargs):
+    def enumerate(cls, session_factory, arn, resource_id=None):
         resources = super(Subscription, cls).enumerate(
-            arn, region, account, resource_id, **kwargs)
+            session_factory, arn, resource_id)
 
         return [r for r in resources if r.id not in cls.invalid_arns]
 
-    def __init__(self, client, data, query=None):
-        super(Subscription, self).__init__(client, data, query)
+    def __init__(self, session_factory, client, data, query=None):
+        super(Subscription, self).__init__(session_factory, client, data, query)
 
         if data['SubscriptionArn'] in self.invalid_arns:
             self._id = 'PendingConfirmation'

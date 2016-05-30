@@ -1,4 +1,4 @@
-# Licensed under the Apache License, Version 2.0 (the "License"). You
+o# Licensed under the Apache License, Version 2.0 (the "License"). You
 # may not use this file except in compliance with the License. A copy of
 # the License is located at
 #
@@ -27,8 +27,8 @@ class DeliveryStream(AWSResource):
         date = 'CreateTimestamp'
         dimension = 'DeliveryStreamName'
 
-    def __init__(self, client, data, query=None):
-        super(DeliveryStream, self).__init__(client, data, query)
+    def __init__(self, session_factory, client, data, query=None):
+        super(DeliveryStream, self).__init__(session_factory, client, data, query)
         self._id = data
         detail_op, param_name, detail_path = self.Meta.detail_spec
         params = {param_name: self.id}

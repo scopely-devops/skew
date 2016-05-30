@@ -29,7 +29,7 @@ class Stream(AWSResource):
         date = None
         dimension = 'StreamName'
 
-    def __init__(self, client, data, query=None):
-        super(Stream, self).__init__(client, data, query)
+    def __init__(self, session_factory, client, data, query=None):
+        super(Stream, self).__init__(session_factory, client, data, query)
         self.data = {self.Meta.id: data}
         self._id = self.data[self.Meta.id]

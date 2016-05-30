@@ -88,7 +88,8 @@ class AWSResource(Resource):
     def filter(cls, arn, resource_id, data):
         pass
 
-    def __init__(self, client, data, query=None):
+    def __init__(self, session_factory, client, data, query=None):
+        self._session = session_factory
         self._client = client
         self._query = query
         if data is None:
@@ -103,10 +104,6 @@ class AWSResource(Resource):
         else:
             self._id = ''
         self._cloudwatch = None
-        if hasattr(self.Meta, 'dimension') and self.Meta.dimension:
-            self._cloudwatch = skew.awsclient.get_awsclient(
-                'cloudwatch', self._client.region_name,
-                self._client.account_id)
         self._metrics = None
         self._name = None
         self._date = None
@@ -118,14 +115,16 @@ class AWSResource(Resource):
     @property
     def arn(self):
         return 'arn:aws:%s:%s:%s:%s/%s' % (
-            self._client.service_name,
-            self._client.region_name,
-            self._client.account_id, self.resourcetype, self.id)
+            self.Meta.service_name,
+            self.session.region_name,
+            self.session.account_id, self.resourcetype, self.id)
 
     @property
     def metrics(self):
         if self._metrics is None:
-            if self._cloudwatch:
+            if getattr(self.Meta, 'dimension', None):
+                if self._cloudwatch is None:
+                    self._cloudwatch = self.session.get_client('cloudwatch')
                 data = self._cloudwatch.call(
                     'list_metrics',
                     Dimensions=[{'Name': self.Meta.dimension,
