@@ -30,6 +30,13 @@ class Cluster(AWSResource):
         date = 'CacheClusterCreateTime'
         dimension = 'CacheClusterId'
 
+    @property
+    def arn(self):
+        return 'arn:aws:%s:%s:%s:%s:%s' % (
+            self._client.service_name,
+            self._client.region_name,
+            self._client.account_id, self.resourcetype, self.id)
+
 
 class SubnetGroup(AWSResource):
 
@@ -60,3 +67,10 @@ class Snapshot(AWSResource):
         name = 'SnapshotName'
         date = 'StartTime'
         dimension = None
+
+    @property
+    def arn(self):
+        return 'arn:aws:%s:%s:%s:%s:%s' % (
+            self._client.service_name,
+            self._client.region_name,
+            self._client.account_id, self.resourcetype, self.id)
