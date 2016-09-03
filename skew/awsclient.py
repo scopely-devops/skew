@@ -136,4 +136,6 @@ class AWSClient(object):
 
 
 def get_awsclient(service_name, region_name, account_id, **kwargs):
+    if region_name == '':
+        region_name = None
     return AWSClient(service_name, region_name, account_id, **kwargs)
