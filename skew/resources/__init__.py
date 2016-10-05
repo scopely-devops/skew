@@ -20,6 +20,7 @@ ResourceTypes = {
     'aws.apigateway.restapis': 'aws.apigateway.RestAPI',
     'aws.autoscaling.autoScalingGroup': 'aws.autoscaling.AutoScalingGroup',
     'aws.autoscaling.launchConfigurationName': 'aws.autoscaling.LaunchConfiguration',
+    'aws.cloudfront.distribution': 'aws.cloudfront.Distribution',
     'aws.cloudformation.stack': 'aws.cloudformation.Stack',
     'aws.cloudwatch.alarm': 'aws.cloudwatch.Alarm',
     'aws.dynamodb.table': 'aws.dynamodb.Table',
