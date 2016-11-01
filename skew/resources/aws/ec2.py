@@ -42,9 +42,9 @@ class SecurityGroup(AWSResource):
         enum_spec = ('describe_security_groups', 'SecurityGroups', None)
         detail_spec = None
         id = 'GroupId'
-        filter_name = 'GroupNames'
+        filter_name = 'GroupIds'
         filter_type = 'list'
-        name = 'GroupName'
+        name = 'GroupId'
         date = None
         dimension = None
 
