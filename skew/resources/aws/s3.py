@@ -23,13 +23,11 @@ class Bucket(AWSResource):
     _location_cache = {}
 
     @classmethod
-    def enumerate(cls, arn, region, account, resource_id=None, **kwargs):
-        resources = super(Bucket, cls).enumerate(arn, region, account,
-                                                 resource_id,
-                                                 **kwargs)
+    def enumerate(cls, session_factory, arn, resource_id=None):
+        resources = super(Bucket, cls).enumerate(
+            session_factory, arn, resource_id)
         region_resources = []
-        if region is None:
-            region = 'us-east-1'
+        region = session_factory.region_name or 'us-east-1'
         for r in resources:
             location = cls._location_cache.get(r.id)
             if location is None:
@@ -57,8 +55,8 @@ class Bucket(AWSResource):
         date = 'CreationDate'
         dimension = None
 
-    def __init__(self, client, data, query=None):
-        super(Bucket, self).__init__(client, data, query)
+    def __init__(self, session_factory, client, data, query=None):
+        super(Bucket, self).__init__(session_factory, client, data, query)
         self._data = data
         self._keys = []
 

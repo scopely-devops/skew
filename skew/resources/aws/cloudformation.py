@@ -18,9 +18,10 @@ from skew.resources.aws import AWSResource
 class Stack(AWSResource):
 
     @classmethod
-    def enumerate(cls, arn, region, account, resource_id=None, **kwargs):
-        resources = super(Stack, cls).enumerate(arn, region, account,
-                                                resource_id, **kwargs)
+    def enumerate(cls, session_factory, arn, resource_id=None):
+        resources = super(Stack, cls).enumerate(
+            session_factory, arn, resource_id)
+
         for stack in resources:
             stack.data['Resources'] = []
             for stack_resource in stack:
@@ -47,15 +48,15 @@ class Stack(AWSResource):
         date = 'CreationTime'
         dimension = None
 
-    def __init__(self, client, data, query=None):
-        super(Stack, self).__init__(client, data, query)
+    def __init__(self, session_factory, client, data, query=None):
+        super(Stack, self).__init__(session_factory, client, data, query)
         self._data = data
-        self._resources = []
+        self._resources = None
 
     def __iter__(self):
         detail_op, param_name, detail_path = self.Meta.detail_spec
         params = {param_name: self.id}
-        if not self._resources:
+        if self._resources is None:
             data = self._client.call(detail_op, **params)
             self._resources = jmespath.search(detail_path, data)
         for resource in self._resources:

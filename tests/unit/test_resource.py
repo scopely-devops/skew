@@ -47,7 +47,7 @@ class TestResource(unittest.TestCase):
     def test_resource(self):
         client = skew.awsclient.get_awsclient(
             'ec2', 'us-east-1', '123456789012')
-        resource = FooResource(client, data={'bar': 'bar'})
+        resource = FooResource(None, client, data={'bar': 'bar'})
         self.assertEqual(resource.id, 'bar')
         self.assertEqual(resource.__repr__(),
                          'arn:aws:ec2:us-east-1:123456789012:foo/bar')

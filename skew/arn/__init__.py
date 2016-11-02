@@ -21,6 +21,7 @@ import jmespath
 
 import skew.resources
 from skew.config import get_config
+from skew.awsclient import SkewSessionFactory
 
 LOG = logging.getLogger(__name__)
 DebugFmtString = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
@@ -121,11 +122,15 @@ class Resource(ARNComponent):
         LOG.debug('resource_type=%s, resource_id=%s',
                   resource_type, resource_id)
         resources = []
+
+        session_factory = SkewSessionFactory(region, account, **kwargs)
+
         for resource_type in self.matches(context):
             resource_path = '.'.join([provider, service_name, resource_type])
             resource_cls = skew.resources.find_resource_class(resource_path)
             resources.extend(resource_cls.enumerate(
-                self._arn, region, account, resource_id, **kwargs))
+                session_factory, self._arn, resource_id))
+
         return resources
 
 

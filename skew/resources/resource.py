@@ -24,10 +24,11 @@ LOG = logging.getLogger(__name__)
 
 class Resource(object):
 
+    flyweight = True
+
     @classmethod
-    def enumerate(cls, arn, region, account, resource_id=None, **kwargs):
-        client = skew.awsclient.get_awsclient(
-            cls.Meta.service, region, account, **kwargs)
+    def enumerate(cls, session_factory, arn, resource_id=None):
+        client = session_factory.get_client(cls.Meta.service)
         kwargs = {}
         do_client_side_filtering = False
         if resource_id and resource_id != '*':
@@ -66,7 +67,10 @@ class Resource(object):
                     # resource ID we are looking for.
                     if not cls.filter(arn, resource_id, d):
                         continue
-                resources.append(cls(client, d, arn.query))
+                if cls.flyweight:
+                    resources.append(cls(session_factory, client, d, arn.query))
+                else:
+                    resources.append(d)
         return resources
 
     class Meta(object):
@@ -77,7 +81,8 @@ class Resource(object):
         date = None
         name = None
 
-    def __init__(self, client, data):
+    def __init__(self, session_factory, client, data):
+        self._session_factory = session_factory
         self._client = client
         if data is None:
             data = {}
