@@ -172,6 +172,7 @@ class Region(ARNComponent):
         'redshift': _region_names_limited,
         'glacier': _region_names_limited,
         'kinesis': _region_names_limited,
+        'cloudfront': _no_region_required,
         'iam': _no_region_required,
         'route53': _no_region_required,
         'lambda': ['us-east-1', 'us-west-2', 'eu-west-1', 'ap-northeast-1'],
