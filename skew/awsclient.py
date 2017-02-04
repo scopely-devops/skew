@@ -78,7 +78,8 @@ class AWSClient(object):
                 pill.record()
             elif self.placebo_mode == 'playback':
                 pill.playback()
-        return session.client(self.service_name, region_name=self.region_name)
+        return session.client(self.service_name,
+                              region_name=self.region_name if self.region_name else None)
 
     def call(self, op_name, query=None, **kwargs):
         """
