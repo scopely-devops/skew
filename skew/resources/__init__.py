@@ -43,6 +43,7 @@ ResourceTypes = {
     'aws.elasticbeanstalk.application': 'aws.elasticbeanstalk.Application',
     'aws.elasticbeanstalk.environment': 'aws.elasticbeanstalk.Environment',
     'aws.elb.loadbalancer': 'aws.elb.LoadBalancer',
+    'aws.es.domain': 'aws.es.ElasticsearchDomain',
     'aws.firehose.deliverystream': 'aws.firehose.DeliveryStream',
     'aws.iam.group': 'aws.iam.Group',
     'aws.iam.instance-profile': 'aws.iam.InstanceProfile',
