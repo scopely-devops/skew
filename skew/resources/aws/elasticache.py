@@ -24,6 +24,8 @@ class Cluster(AWSResource):
                      'CacheClusters[]', None)
         detail_spec = None
         id = 'CacheClusterId'
+        tags_spec = ('list_tags_for_resource', 'TagList',
+                     'ResourceName', 'arn')
         filter_name = 'CacheClusterId'
         filter_type = 'scalar'
         name = 'CacheClusterId'
@@ -62,6 +64,8 @@ class Snapshot(AWSResource):
         enum_spec = ('describe_snapshots', 'Snapshots', None)
         detail_spec = None
         id = 'SnapshotName'
+        tags_spec = ('list_tags_for_resource', 'TagList',
+                     'ResourceName', 'arn')
         filter_name = 'SnapshotName'
         filter_type = 'scalar'
         name = 'SnapshotName'
