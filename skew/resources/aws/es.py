@@ -23,7 +23,8 @@ class ElasticsearchDomain(AWSResource):
         service = 'es'
         type = 'domain'
         enum_spec = ('list_domain_names', 'DomainNames[].DomainName', None)
-        tags_spec = None
+        tags_spec = ('list_tags', 'TagList',
+                     'ARN', 'arn')
         detail_spec = ('describe_elasticsearch_domain', 'DomainName', 'DomainStatus')
         id = 'DomainName'
         filter_name = None
