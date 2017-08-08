@@ -24,11 +24,20 @@ class Cluster(AWSResource):
                      'CacheClusters[]', None)
         detail_spec = None
         id = 'CacheClusterId'
+        tags_spec = ('list_tags_for_resource', 'TagList',
+                     'ResourceName', 'arn')
         filter_name = 'CacheClusterId'
         filter_type = 'scalar'
         name = 'CacheClusterId'
         date = 'CacheClusterCreateTime'
         dimension = 'CacheClusterId'
+
+    @property
+    def arn(self):
+        return 'arn:aws:%s:%s:%s:%s:%s' % (
+            self._client.service_name,
+            self._client.region_name,
+            self._client.account_id, self.resourcetype, self.id)
 
 
 class SubnetGroup(AWSResource):
@@ -55,8 +64,17 @@ class Snapshot(AWSResource):
         enum_spec = ('describe_snapshots', 'Snapshots', None)
         detail_spec = None
         id = 'SnapshotName'
+        tags_spec = ('list_tags_for_resource', 'TagList',
+                     'ResourceName', 'arn')
         filter_name = 'SnapshotName'
         filter_type = 'scalar'
         name = 'SnapshotName'
         date = 'StartTime'
         dimension = None
+
+    @property
+    def arn(self):
+        return 'arn:aws:%s:%s:%s:%s:%s' % (
+            self._client.service_name,
+            self._client.region_name,
+            self._client.account_id, self.resourcetype, self.id)
