@@ -145,7 +145,7 @@ class AWSResource(Resource):
             LOG.debug('need to build tags')
             self._tags = {}
 
-            if hasattr(self.Meta, 'tags_spec'):
+            if hasattr(self.Meta, 'tags_spec') and (self.Meta.tags_spec is not None):
                 LOG.debug('have a tags_spec')
                 method, path, param_name, param_value = self.Meta.tags_spec
                 kwargs = {}
