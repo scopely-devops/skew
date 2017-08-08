@@ -30,6 +30,8 @@ class Table(AWSResource):
         enum_spec = ('list_tables', 'TableNames', None)
         detail_spec = ('describe_table', 'TableName', 'Table')
         id = 'Table'
+        tags_spec = ('list_tags_of_resource', 'Tags[]',
+                     'ResourceArn', 'arn')
         filter_name = None
         name = 'TableName'
         date = 'CreationDateTime'
