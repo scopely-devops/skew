@@ -160,13 +160,17 @@ class AWSResource(Resource):
                 LOG.debug(self.data['Tags'])
 
             if 'Tags' in self.data:
-                for kvpair in self.data['Tags']:
-                    if kvpair['Key'] in self._tags:
-                        if not isinstance(self._tags[kvpair['Key']], list):
-                            self._tags[kvpair['Key']] = [self._tags[kvpair['Key']]]
-                        self._tags[kvpair['Key']].append(kvpair['Value'])
-                    else:
-                        self._tags[kvpair['Key']] = kvpair['Value']
+                _tags = self.data['Tags']
+                if isinstance(_tags, list):
+                    for kvpair in _tags:
+                        if kvpair['Key'] in self._tags:
+                            if not isinstance(self._tags[kvpair['Key']], list):
+                                self._tags[kvpair['Key']] = [self._tags[kvpair['Key']]]
+                            self._tags[kvpair['Key']].append(kvpair['Value'])
+                        else:
+                            self._tags[kvpair['Key']] = kvpair['Value']
+                elif isinstance(_tags, dict):
+                    self._tags = _tags
         return self._tags
 
     def find_metric(self, metric_name):

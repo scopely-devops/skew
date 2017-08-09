@@ -44,6 +44,8 @@ class Function(AWSResource):
         name = 'FunctionName'
         date = 'LastModified'
         dimension = 'FunctionName'
+        tags_spec = ('list_tags', 'Tags',
+                     'Resource', 'arn')
 
     @classmethod
     def filter(cls, arn, resource_id, data):
