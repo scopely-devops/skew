@@ -129,6 +129,8 @@ class AWSClient(object):
                         time.sleep(1)
                     elif 'AccessDenied' in str(e):
                         done = True
+                    elif 'NoSuchTagSet' in str(e):
+                        done = True
                 except Exception:
                     done = True
         if query:
