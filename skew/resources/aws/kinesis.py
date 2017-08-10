@@ -28,6 +28,8 @@ class Stream(AWSResource):
         name = 'StreamName'
         date = None
         dimension = 'StreamName'
+        tags_spec = ('list_tags_for_stream', 'Tags[]',
+                     'StreamName', 'id')
 
     def __init__(self, client, data, query=None):
         super(Stream, self).__init__(client, data, query)
