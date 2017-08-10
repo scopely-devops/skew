@@ -56,6 +56,8 @@ class Bucket(AWSResource):
         name = 'BucketName'
         date = 'CreationDate'
         dimension = None
+        tags_spec = ('get_bucket_tagging', 'TagSet[]',
+                     'Bucket', 'id')
 
     def __init__(self, client, data, query=None):
         super(Bucket, self).__init__(client, data, query)
