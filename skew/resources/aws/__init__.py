@@ -64,6 +64,10 @@ class AWSResource(Resource):
         (this is not always the same as filter_name, e.g. RDS)
       * the value of the parameter to send to identify the specific resource
         (this is not always the same as the id, e.g. RDS)
+      * [OPTIONAL] the fifth parameter is a dict containing the constants
+        needed to the call of the operation, in addition to the parameter
+        used to identify the specific resource (e.g. needed for Route53).
+        Those constants are expressed in a dict of key, value pairs.
     * detail_spec - Some services provide only summary information in the
       list or describe method and require you to make another request to get
       the detailed info for a specific resource.  If that is the case, this
@@ -147,13 +151,15 @@ class AWSResource(Resource):
 
             if hasattr(self.Meta, 'tags_spec') and (self.Meta.tags_spec is not None):
                 LOG.debug('have a tags_spec')
-                method, path, param_name, param_value = self.Meta.tags_spec
+                method, path, param_name, param_value = self.Meta.tags_spec[:4]
                 kwargs = {}
                 filter_type = getattr(self.Meta, 'filter_type', None)
                 if filter_type == 'list':
                     kwargs = {param_name: [getattr(self, param_value)]}
                 else:
                     kwargs = {param_name: getattr(self, param_value)}
+                if len(self.Meta.tags_spec) > 4:
+                    kwargs.update(self.Meta.tags_spec[4])
                 LOG.debug('fetching tags')
                 self.data['Tags'] = self._client.call(
                     method, query=path, **kwargs)

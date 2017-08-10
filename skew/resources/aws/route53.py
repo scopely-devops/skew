@@ -35,6 +35,8 @@ class HostedZone(Route53Resource):
         name = 'Name'
         date = None
         dimension = None
+        tags_spec = ('list_tags_for_resource', 'ResourceTagSet.Tags[]',
+                     'ResourceId', 'id', {'ResourceType': 'hostedzone'})
 
     @property
     def id(self):
@@ -53,6 +55,8 @@ class HealthCheck(Route53Resource):
         name = None
         date = None
         dimension = None
+        tags_spec = ('list_tags_for_resource', 'ResourceTagSet.Tags[]',
+                     'ResourceId', 'id', {'ResourceType': 'healthcheck'})
 
 
 class ResourceRecordSet(Route53Resource):
