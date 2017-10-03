@@ -220,6 +220,20 @@ class RouteTable(AWSResource):
         date = None
         dimension = None
 
+class NatGateway(AWSResource):
+
+    class Meta(object):
+        service = 'ec2'
+        type = 'natgateway'
+        enum_spec = ('describe_nat_gateways', 'NatGateways', None)
+        detail_spec = None
+        id = 'NatGatewayId'
+        filter_name = 'NatGatewayIds'
+        filter_type = 'list'
+        name = 'NatGatewayId'
+        date = 'CreateTime'
+        dimension = None
+
 
 class NetworkAcl(AWSResource):
 

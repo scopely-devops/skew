@@ -205,3 +205,16 @@ class TestARN(unittest.TestCase):
         stack_resource = l[0]
         resources = list(stack_resource)
         self.assertEqual(len(resources), 4)
+
+    def test_nat_gateways(self):
+        placebo_cfg = {
+            'placebo': placebo,
+            'placebo_dir': self._get_response_path('natgateways'),
+            'placebo_mode': 'playback'}
+        arn = scan('arn:aws:ec2:us-west-2:123456789012:natgateway/*',
+                   **placebo_cfg)
+        l = list(arn)
+        self.assertEqual(len(l), 1)
+        natgateways = l[0]
+        self.assertEqual(natgateways.arn,
+                         'arn:aws:ec2:us-west-2:123456789012:natgateway/nat-443d3ea762d00ee83')
