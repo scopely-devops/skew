@@ -46,7 +46,7 @@ account ID (as a string).  Within that, you must have an entry called *profile*
 that lists the profile name this account maps to within your AWS credential
 file.
 
-The main purpose of skew is to identify resources or sets of resources 
+The main purpose of skew is to identify resources or sets of resources
 across services, regions, and accounts and to quickly and easily return the
 data associated with those resources. For example, if you wanted to return
 the data associated with the example ARN above:
@@ -183,6 +183,33 @@ retrieves the value of the attribute `InstanceType` within the data.  The
 filtered data is available as the `filtered_data` attribute of the
 Resource object.  The full, unfiltered data is still available as the
 `data` attribute.
+
+Multithreaded Usage
+-------------------
+
+Skew is single-threaded by default, like most Python libraries. In order to
+speed up the enumeration of matching resources, you can use multiple threads:
+
+```python
+class Worker(Thread):
+   def __init__(self, arn):
+       Thread.__init__(self)
+       self.arn = arn
+       self.name = arn
+
+   def run(self):
+       for i in skew.scan(self.arn):
+           # now do something with the stuff
+
+arn = ARN()
+
+for service in arn.service.choices():
+    uri = 'arn:aws:' + service + ':*:*:*/*
+    worker = Worker(uri);
+    worker.start()
+```
+
+(thanks to @alFReD-NSH for the snippet)
 
 More Examples
 -------------
