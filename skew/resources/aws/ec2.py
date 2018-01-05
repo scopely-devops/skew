@@ -196,7 +196,7 @@ class InternetGateway(AWSResource):
     class Meta(object):
         service = 'ec2'
         type = 'internet-gateway'
-        enum_spec = ('describe_internet_gateways', 'InternetGateway', None)
+        enum_spec = ('describe_internet_gateways', 'InternetGateways', None)
         detail_spec = None
         id = 'InternetGatewayId'
         filter_name = 'InternetGatewayIds'

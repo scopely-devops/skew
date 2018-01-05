@@ -31,6 +31,7 @@ ResourceTypes = {
     'aws.ec2.instance': 'aws.ec2.Instance',
     'aws.ec2.network-acl': 'aws.ec2.NetworkAcl',
     'aws.ec2.route-table': 'aws.ec2.RouteTable',
+    'aws.ec2.internet-gateway': 'aws.ec2.InternetGateway',
     'aws.ec2.security-group': 'aws.ec2.SecurityGroup',
     'aws.ec2.snapshot': 'aws.ec2.Snapshot',
     'aws.ec2.volume': 'aws.ec2.Volume',
