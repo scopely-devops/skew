@@ -191,6 +191,8 @@ Skew is single-threaded by default, like most Python libraries. In order to
 speed up the enumeration of matching resources, you can use multiple threads:
 
 ```python
+import skew
+
 class Worker(Thread):
    def __init__(self, arn):
        Thread.__init__(self)
@@ -201,10 +203,10 @@ class Worker(Thread):
        for i in skew.scan(self.arn):
            # now do something with the stuff
 
-arn = ARN()
+arn = skew.ARN()
 
 for service in arn.service.choices():
-    uri = 'arn:aws:' + service + ':*:*:*/*
+    uri = 'arn:aws:' + service + ':*:*:*/*'
     worker = Worker(uri);
     worker.start()
 ```
