@@ -31,3 +31,10 @@ class LoadBalancer(AWSResource):
         dimension = 'LoadBalancerName'
         tags_spec = ('describe_tags', 'TagDescriptions[].Tags[]',
                      'LoadBalancerNames', 'id')
+
+    @property
+    def arn(self):
+        return 'arn:aws:elasticloadbalancing:%s:%s:%s/%s' % (
+            self._client.region_name,
+            self._client.account_id,
+            self.resourcetype, self.id)
