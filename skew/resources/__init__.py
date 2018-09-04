@@ -17,6 +17,7 @@ import importlib
 # Maps resources names as they appear in ARN's to the path name
 # of the Python class representing that resource.
 ResourceTypes = {
+    'aws.acm.certificate': 'aws.acm.Certificate',
     'aws.apigateway.restapis': 'aws.apigateway.RestAPI',
     'aws.autoscaling.autoScalingGroup': 'aws.autoscaling.AutoScalingGroup',
     'aws.autoscaling.launchConfigurationName': 'aws.autoscaling.LaunchConfiguration',
@@ -37,12 +38,17 @@ ResourceTypes = {
     'aws.ec2.vpc': 'aws.ec2.Vpc',
     'aws.ec2.vpc-peering-connection': 'aws.ec2.VpcPeeringConnection',
     'aws.ec2.subnet': 'aws.ec2.Subnet',
+    'aws.ecs.cluster': 'aws.ecs.Cluster',
+    'aws.ecs.task-definition': 'aws.ecs.TaskDefinition',
+    'aws.efs.filesystem': 'aws.efs.Filesystem',
     'aws.elasticache.cluster': 'aws.elasticache.Cluster',
     'aws.elasticache.subnet-group': 'aws.elasticache.SubnetGroup',
     'aws.elasticache.snapshot': 'aws.elasticache.Snapshot',
     'aws.elasticbeanstalk.application': 'aws.elasticbeanstalk.Application',
     'aws.elasticbeanstalk.environment': 'aws.elasticbeanstalk.Environment',
     'aws.elb.loadbalancer': 'aws.elb.LoadBalancer',
+    'aws.elbv2.loadbalancer': 'aws.elbv2.LoadBalancer',
+    'aws.elbv2.targetgroup': 'aws.elbv2.TargetGroup',
     'aws.es.domain': 'aws.es.ElasticsearchDomain',
     'aws.firehose.deliverystream': 'aws.firehose.DeliveryStream',
     'aws.iam.group': 'aws.iam.Group',
@@ -60,8 +66,10 @@ ResourceTypes = {
     'aws.route53.healthcheck': 'aws.route53.HealthCheck',
     'aws.s3.bucket': 'aws.s3.Bucket',
     'aws.sqs.queue': 'aws.sqs.Queue',
+    'aws.ses.identity': 'aws.ses.Identity',
     'aws.sns.subscription': 'aws.sns.Subscription',
-    'aws.sns.topic': 'aws.sns.Topic'
+    'aws.sns.topic': 'aws.sns.Topic',
+    'aws.support.check': 'aws.support.Check'
 }
 
 
