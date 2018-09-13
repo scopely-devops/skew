@@ -42,6 +42,10 @@ class HostedZone(Route53Resource):
     def id(self):
         return self._id.split('/')[-1]
 
+    @property
+    def arn(self):
+        return 'arn:aws:route:::hostedzone/{}'.format(self.id)
+
 
 class HealthCheck(Route53Resource):
 

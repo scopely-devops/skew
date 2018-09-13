@@ -72,3 +72,7 @@ class Bucket(AWSResource):
             self._keys = jmespath.search(detail_path, data)
         for key in self._keys:
             yield key
+
+    @property
+    def arn(self):
+        return 'arn:aws:s3:::{}'.format(self.data['Name'])
