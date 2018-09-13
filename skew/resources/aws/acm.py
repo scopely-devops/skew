@@ -36,3 +36,7 @@ class Certificate(AWSResource):
         name = 'DomainName'
         date = None
         dimension = None
+
+    @property
+    def arn(self):
+        return self.data['CertificateArn']
