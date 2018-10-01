@@ -69,6 +69,10 @@ class Resource(object):
                 resources.append(cls(client, d, arn.query))
         return resources
 
+    @classmethod
+    def set_tags(cls, arn, region, account, tags, resource_id=None, **kwargs):
+        pass
+
     class Meta(object):
         type = 'resource'
         dimension = None
