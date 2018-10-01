@@ -17,6 +17,7 @@ import logging
 import jmespath
 
 from skew.resources.aws import AWSResource
+from skew.awsclient import get_awsclient
 
 
 LOG = logging.getLogger(__name__)
@@ -40,3 +41,10 @@ class Certificate(AWSResource):
     @property
     def arn(self):
         return self.data['CertificateArn']
+
+    @classmethod
+    def set_tags(cls, arn, region, account, tags, resource_id=None, **kwargs):
+        client = get_awsclient(
+            cls.Meta.service, region, account, **kwargs)
+        tags_list = [dict(Key=k, Value=str(v)) for k, v in tags.items()]
+        return client.call('add_tags_to_certificate', CertificateArn=arn, Tags=tags_list)
