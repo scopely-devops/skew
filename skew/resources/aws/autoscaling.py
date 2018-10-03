@@ -15,6 +15,7 @@
 import jmespath
 
 from skew.resources.aws import AWSResource
+from skew.awsclient import get_awsclient
 
 
 class AutoScalingGroup(AWSResource):
@@ -40,6 +41,17 @@ class AutoScalingGroup(AWSResource):
     @property
     def arn(self):
         return self._arn_query.search(self.data)
+
+    @classmethod
+    def set_tags(cls, arn, region, account, tags, resource_id=None, **kwargs):
+        client = get_awsclient(
+            cls.Meta.service, region, account, **kwargs)
+        asg_name = arn.split(':')[7].split('/')[1]
+        addon = dict(ResourceId=asg_name,
+                     ResourceType='auto-scaling-group',
+                     PropagateAtLaunch=False)
+        tags_list = [dict(Key=k, Value=str(v), **addon) for k, v in tags.items()]
+        return client.call('create_or_update_tags', Tags=tags_list)
 
 
 class LaunchConfiguration(AWSResource):

@@ -1,6 +1,7 @@
 import logging
 
 from skew.resources.aws import AWSResource
+from skew.awsclient import get_awsclient
 
 
 LOG = logging.getLogger(__name__)
@@ -34,3 +35,10 @@ class Distribution(CloudfrontResource):
     def filter(cls, arn, resource_id, data):
         LOG.debug('%s == %s', resource_id, data)
         return resource_id == data['Id']
+
+    @classmethod
+    def set_tags(cls, arn, region, account, tags, resource_id=None, **kwargs):
+        client = get_awsclient(
+            cls.Meta.service, region, account, **kwargs)
+        tags_list = [dict(Key=k, Value=str(v)) for k, v in tags.items()]
+        return client.call('tag_resource', Resource=arn, Tags=dict(Items=tags_list))
