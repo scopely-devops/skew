@@ -25,7 +25,7 @@ class Queue(AWSResource):
         id = 'QueueUrl'
         filter_name = 'QueueNamePrefix'
         filter_type = 'scalar'
-        name = 'QueueUrl'
+        name = 'QueueName'
         date = None
         dimension = 'QueueName'
 

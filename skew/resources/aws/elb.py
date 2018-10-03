@@ -26,7 +26,7 @@ class LoadBalancer(AWSResource):
         id = 'LoadBalancerName'
         filter_name = 'LoadBalancerNames'
         filter_type = 'list'
-        name = 'DNSName'
+        name = 'LoadBalancerName'
         date = 'CreatedTime'
         dimension = 'LoadBalancerName'
         tags_spec = ('describe_tags', 'TagDescriptions[].Tags[]',
