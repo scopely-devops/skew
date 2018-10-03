@@ -26,7 +26,7 @@ class Distribution(CloudfrontResource):
         id = 'Id'
         tags_spec = ('list_tags_for_resource', 'Tags.Items[]',
                      'Resource', 'arn')
-        name = 'DomainName'
+        name = 'Id'
         filter_name = None
         date = 'LastModifiedTime'
         dimension = None

@@ -29,7 +29,7 @@ class LoadBalancer(AWSResource):
         id = 'LoadBalancerArn'
         filter_name = 'Names'
         filter_type = 'list'
-        name = 'DNSName'
+        name = 'LoadBalancerName'
         date = 'CreatedTime'
         dimension = None
         tags_spec = ('describe_tags', 'TagDescriptions[].Tags[]',
