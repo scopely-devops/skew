@@ -25,7 +25,7 @@ class Instance(AWSResource):
         id = 'InstanceId'
         filter_name = 'InstanceIds'
         filter_type = 'list'
-        name = 'PublicDnsName'
+        name = 'InstanceId'
         date = 'LaunchTime'
         dimension = 'InstanceId'
 
