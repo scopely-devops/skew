@@ -33,7 +33,7 @@ class LoadBalancer(AWSResource):
         date = 'CreatedTime'
         dimension = None
         tags_spec = ('describe_tags', 'TagDescriptions[].Tags[]',
-                     'LoadBalancerNames', 'id')
+                     'ResourceArns', 'id')
 
     @property
     def arn(self):
@@ -41,7 +41,6 @@ class LoadBalancer(AWSResource):
 
     def __init__(self, client, data, query=None):
         super(LoadBalancer, self).__init__(client, data, query)
-        self._id = data
         detail_op, param_name, detail_path = self.Meta.detail_spec
         params = {param_name: self.data['LoadBalancerArn']}
         data = client.call(detail_op, **params)
