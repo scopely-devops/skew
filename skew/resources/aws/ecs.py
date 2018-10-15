@@ -27,6 +27,7 @@ class Cluster(AWSResource):
     class Meta(object):
         service = 'ecs'
         type = 'cluster'
+        resourcegroups_tagging = False
         enum_spec = ('list_clusters', 'clusterArns', None)
         detail_spec = ('describe_clusters', 'clusters', 'clusters[0]')
         id = None
@@ -55,6 +56,7 @@ class TaskDefinition(AWSResource):
     class Meta(object):
         service = 'ecs'
         type = 'task-definition'
+        resourcegroups_tagging = False
         enum_spec = ('list_task_definitions', 'taskDefinitionArns', None)
         detail_spec = ('describe_task_definition', 'taskDefinition', 'taskDefinition')
         id = None

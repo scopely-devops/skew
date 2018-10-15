@@ -27,6 +27,7 @@ class Table(AWSResource):
     class Meta(object):
         service = 'dynamodb'
         type = 'table'
+        resourcegroups_tagging = True
         enum_spec = ('list_tables', 'TableNames', None)
         detail_spec = ('describe_table', 'TableName', 'Table')
         id = 'Table'

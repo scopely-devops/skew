@@ -20,6 +20,7 @@ class Cluster(AWSResource):
     class Meta(object):
         service = 'elasticache'
         type = 'cluster'
+        resourcegroups_tagging = True
         enum_spec = ('describe_cache_clusters',
                      'CacheClusters[]', None)
         detail_spec = None
@@ -45,6 +46,7 @@ class SubnetGroup(AWSResource):
     class Meta(object):
         service = 'elasticache'
         type = 'subnet-group'
+        resourcegroups_tagging = False
         enum_spec = ('describe_cache_subnet_groups',
                      'CacheSubnetGroups', None)
         detail_spec = None
@@ -61,6 +63,7 @@ class Snapshot(AWSResource):
     class Meta(object):
         service = 'elasticache'
         type = 'snapshot'
+        resourcegroups_tagging = True
         enum_spec = ('describe_snapshots', 'Snapshots', None)
         detail_spec = None
         id = 'SnapshotName'

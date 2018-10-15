@@ -28,6 +28,7 @@ class HostedZone(Route53Resource):
     class Meta(object):
         service = 'route53'
         type = 'hostedzone'
+        resourcegroups_tagging = True
         enum_spec = ('list_hosted_zones', 'HostedZones', None)
         detail_spec = ('GetHostedZone', 'Id', None)
         id = 'Id'
@@ -52,6 +53,7 @@ class HealthCheck(Route53Resource):
     class Meta(object):
         service = 'route53'
         type = 'healthcheck'
+        resourcegroups_tagging = True
         enum_spec = ('list_health_checks', 'HealthChecks', None)
         detail_spec = ('GetHealthCheck', 'Id', None)
         id = 'Id'
@@ -68,6 +70,7 @@ class ResourceRecordSet(Route53Resource):
     class Meta(object):
         service = 'route53'
         type = 'rrset'
+        resourcegroups_tagging = False
         enum_spec = ('list_resource_record_sets', 'ResourceRecordSets', None)
         detail_spec = None
         id = 'Name'

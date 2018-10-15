@@ -27,6 +27,7 @@ class Filesystem(AWSResource):
     class Meta(object):
         service = 'efs'
         type = 'filesystem'
+        resourcegroups_tagging = False
         enum_spec = ('describe_file_systems', 'FileSystems', None)
         detail_spec = None
         id = 'FileSystemId'

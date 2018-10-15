@@ -22,6 +22,7 @@ class ElasticsearchDomain(AWSResource):
     class Meta(object):
         service = 'es'
         type = 'domain'
+        resourcegroups_tagging = True
         enum_spec = ('list_domain_names', 'DomainNames[].DomainName', None)
         tags_spec = ('list_tags', 'TagList',
                      'ARN', 'arn')

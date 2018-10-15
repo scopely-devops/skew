@@ -23,6 +23,7 @@ class AutoScalingGroup(AWSResource):
     class Meta(object):
         service = 'autoscaling'
         type = 'autoScalingGroup'
+        resourcegroups_tagging = False
         name = 'AutoScalingGroupName'
         date = 'CreatedTime'
         dimension = 'AutoScalingGroupName'

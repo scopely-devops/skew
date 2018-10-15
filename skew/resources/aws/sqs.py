@@ -20,6 +20,7 @@ class Queue(AWSResource):
     class Meta(object):
         service = 'sqs'
         type = 'queue'
+        resourcegroups_tagging = True
         enum_spec = ('list_queues', 'QueueUrls', None)
         detail_spec = ('get_queue_attributes', 'QueueUrl', 'QueueUrl')
         id = 'QueueUrl'

@@ -17,6 +17,7 @@ class Application(AWSResource):
     class Meta(object):
         service = 'elasticbeanstalk'
         type = 'application'
+        resourcegroups_tagging = False
         enum_spec = ('describe_applications', 'Applications', None)
         detail_spec = None
         id = 'ApplicationName'
@@ -31,6 +32,7 @@ class Environment(AWSResource):
     class Meta(object):
         service = 'elasticbeanstalk'
         type = 'environment'
+        resourcegroups_tagging = True
         enum_spec = ('describe_environments', 'Environments', None)
         detail_spec = None
         id = 'EnvironmentName'
@@ -39,3 +41,7 @@ class Environment(AWSResource):
         name = 'EnvironmentName'
         date = None
         dimension = None
+
+    @property
+    def arn(self):
+        return self.data['EnvironmentArn']

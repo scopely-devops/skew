@@ -22,6 +22,7 @@ class LoadBalancer(AWSResource):
     class Meta(object):
         service = 'elbv2'
         type = 'loadbalancer'
+        resourcegroups_tagging = True
         enum_spec = ('describe_load_balancers',
                      'LoadBalancers', None)
         # detail_spec = None
@@ -52,6 +53,7 @@ class TargetGroup(AWSResource):
     class Meta(object):
         service = 'elbv2'
         type = 'targetgroup'
+        resourcegroups_tagging = False
         enum_spec = ('describe_target_groups',
                      'TargetGroups', None)
         detail_spec = None

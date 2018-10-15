@@ -27,6 +27,7 @@ class Check(AWSResource):
     class Meta(object):
         service = 'support'
         type = 'check'
+        resourcegroups_tagging = False
         enum_spec = ('describe_trusted_advisor_checks', 'checks', None)
         detail_spec = None
         id = 'id'

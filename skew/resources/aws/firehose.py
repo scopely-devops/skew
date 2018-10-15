@@ -18,6 +18,7 @@ class DeliveryStream(AWSResource):
     class Meta(object):
         service = 'firehose'
         type = 'deliverystream'
+        resourcegroups_tagging = False
         enum_spec = ('list_delivery_streams', 'DeliveryStreamNames', None)
         detail_spec = ('describe_delivery_stream', 'DeliveryStreamName', 'DeliveryStreamDescription')
         id = 'DeliveryStreamName'

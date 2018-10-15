@@ -21,6 +21,7 @@ class RestAPI(AWSResource):
     class Meta(object):
         service = 'apigateway'
         type = 'restapis'
+        resourcegroups_tagging = False
         enum_spec = ('get_rest_apis', 'items', None)
         id = 'id'
         filter_name = None
