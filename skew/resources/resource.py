@@ -71,10 +71,11 @@ class Resource(object):
 
     @classmethod
     def set_tags(cls, arn, region, account, tags, resource_id=None, **kwargs):
-        if hasattr(cls.Meta, 'tags_support') and (cls.Meta.tags_support):
+        if hasattr(cls.Meta, 'resourcegroups_tagging') and (cls.Meta.resourcegroups_tagging):
             client = skew.awsclient.get_awsclient(
                 'resourcegroupstaggingapi', region, account, **kwargs)
-            client.call('tag_resources', ResourceARNList=[arn], Tags=tags)
+            r = client.call('tag_resources', ResourceARNList=[arn], Tags=tags)
+            logging.warn('Tag ARN %s : %s', arn, r)
 
     class Meta(object):
         type = 'resource'
