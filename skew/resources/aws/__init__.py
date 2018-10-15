@@ -47,6 +47,7 @@ class AWSResource(Resource):
     Each entry in the dictionary we define:
 
     * service - The AWS service in which this resource is defined.
+    * tags_support - Precise if the resource supports tags.
     * enum_spec - The enumeration configuration.  This is a tuple consisting
       of the name of the operation to call to enumerate the resources,
       a jmespath query that will be run against the result of the operation
