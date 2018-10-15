@@ -34,6 +34,7 @@ class Group(IAMResource):
     class Meta(object):
         service = 'iam'
         type = 'group'
+        resourcegroups_tagging = False
         enum_spec = ('list_groups', 'Groups', None)
         detail_spec = None
         id = 'GroupId'
@@ -53,6 +54,7 @@ class User(IAMResource):
     class Meta(object):
         service = 'iam'
         type = 'user'
+        resourcegroups_tagging = False
         enum_spec = ('list_users', 'Users', None)
         detail_spec = None
         id = 'UserId'
@@ -72,6 +74,7 @@ class Role(IAMResource):
     class Meta(object):
         service = 'iam'
         type = 'role'
+        resourcegroups_tagging = False
         enum_spec = ('list_roles', 'Roles', None)
         detail_spec = None
         id = 'RoleId'
@@ -91,6 +94,7 @@ class InstanceProfile(IAMResource):
     class Meta(object):
         service = 'iam'
         type = 'instance-profile'
+        resourcegroups_tagging = False
         enum_spec = ('list_instance_profiles', 'InstanceProfiles', None)
         detail_spec = None
         id = 'InstanceProfileId'
@@ -110,6 +114,7 @@ class Policy(IAMResource):
     class Meta(object):
         service = 'iam'
         type = 'policy'
+        resourcegroups_tagging = False
         enum_spec = ('list_policies', 'Policies', None)
         detail_spec = None
         id = 'PolicyId'
@@ -129,6 +134,7 @@ class ServerCertificate(IAMResource):
     class Meta(object):
         service = 'iam'
         type = 'server-certificate'
+        resourcegroups_tagging = False
         enum_spec = ('list_server_certificates',
                      'ServerCertificateMetadataList',
                      None)

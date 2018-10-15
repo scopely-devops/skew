@@ -21,6 +21,7 @@ class Distribution(CloudfrontResource):
     class Meta(object):
         service = 'cloudfront'
         type = 'distribution'
+        resourcegroups_tagging = False
         enum_spec = ('list_distributions', 'DistributionList.Items[]', None)
         detail_spec = None
         id = 'Id'

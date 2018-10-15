@@ -28,6 +28,7 @@ class Certificate(AWSResource):
     class Meta(object):
         service = 'acm'
         type = 'certificate'
+        resourcegroups_tagging = True
         enum_spec = ('list_certificates', 'CertificateSummaryList', None)
         detail_spec = None
         id = 'CertificateArn'
@@ -41,10 +42,3 @@ class Certificate(AWSResource):
     @property
     def arn(self):
         return self.data['CertificateArn']
-
-    @classmethod
-    def set_tags(cls, arn, region, account, tags, resource_id=None, **kwargs):
-        client = get_awsclient(
-            cls.Meta.service, region, account, **kwargs)
-        tags_list = [dict(Key=k, Value=str(v)) for k, v in tags.items()]
-        return client.call('add_tags_to_certificate', CertificateArn=arn, Tags=tags_list)

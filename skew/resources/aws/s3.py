@@ -49,6 +49,7 @@ class Bucket(AWSResource):
     class Meta(object):
         service = 's3'
         type = 'bucket'
+        resourcegroups_tagging = True
         enum_spec = ('list_buckets', 'Buckets[]', None)
         detail_spec = ('list_objects', 'Bucket', 'Contents[]')
         id = 'Name'

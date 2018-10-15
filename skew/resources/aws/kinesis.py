@@ -20,6 +20,7 @@ class Stream(AWSResource):
     class Meta(object):
         service = 'kinesis'
         type = 'stream'
+        resourcegroups_tagging = True
         enum_spec = ('list_streams', 'StreamNames', None)
         detail_spec = None
         id = 'StreamName'

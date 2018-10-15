@@ -20,6 +20,7 @@ class Instance(AWSResource):
     class Meta(object):
         service = 'ec2'
         type = 'instance'
+        resourcegroups_tagging = True
         enum_spec = ('describe_instances', 'Reservations[].Instances[]', None)
         detail_spec = None
         id = 'InstanceId'
@@ -39,6 +40,7 @@ class SecurityGroup(AWSResource):
     class Meta(object):
         service = 'ec2'
         type = 'security-group'
+        resourcegroups_tagging = True
         enum_spec = ('describe_security_groups', 'SecurityGroups', None)
         detail_spec = None
         id = 'GroupId'
@@ -54,6 +56,7 @@ class KeyPair(AWSResource):
     class Meta(object):
         service = 'ec2'
         type = 'key-pair'
+        resourcegroups_tagging = False
         enum_spec = ('describe_key_pairs', 'KeyPairs', None)
         detail_spec = None
         id = 'KeyName'
@@ -68,6 +71,7 @@ class Address(AWSResource):
     class Meta(object):
         service = 'ec2'
         type = 'address'
+        resourcegroups_tagging = False
         enum_spec = ('describe_addresses', 'Addresses', None)
         detail_spec = None
         id = 'PublicIp'
@@ -83,6 +87,7 @@ class Volume(AWSResource):
     class Meta(object):
         service = 'ec2'
         type = 'volume'
+        resourcegroups_tagging = True
         enum_spec = ('describe_volumes', 'Volumes', None)
         detail_spec = None
         id = 'VolumeId'
@@ -105,6 +110,7 @@ class Snapshot(AWSResource):
     class Meta(object):
         service = 'ec2'
         type = 'snapshot'
+        resourcegroups_tagging = True
         enum_spec = (
             'describe_snapshots', 'Snapshots', {'OwnerIds': ['self']})
         detail_spec = None
@@ -128,6 +134,7 @@ class Image(AWSResource):
     class Meta(object):
         service = 'ec2'
         type = 'image'
+        resourcegroups_tagging = True
         enum_spec = (
             'describe_images', 'Images', {'Owners': ['self']})
         detail_spec = None
@@ -151,6 +158,7 @@ class Vpc(AWSResource):
     class Meta(object):
         service = 'ec2'
         type = 'vpc'
+        resourcegroups_tagging = True
         enum_spec = ('describe_vpcs', 'Vpcs', None)
         detail_spec = None
         id = 'VpcId'
@@ -166,6 +174,7 @@ class Subnet(AWSResource):
     class Meta(object):
         service = 'ec2'
         type = 'subnet'
+        resourcegroups_tagging = True
         enum_spec = ('describe_subnets', 'Subnets', None)
         detail_spec = None
         id = 'SubnetId'
@@ -181,6 +190,7 @@ class CustomerGateway(AWSResource):
     class Meta(object):
         service = 'ec2'
         type = 'customer-gateway'
+        resourcegroups_tagging = True
         enum_spec = ('describe_customer_gateways', 'CustomerGateway', None)
         detail_spec = None
         id = 'CustomerGatewayId'
@@ -196,6 +206,7 @@ class InternetGateway(AWSResource):
     class Meta(object):
         service = 'ec2'
         type = 'internet-gateway'
+        resourcegroups_tagging = True
         enum_spec = ('describe_internet_gateways', 'InternetGateway', None)
         detail_spec = None
         id = 'InternetGatewayId'
@@ -211,6 +222,7 @@ class RouteTable(AWSResource):
     class Meta(object):
         service = 'ec2'
         type = 'route-table'
+        resourcegroups_tagging = True
         enum_spec = ('describe_route_tables', 'RouteTables', None)
         detail_spec = None
         id = 'RouteTableId'
@@ -226,6 +238,7 @@ class NetworkAcl(AWSResource):
     class Meta(object):
         service = 'ec2'
         type = 'network-acl'
+        resourcegroups_tagging = True
         enum_spec = ('describe_network_acls', 'NetworkAcls', None)
         detail_spec = None
         id = 'NetworkAclId'
@@ -241,6 +254,7 @@ class VpcPeeringConnection(AWSResource):
     class Meta(object):
         service = 'ec2'
         type = 'vpc-peering-connection'
+        resourcegroups_tagging = False
         enum_spec = ('describe_vpc_peering_connections',
                      'VpcPeeringConnection', None)
         detail_spec = None

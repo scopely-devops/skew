@@ -37,6 +37,7 @@ class Function(AWSResource):
     class Meta(object):
         service = 'lambda'
         type = 'function'
+        resourcegroups_tagging = True
         enum_spec = ('list_functions', 'Functions', None)
         detail_spec = None
         id = 'FunctionName'

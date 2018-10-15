@@ -38,6 +38,7 @@ class Stack(AWSResource):
     class Meta(object):
         service = 'cloudformation'
         type = 'stack'
+        resourcegroups_tagging = False
         enum_spec = ('describe_stacks', 'Stacks[]', None)
         detail_spec = ('describe_stack_resources', 'StackName',
                        'StackResources[]')

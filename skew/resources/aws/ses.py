@@ -27,6 +27,7 @@ class Identity(AWSResource):
     class Meta(object):
         service = 'ses'
         type = 'identity'
+        resourcegroups_tagging = False
         enum_spec = ('list_identities', 'Identities', None)
         detail_spec = ('describe_table', 'TableName', 'Table')
         id = 'Identity'

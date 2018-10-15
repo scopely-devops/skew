@@ -20,6 +20,7 @@ class LoadBalancer(AWSResource):
     class Meta(object):
         service = 'elb'
         type = 'loadbalancer'
+        resourcegroups_tagging = True
         enum_spec = ('describe_load_balancers',
                      'LoadBalancerDescriptions', None)
         detail_spec = None

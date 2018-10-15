@@ -20,6 +20,7 @@ class DBInstance(AWSResource):
     class Meta(object):
         service = 'rds'
         type = 'db'
+        resourcegroups_tagging = True
         enum_spec = ('describe_db_instances', 'DBInstances', None)
         tags_spec = ('list_tags_for_resource', 'TagList',
                      'ResourceName', 'arn')
@@ -44,6 +45,7 @@ class DBSecurityGroup(AWSResource):
     class Meta(object):
         service = 'rds'
         type = 'secgrp'
+        resourcegroups_tagging = True
         enum_spec = ('describe_db_security_groups', 'DBSecurityGroups', None)
         detail_spec = None
         id = 'DBSecurityGroupName'

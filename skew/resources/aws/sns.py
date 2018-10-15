@@ -23,6 +23,7 @@ class Topic(AWSResource):
     class Meta(object):
         service = 'sns'
         type = 'topic'
+        resourcegroups_tagging = False
         enum_spec = ('list_topics', 'Topics', None)
         detail_spec = ('get_topic_attributes', 'TopicArn', 'Attributes')
         id = 'TopicArn'
@@ -61,6 +62,7 @@ class Subscription(AWSResource):
     class Meta(object):
         service = 'sns'
         type = 'subscription'
+        resourcegroups_tagging = False
         enum_spec = ('list_subscriptions', 'Subscriptions', None)
         detail_spec = ('get_subscription_attributes', 'SubscriptionArn',
                        'Attributes')
