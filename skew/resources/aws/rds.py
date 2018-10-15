@@ -27,7 +27,7 @@ class DBInstance(AWSResource):
         id = 'DBInstanceIdentifier'
         filter_name = 'DbInstanceIdentifier'
         filter_type = 'scalar'
-        name = 'Endpoint.Address'
+        name = 'DBInstanceIdentifier'
         date = 'InstanceCreateTime'
         dimension = 'DBInstanceIdentifier'
 
