@@ -17,6 +17,7 @@ import logging
 import jmespath
 
 from skew.resources.aws import AWSResource
+from skew.awsclient import get_awsclient
 
 
 LOG = logging.getLogger(__name__)
@@ -46,3 +47,6 @@ class Filesystem(AWSResource):
             self._client.region_name,
             self._client.account_id,
             'file-system-id', self.id)
+
+    def sleek(self):
+        self.data['SizeInBytes'] = 0
