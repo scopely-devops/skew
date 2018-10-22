@@ -77,6 +77,12 @@ class Resource(object):
             r = client.call('tag_resources', ResourceARNList=[arn], Tags=tags)
             logging.warn('Tag ARN %s : %s', arn, r)
 
+    def sleek(self):
+        """
+        overrides datas frequently varied by a static value.
+        """
+        pass
+
     class Meta(object):
         type = 'resource'
         dimension = None

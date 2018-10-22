@@ -62,3 +62,5 @@ class DBSecurityGroup(AWSResource):
             self._client.region_name,
             self._client.account_id, self.resourcetype, self.id)
 
+    def sleek(self):
+        self.data['LatestRestorableTime'] = ''
