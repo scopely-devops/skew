@@ -75,7 +75,7 @@ class Resource(object):
             client = skew.awsclient.get_awsclient(
                 'resourcegroupstaggingapi', region, account, **kwargs)
             r = client.call('tag_resources', ResourceARNList=[arn], Tags=tags)
-            logging.warn('Tag ARN %s : %s', arn, r)
+            LOG.debug('Tag ARN %s, r=%s', arn, r)
 
     def sleek(self):
         """
