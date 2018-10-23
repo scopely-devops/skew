@@ -54,7 +54,7 @@ class Bucket(AWSResource):
         detail_spec = ('list_objects', 'Bucket', 'Contents[]')
         id = 'Name'
         filter_name = None
-        name = 'BucketName'
+        name = 'Name'
         date = 'CreationDate'
         dimension = None
         tags_spec = ('get_bucket_tagging', 'TagSet[]',
