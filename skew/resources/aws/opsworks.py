@@ -15,6 +15,7 @@
 import logging
 
 from skew.resources.aws import AWSResource
+from skew.awsclient import get_awsclient
 
 
 LOG = logging.getLogger(__name__)
@@ -25,7 +26,7 @@ class Stack(AWSResource):
     class Meta(object):
         service = 'opsworks'
         type = 'stack'
-        resourcegroups_tagging = True # only support regional, not classic (us-east-1)
+        resourcegroups_tagging = False
         enum_spec = ('describe_stacks', 'Stacks', None)
         detail_spec = None
         id = 'StackId'
@@ -39,3 +40,12 @@ class Stack(AWSResource):
     @property
     def arn(self):
         return self.data.get('Arn')
+
+    @classmethod
+    def set_tags(cls, arn, region, account, tags, resource_id=None, **kwargs):
+        # ResourceGroupsTaggingAPI supports regional stacks, but not classic (us-east-1)
+        # opsworks.tag_resource() supports both
+        client = get_awsclient(
+            cls.Meta.service, region, account, **kwargs)
+        r = client.call('tag_resource', ResourceArn=arn, Tags=tags)
+        LOG.debug('Tag ARN %s, r=%s', arn, r)
