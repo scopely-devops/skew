@@ -36,3 +36,10 @@ class RestAPI(AWSResource):
         api_id = data.get(cls.Meta.id)
         LOG.debug('%s == %s', resource_id, api_id)
         return resource_id == api_id
+
+    @property
+    def arn(self):
+        # arn:aws:apigateway:us-east-1::/restapis/vwxyz12345
+        return 'arn:aws:apigateway:%s::/restapis/%s' % (
+            self._client.region_name,
+            self.id)
