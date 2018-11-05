@@ -264,3 +264,18 @@ class VpcPeeringConnection(AWSResource):
         name = 'VpcPeeringConnectionId'
         date = None
         dimension = None
+
+
+class LaunchTemplate(AWSResource):
+
+    class Meta(object):
+        service = 'ec2'
+        type = 'launch-template'
+        enum_spec = ('describe_launch_templates', 'LaunchTemplates', None)
+        detail_spec = None
+        id = 'LaunchTemplateId'
+        filter_name = 'LaunchTemplateIds'
+        filter_type = 'list'
+        name = 'LaunchTemplateName'
+        date = 'CreateTime'
+        dimension = None
