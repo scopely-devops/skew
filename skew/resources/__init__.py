@@ -39,6 +39,7 @@ ResourceTypes = {
     'aws.ec2.vpc': 'aws.ec2.Vpc',
     'aws.ec2.vpc-peering-connection': 'aws.ec2.VpcPeeringConnection',
     'aws.ec2.subnet': 'aws.ec2.Subnet',
+    'aws.ec2.launch-template': 'aws.ec2.LaunchTemplate',
     'aws.elasticache.cluster': 'aws.elasticache.Cluster',
     'aws.elasticache.subnet-group': 'aws.elasticache.SubnetGroup',
     'aws.elasticache.snapshot': 'aws.elasticache.Snapshot',

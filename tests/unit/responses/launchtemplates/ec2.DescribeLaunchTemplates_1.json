@@ -1,0 +1,55 @@
+{
+    "status_code": 200,
+    "data": {
+        "ResponseMetadata": {
+            "HTTPStatusCode": 200,
+            "RequestId": "5367ca88-d88c-4ff0-b393-1f3399c00bd1"
+        },
+        "LaunchTemplates": [
+            {
+                "LatestVersionNumber": 2,
+                "LaunchTemplateId": "lt-000005555511111888",
+                "LaunchTemplateName": "controllershardv2",
+                "DefaultVersionNumber": 2,
+                "CreatedBy": "arn:aws:iam::123456789012:user/dev",
+                "CreateTime": "2018-10-30T13:59:02.000Z"
+            },
+            {
+                "LatestVersionNumber": 2,
+                "Tags": [
+                    {
+                        "Value": "prod",
+                        "Key": "costcenter"
+                    }
+                ],
+                "LaunchTemplateId": "lt-000007777744444999",
+                "LaunchTemplateName": "rabbitmq",
+                "DefaultVersionNumber": 2,
+                "CreatedBy": "arn:aws:iam::123456789012:user/prod",
+                "CreateTime": "2018-10-11T13:25:16.000Z"
+            },
+            {
+                "LatestVersionNumber": 3,
+                "Tags": [
+                    {
+                        "Value": "dev",
+                        "Key": "costcenter"
+                    }
+                ],
+                "LaunchTemplateId": "lt-000006666633333888",
+                "LaunchTemplateName": "kafkazookeeper",
+                "DefaultVersionNumber": 3,
+                "CreatedBy": "arn:aws:iam::123456789012:user/dev",
+                "CreateTime": "2018-10-11T13:52:47.000Z"
+            },
+            {
+                "LatestVersionNumber": 2,
+                "LaunchTemplateId": "lt-000777772222211223",
+                "LaunchTemplateName": "orchestrator",
+                "DefaultVersionNumber": 1,
+                "CreatedBy": "arn:aws:iam::123456789012:user/prod",
+                "CreateTime": "2018-10-30T14:18:51.000Z"
+            }
+        ]
+    }
+}

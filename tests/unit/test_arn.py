@@ -218,3 +218,20 @@ class TestARN(unittest.TestCase):
         natgateways = l[0]
         self.assertEqual(natgateways.arn,
                          'arn:aws:ec2:us-west-2:123456789012:natgateway/nat-443d3ea762d00ee83')
+    
+    def test_ec2_launchtemplates(self):
+        placebo_cfg = {
+            'placebo': placebo,
+            'placebo_dir': self._get_response_path('launchtemplates'),
+            'placebo_mode': 'playback'}
+        arn = scan('arn:aws:ec2:us-west-2:123456789012:launch-template/*',
+                   debug=True, **placebo_cfg)
+        l = list(arn)
+        self.assertEqual(len(l), 4)
+        self.assertEqual(l[0].id, 'lt-000005555511111888')
+        self.assertEqual(l[1].id, 'lt-000007777744444999')
+        self.assertEqual(l[2].id, 'lt-000006666633333888')
+        self.assertEqual(l[3].id, 'lt-000777772222211223')
+
+        self.assertEqual(l[1].data['Tags'][0]['Key'], "costcenter")
+        self.assertTrue('Tags' not in l[3].data)
