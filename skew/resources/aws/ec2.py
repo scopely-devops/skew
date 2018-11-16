@@ -34,6 +34,10 @@ class Instance(AWSResource):
     def parent(self):
         return self.data['ImageId']
 
+    def __init__(self, client, data, query=None):
+        super(Instance, self).__init__(client, data, query)
+        # Asset name is get by tags if defined, or is InstanceId
+        self._name = self.tags.get('Name', self.data['InstanceId'])
 
 class SecurityGroup(AWSResource):
 
