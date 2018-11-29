@@ -34,14 +34,17 @@ class AutoScalingGroup(AWSResource):
         filter_type = 'list'
 
     def __init__(self, client, data, query=None):
-        # Always save the list in the same order to avoid false changes detection
-        data['EnabledMetrics'].sort(key=lambda item:item['Metric'])
         super(AutoScalingGroup, self).__init__(client, data, query)
         self._arn_query = jmespath.compile('AutoScalingGroupARN')
 
     @property
     def arn(self):
         return self._arn_query.search(self.data)
+
+    def sleek(self):
+        # Always render lists in the same order to avoid false changes detection
+        self.data['EnabledMetrics'].sort(key=lambda item: item['Metric'])
+        self.data['SuspendedProcesses'].sort(key=str)
 
     @classmethod
     def set_tags(cls, arn, region, account, tags, resource_id=None, **kwargs):
