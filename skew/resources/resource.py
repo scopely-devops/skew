@@ -82,7 +82,7 @@ class Resource(object):
         if hasattr(cls.Meta, 'resourcegroups_tagging') and (cls.Meta.resourcegroups_tagging):
             client = skew.awsclient.get_awsclient(
                 'resourcegroupstaggingapi', region, account, **kwargs)
-            r = client.call('untag_resources', ResourceARNList=[arn], TagsKeys=tags_keys)
+            r = client.call('untag_resources', ResourceARNList=[arn], TagKeys=tags_keys)
             LOG.debug('UnTag ARN %s, r=%s', arn, r)
 
     def sleek(self):

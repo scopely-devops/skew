@@ -56,5 +56,5 @@ class Stack(AWSResource):
         # opsworks.untag_resource() supports both
         client = get_awsclient(
             cls.Meta.service, region, account, **kwargs)
-        r = client.call('untag_resource', ResourceArn=arn, TagsKeys=tags_keys)
+        r = client.call('untag_resource', ResourceArn=arn, TagKeys=tags_keys)
         LOG.debug('UnTag ARN %s, r=%s', arn, r)
