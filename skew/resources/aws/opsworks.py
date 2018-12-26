@@ -49,3 +49,12 @@ class Stack(AWSResource):
             cls.Meta.service, region, account, **kwargs)
         r = client.call('tag_resource', ResourceArn=arn, Tags=tags)
         LOG.debug('Tag ARN %s, r=%s', arn, r)
+
+    @classmethod
+    def unset_tags(cls, arn, region, account, tags_keys, resource_id=None, **kwargs):
+        # ResourceGroupsTaggingAPI supports regional stacks, but not classic (us-east-1)
+        # opsworks.untag_resource() supports both
+        client = get_awsclient(
+            cls.Meta.service, region, account, **kwargs)
+        r = client.call('untag_resource', ResourceArn=arn, TagsKeys=tags_keys)
+        LOG.debug('UnTag ARN %s, r=%s', arn, r)
