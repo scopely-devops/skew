@@ -170,12 +170,16 @@ class AWSResource(Resource):
                 _tags = self.data['Tags']
                 if isinstance(_tags, list):
                     for kvpair in _tags:
-                        if kvpair['Key'] in self._tags:
-                            if not isinstance(self._tags[kvpair['Key']], list):
-                                self._tags[kvpair['Key']] = [self._tags[kvpair['Key']]]
-                            self._tags[kvpair['Key']].append(kvpair['Value'])
+                        # Compatibility fix for ECS, that use lowercase 'key' and 'value' as dict keys
+                        # https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ecs.html#ECS.Client.list_tags_for_resource
+                        tags_key = kvpair.get('Key', kvpair.get('key'))
+                        tags_value = kvpair.get('Value', kvpair.get('value'))
+                        if tags_key in self._tags:
+                            if not isinstance(self._tags[tags_key], list):
+                                self._tags[tags_key] = [self._tags[tags_key]]
+                            self._tags[tags_key].append(tags_value)
                         else:
-                            self._tags[kvpair['Key']] = kvpair['Value']
+                            self._tags[tags_key] = tags_value
                 elif isinstance(_tags, dict):
                     self._tags = _tags
         return self._tags
