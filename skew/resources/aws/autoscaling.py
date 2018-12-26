@@ -65,7 +65,7 @@ class AutoScalingGroup(AWSResource):
         addon = dict(ResourceId=asg_name,
                      ResourceType='auto-scaling-group',
                      PropagateAtLaunch=False)
-        tags_list = [dict(Key=k, Value=str(''), **addon) for k in tags_keys]
+        tags_list = [dict(Key=k, **addon) for k in tags_keys]
         return client.call('delete_tags', Tags=tags_list)
 
 
