@@ -57,6 +57,17 @@ class AutoScalingGroup(AWSResource):
         tags_list = [dict(Key=k, Value=str(v), **addon) for k, v in tags.items()]
         return client.call('create_or_update_tags', Tags=tags_list)
 
+    @classmethod
+    def unset_tags(cls, arn, region, account, tags_keys, resource_id=None, **kwargs):
+        client = get_awsclient(
+            cls.Meta.service, region, account, **kwargs)
+        asg_name = arn.split(':')[7].split('/')[1]
+        addon = dict(ResourceId=asg_name,
+                     ResourceType='auto-scaling-group',
+                     PropagateAtLaunch=False)
+        tags_list = [dict(Key=k, Value=str(''), **addon) for k in tags_keys]
+        return client.call('delete_tags', Tags=tags_list)
+
 
 class LaunchConfiguration(AWSResource):
 
