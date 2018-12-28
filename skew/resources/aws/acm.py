@@ -17,7 +17,6 @@ import logging
 import jmespath
 
 from skew.resources.aws import AWSResource
-from skew.awsclient import get_awsclient
 
 
 LOG = logging.getLogger(__name__)
@@ -30,15 +29,32 @@ class Certificate(AWSResource):
         type = 'certificate'
         resourcegroups_tagging = True
         enum_spec = ('list_certificates', 'CertificateSummaryList', None)
-        detail_spec = None
+        detail_spec = ('describe_certificate', 'CertificateArn', 'Certificate')
         id = 'CertificateArn'
         tags_spec = ('list_tags_for_certificate', 'Tags[]',
                      'CertificateArn', 'id')
         filter_name = None
         name = 'DomainName'
-        date = None
+        date = 'CreatedAt'
         dimension = None
+
+    @classmethod
+    def filter(cls, arn, resource_id, data):
+        certificate_id = data.get(cls.Meta.id).split('/')[-1]
+        LOG.debug('%s == %s', resource_id, certificate_id)
+        return resource_id == certificate_id
 
     @property
     def arn(self):
         return self.data['CertificateArn']
+
+    def __init__(self, client, data, query=None):
+        super(Certificate, self).__init__(client, data, query)
+
+        self._id = data['CertificateArn']
+
+        detail_op, param_name, detail_path = self.Meta.detail_spec
+        params = {param_name: data['CertificateArn']}
+        data = client.call(detail_op, **params)
+
+        self.data = jmespath.search(detail_path, data)
