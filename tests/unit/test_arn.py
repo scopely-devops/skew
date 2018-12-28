@@ -235,3 +235,19 @@ class TestARN(unittest.TestCase):
 
         self.assertEqual(l[1].data['Tags'][0]['Key'], "costcenter")
         self.assertTrue('Tags' not in l[3].data)
+
+    def test_acm(self):
+        placebo_cfg = {
+            'placebo': placebo,
+            'placebo_dir': self._get_response_path('certificates'),
+            'placebo_mode': 'playback'}
+        arn = scan('arn:aws:acm:us-west-2:123456789012:certificate/*',
+                   debug=True, **placebo_cfg)
+        l = list(arn)
+        self.assertEqual(len(l), 2)
+        self.assertEqual(l[0].arn, 'arn:aws:acm:us-west-2:123456789012:certificate/aaaaaaaa-bbbb-cccc-dddd-000000000001')
+        self.assertEqual(l[0].data['DomainName'], 'example.com')
+        self.assertEqual(l[0].tags['tld'], '.com')
+        self.assertEqual(l[1].arn, 'arn:aws:acm:us-west-2:123456789012:certificate/aaaaaaaa-bbbb-cccc-dddd-000000000002')
+        self.assertEqual(l[1].data['DomainName'], 'example.net')
+        self.assertEqual(l[1].tags['tld'], '.net')
