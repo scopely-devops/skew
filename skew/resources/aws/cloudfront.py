@@ -45,7 +45,7 @@ class Distribution(CloudfrontResource):
         return client.call('tag_resource', Resource=arn, Tags=dict(Items=tags_list))
 
     @classmethod
-    def unset_tags(cls, arn, region, account, tags_keys, resource_id=None, **kwargs):
+    def unset_tags(cls, arn, region, account, tag_keys, resource_id=None, **kwargs):
         client = get_awsclient(
             cls.Meta.service, region, account, **kwargs)
-        return client.call('untag_resource', Resource=arn, TagKeys=dict(Items=tags_keys))
+        return client.call('untag_resource', Resource=arn, TagKeys=dict(Items=tag_keys))
