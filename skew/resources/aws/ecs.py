@@ -31,8 +31,9 @@ class Cluster(AWSResource):
         enum_spec = ('list_clusters', 'clusterArns', None)
         detail_spec = ('describe_clusters', 'clusters', 'clusters[0]')
         id = None
-        tags_spec = ('list_tags_for_resource', 'tags[]',
-                     'resourceArn', 'arn')
+        tags_spec = None # Not yet supported on Lambda boto3 included
+        # tags_spec = ('list_tags_for_resource', 'tags[]',
+        #              'resourceArn', 'arn')
 
         filter_name = None
         name = 'clusterName'
