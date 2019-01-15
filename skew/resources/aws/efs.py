@@ -48,6 +48,11 @@ class Filesystem(AWSResource):
             self._client.account_id,
             'file-system-id', self.id)
 
+    def __init__(self, client, data, query=None):
+        super(Filesystem, self).__init__(client, data, query)
+        # Asset name is get by tags if defined, or is FileSystemId
+        self._name = self.tags.get('Name', self.data['FileSystemId'])
+
     def sleek(self):
         self.data['SizeInBytes'] = 0
 
