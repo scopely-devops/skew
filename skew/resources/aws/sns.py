@@ -54,6 +54,9 @@ class Topic(AWSResource):
 
         self.data = jmespath.search(detail_path, data)
 
+        # Attribute DisplayName is not relevant, set Id as name instead
+        self._name = self._id
+
 
 class Subscription(AWSResource):
 
