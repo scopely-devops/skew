@@ -23,6 +23,7 @@ ResourceTypes = {
     'aws.autoscaling.launchConfigurationName': 'aws.autoscaling.LaunchConfiguration',
     'aws.cloudfront.distribution': 'aws.cloudfront.Distribution',
     'aws.cloudformation.stack': 'aws.cloudformation.Stack',
+    'aws.cloudsearch.domain': 'aws.cloudsearch.Domain',
     'aws.cloudwatch.alarm': 'aws.cloudwatch.Alarm',
     'aws.dynamodb.table': 'aws.dynamodb.Table',
     'aws.ec2.address': 'aws.ec2.Address',
