@@ -39,7 +39,7 @@ class Bucket(AWSResource):
                 location = response.get('LocationConstraint', 'us-east-1')
                 if location is None:
                     location = 'us-east-1'
-                if location is 'EU':
+                if location == 'EU':
                     location = 'eu-west-1'
                 cls._location_cache[r.id] = location
             if location == region:
