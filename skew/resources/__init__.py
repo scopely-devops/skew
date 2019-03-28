@@ -17,6 +17,7 @@ import importlib
 # Maps resources names as they appear in ARN's to the path name
 # of the Python class representing that resource.
 ResourceTypes = {
+    'aws.acm.certificate': 'aws.acm.Certificate',
     'aws.apigateway.restapis': 'aws.apigateway.RestAPI',
     'aws.autoscaling.autoScalingGroup': 'aws.autoscaling.AutoScalingGroup',
     'aws.autoscaling.launchConfigurationName': 'aws.autoscaling.LaunchConfiguration',

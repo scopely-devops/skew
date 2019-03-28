@@ -1,0 +1,26 @@
+{
+    "status_code": 200,
+    "data": {
+        "CertificateSummaryList": [
+            {
+                "CertificateArn": "arn:aws:acm:us-west-2:123456789012:certificate/aaaaaaaa-bbbb-cccc-dddd-000000000001",
+                "DomainName": "example.com"
+            },
+            {
+                "CertificateArn": "arn:aws:acm:us-west-2:123456789012:certificate/aaaaaaaa-bbbb-cccc-dddd-000000000002",
+                "DomainName": "example.net"
+            }
+        ],
+        "ResponseMetadata": {
+            "RequestId": "43f4a309-0a9d-11e9-bede-fd29c5b8df0c",
+            "HTTPStatusCode": 200,
+            "HTTPHeaders": {
+                "x-amzn-requestid": "43f4a309-0a9d-11e9-bede-fd29c5b8df0c",
+                "content-type": "application/x-amz-json-1.1",
+                "content-length": "0",
+                "date": "Fri, 28 Dec 2018 12:36:56 GMT"
+            },
+            "RetryAttempts": 0
+        }
+    }
+}

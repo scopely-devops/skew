@@ -1,0 +1,61 @@
+{
+    "status_code": 200,
+    "data": {
+        "Certificate": {
+            "CertificateArn": "arn:aws:acm:us-west-2:123456789012:certificate/aaaaaaaa-bbbb-cccc-dddd-000000000001",
+            "CreatedAt": {
+                "hour": 18,
+                "__class__": "datetime",
+                "month": 12,
+                "second": 30,
+                "microsecond": 0,
+                "year": 2017,
+                "day": 31,
+                "minute": 0
+            },
+            "DomainName": "example.com",
+            "DomainValidationOptions": [
+                {
+                    "DomainName": "example.com",
+                    "ValidationDomain": "example.com",
+                    "ValidationEmails": [
+                        "webmaster@example.com",
+                        "hostmaster@example.com",
+                        "domaine@example.com",
+                        "admin@example.com",
+                        "administrator@example.com",
+                        "postmaster@example.com"
+                    ],
+                    "ValidationMethod": "EMAIL",
+                    "ValidationStatus": "PENDING_VALIDATION"
+                }
+            ],
+            "ExtendedKeyUsages": [],
+            "InUseBy": [],
+            "KeyAlgorithm": "RSA-2048",
+            "KeyUsages": [],
+            "Options": {
+                "CertificateTransparencyLoggingPreference": "ENABLED"
+            },
+            "RenewalEligibility": "INELIGIBLE",
+            "SignatureAlgorithm": "SHA256WITHRSA",
+            "Status": "VALIDATION_TIMED_OUT",
+            "Subject": "CN=example.com",
+            "SubjectAlternativeNames": [
+                "example.com"
+            ],
+            "Type": "AMAZON_ISSUED"
+        },
+        "ResponseMetadata": {
+            "HTTPHeaders": {
+                "content-length": "0",
+                "content-type": "application/x-amz-json-1.1",
+                "date": "Fri, 28 Dec 2018 12:59:36 GMT",
+                "x-amzn-requestid": "6e4966b5-0aa0-11e9-a488-d10d70207042"
+            },
+            "HTTPStatusCode": 200,
+            "RequestId": "6e4966b5-0aa0-11e9-a488-d10d70207042",
+            "RetryAttempts": 0
+        }
+    }
+}

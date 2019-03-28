@@ -1,0 +1,22 @@
+{
+    "status_code": 200,
+    "data": {
+        "ResponseMetadata": {
+            "HTTPHeaders": {
+                "content-length": "0",
+                "content-type": "application/x-amz-json-1.1",
+                "date": "Fri, 28 Dec 2018 13:02:06 GMT",
+                "x-amzn-requestid": "c74454e8-0aa0-11e9-94cb-1757d0684d96"
+            },
+            "HTTPStatusCode": 200,
+            "RequestId": "c74454e8-0aa0-11e9-94cb-1757d0684d96",
+            "RetryAttempts": 0
+        },
+        "Tags": [
+            {
+                "Key": "tld",
+                "Value": ".net"
+            }
+        ]
+    }
+}
