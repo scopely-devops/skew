@@ -11,7 +11,7 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
 # ANY KIND, either express or implied. See the License for the specific
 # language governing permissions and limitations under the License.
-
+import jmespath
 from skew.resources.aws import AWSResource
 
 
@@ -23,6 +23,12 @@ class LoadBalancer(AWSResource):
         enum_spec = ('describe_load_balancers',
                      'LoadBalancerDescriptions', None)
         detail_spec = None
+        attr_spec = [
+            ('describe_load_balancer_attributes', 'LoadBalancerName',
+                'LoadBalancerAttributes'),
+            ('describe_load_balancer_policies', 'LoadBalancerName',
+                'PolicyDescriptions'),
+        ]
         id = 'LoadBalancerName'
         filter_name = 'LoadBalancerNames'
         filter_type = 'list'
@@ -31,3 +37,15 @@ class LoadBalancer(AWSResource):
         dimension = 'LoadBalancerName'
         tags_spec = ('describe_tags', 'TagDescriptions[].Tags[]',
                      'LoadBalancerNames', 'id')
+
+    def __init__(self, client, data, query=None):
+        super(LoadBalancer, self).__init__(client, data, query)
+
+        self._id = data['LoadBalancerName']
+        
+        # add addition attribute data
+        for attr in self.Meta.attr_spec:
+            detail_op, param_name, detail_path = attr
+            params = {param_name: self._id}
+            data = client.call(detail_op, **params)
+            self.data[detail_path] = jmespath.search(detail_path, data)
