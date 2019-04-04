@@ -50,7 +50,7 @@ class LogGroup(AWSResource):
         id = 'logGroupName'
         tags_spec = ('list_tags_log_group', 'tags',
                      'logGroupName', 'logGroupName')
-        filter_name = 'logGroupName'
+        filter_name = 'logGroupNamePrefix'
         filter_type = 'dict'
         name = 'logGroupName'
         date = 'creationTime'
@@ -73,3 +73,7 @@ class LogGroup(AWSResource):
             if 'ResponseMetadata' in data:
                 del data['ResponseMetadata']
             self.data[detail_key] = data
+
+    @property
+    def logGroupName(self):
+        return self.data.get('logGroupName')
