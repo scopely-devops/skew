@@ -1,0 +1,18 @@
+{
+    "status_code": 200,
+    "data": {
+        "logGroups": [
+            {
+                "logGroupName": "CloudTrail/DefaultLogGroup",
+                "creationTime": 1485199013984,
+                "metricFilterCount": 1,
+                "arn": "arn:aws:logs:us-east-1:123456789012:log-group:CloudTrail/DefaultLogGroup:*",
+                "storedBytes": 2745571173
+            }
+        ],
+        "ResponseMetadata": {
+            "RequestId": "6845270c-5bc8-11e9-b5c6-bbb0be9d8f19",
+            "HTTPStatusCode": 200
+        }
+    }
+}

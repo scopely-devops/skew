@@ -1,0 +1,37 @@
+{
+    "status_code": 200,
+    "data": {
+        "logStreams": [
+            {
+                "logStreamName": "123456789012_CloudTrail_us-east-1",
+                "creationTime": 1485199032455,
+                "firstEventTimestamp": 1485198759000,
+                "lastEventTimestamp": 1501701075294,
+                "lastIngestionTime": 1501701075871,
+                "uploadSequenceToken": "11111111111111111111111111111111111111111111111111111111",
+                "arn": "arn:aws:logs:us-east-1:123456789012:log-group:CloudTrail/DefaultLogGroup:log-stream:123456789012_CloudTrail_us-east-1",
+                "storedBytes": 344477
+            },
+            {
+                "logStreamName": "123456789012_CloudTrail_us-east-1_2",
+                "creationTime": 1485203803263,
+                "firstEventTimestamp": 1485203523000,
+                "lastEventTimestamp": 1485203584000,
+                "lastIngestionTime": 1485203803296,
+                "uploadSequenceToken": "11111111111111111111111111111111111111111111111111111111",
+                "arn": "arn:aws:logs:us-east-1:123456789012:log-group:CloudTrail/DefaultLogGroup:log-stream:123456789012_CloudTrail_us-east-1_2",
+                "storedBytes": 1332
+            },
+            {
+                "logStreamName": "TestLogStream",
+                "creationTime": 1554924998073,
+                "arn": "arn:aws:logs:us-east-1:123456789012:log-group:CloudTrail/DefaultLogGroup:log-stream:TestLogStream",
+                "storedBytes": 0
+            }
+        ],
+        "ResponseMetadata": {
+            "RequestId": "6853cd66-5bc8-11e9-b5c6-bbb0be9d8f19",
+            "HTTPStatusCode": 200
+        }
+    }
+}

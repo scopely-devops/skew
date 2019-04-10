@@ -12,7 +12,10 @@
 # ANY KIND, either express or implied. See the License for the specific
 # language governing permissions and limitations under the License.
 import jmespath
+import logging
 from skew.resources.aws import AWSResource
+
+LOG = logging.getLogger(__name__)
 
 
 class Alarm(AWSResource):
@@ -49,7 +52,7 @@ class LogGroup(AWSResource):
         detail_spec = None
         id = 'logGroupName'
         tags_spec = ('list_tags_log_group', 'tags',
-                     'logGroupName', 'logGroupName')
+                     'logGroupName', 'id')
         filter_name = 'logGroupNamePrefix'
         filter_type = 'dict'
         name = 'logGroupName'
@@ -61,10 +64,10 @@ class LogGroup(AWSResource):
         self._data = data
         self._keys = []
         self._id = data['logGroupName']
-        self._tags = None
 
         # add addition attribute data
         for attr in self.Meta.attr_spec:
+            LOG.debug(attr)
             detail_op, param_name, detail_path, detail_key = attr
             params = {param_name: self._id}
             data = self._client.call(detail_op, **params)
@@ -73,6 +76,7 @@ class LogGroup(AWSResource):
             if 'ResponseMetadata' in data:
                 del data['ResponseMetadata']
             self.data[detail_key] = data
+            LOG.debug(data)
 
     @property
     def logGroupName(self):

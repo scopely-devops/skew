@@ -1,0 +1,24 @@
+{
+    "status_code": 200,
+    "data": {
+        "metricFilters": [
+            {
+                "filterName": "EventCount",
+                "metricTransformations": [
+                    {
+                        "metricName": "TestEventCount",
+                        "metricNamespace": "TestNameSpace",
+                        "metricValue": "1",
+                        "defaultValue": 0.0
+                    }
+                ],
+                "creationTime": 1554924855354,
+                "logGroupName": "CloudTrail/DefaultLogGroup"
+            }
+        ],
+        "ResponseMetadata": {
+            "RequestId": "68a5e4fe-5bc8-11e9-b5c6-bbb0be9d8f19",
+            "HTTPStatusCode": 200
+        }
+    }
+}
