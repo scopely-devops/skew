@@ -1,0 +1,24 @@
+{
+    "status_code": 200,
+    "data": {
+        "LoadBalancerAttributes": {
+            "CrossZoneLoadBalancing": {
+                "Enabled": false
+            },
+            "AccessLog": {
+                "Enabled": false
+            },
+            "ConnectionDraining": {
+                "Enabled": true,
+                "Timeout": 300
+            },
+            "ConnectionSettings": {
+                "IdleTimeout": 60
+            }
+        },
+        "ResponseMetadata": {
+            "RequestId": "96c45f1d-5be9-11e9-8df5-332fcd8c3731",
+            "HTTPStatusCode": 200
+        }
+    }
+}
