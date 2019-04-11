@@ -218,7 +218,7 @@ class TestARN(unittest.TestCase):
         natgateways = l[0]
         self.assertEqual(natgateways.arn,
                          'arn:aws:ec2:us-west-2:123456789012:natgateway/nat-443d3ea762d00ee83')
-    
+
     def test_ec2_launchtemplates(self):
         placebo_cfg = {
             'placebo': placebo,
@@ -251,3 +251,21 @@ class TestARN(unittest.TestCase):
         self.assertEqual(l[1].arn, 'arn:aws:acm:us-west-2:123456789012:certificate/aaaaaaaa-bbbb-cccc-dddd-000000000002')
         self.assertEqual(l[1].data['DomainName'], 'example.net')
         self.assertEqual(l[1].tags['tld'], '.net')
+
+    def test_cloudwatch_loggroup(self):
+        placebo_cfg = {
+            'placebo': placebo,
+            'placebo_dir': self._get_response_path('loggroups'),
+            'placebo_mode': 'playback'}
+        arn = scan('arn:aws:logs:us-east-1:123456789012:log-group/*',
+                   **placebo_cfg)
+        l = list(arn)
+        print(l[0].tags)
+        self.assertEqual(len(l), 1)
+        self.assertEqual(l[0].arn, 'arn:aws:logs:us-east-1:123456789012:log-group/CloudTrail/DefaultLogGroup')
+        self.assertEqual(l[0].data['logGroupName'], 'CloudTrail/DefaultLogGroup')
+        self.assertEqual(l[0].tags['TestKey'], 'TestValue')
+        self.assertEqual(l[0].data['logStreams'][0]['logStreamName'], '123456789012_CloudTrail_us-east-1')
+        self.assertEqual(l[0].data['metricFilters'][0]['filterName'], 'EventCount')
+        self.assertEqual(l[0].data['subscriptionFilters'][0]['filterName'], 'TestLambdaTrigger')
+        self.assertEqual(l[0].data['queries'][0]['queryId'], '11111111-cfe3-43db-8eca-8862fee615a3')

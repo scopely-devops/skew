@@ -1,0 +1,25 @@
+{
+    "status_code": 200,
+    "data": {
+        "queries": [
+            {
+                "queryId": "11111111-cfe3-43db-8eca-8862fee615a3",
+                "queryString": "SOURCE \"CloudTrail/DefaultLogGroup\" START=-604800s END=now | fields @timestamp, @message\n| sort @timestamp desc\n| limit 20",
+                "status": "Complete",
+                "createTime": 1554924920064,
+                "logGroupName": "CloudTrail/DefaultLogGroup"
+            },
+            {
+                "queryId": "11111111-05eb-47e2-9a5d-3e2a4a8c357e",
+                "queryString": "SOURCE \"CloudTrail/DefaultLogGroup\" START=1554922738246 END=1554923698246 | FIELDS @timestamp | LIMIT 1",
+                "status": "Cancelled",
+                "createTime": 1554923218276,
+                "logGroupName": "CloudTrail/DefaultLogGroup"
+            }
+        ],
+        "ResponseMetadata": {
+            "RequestId": "68b2683d-5bc8-11e9-b5c6-bbb0be9d8f19",
+            "HTTPStatusCode": 200
+        }
+    }
+}

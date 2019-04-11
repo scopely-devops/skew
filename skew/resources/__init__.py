@@ -24,6 +24,7 @@ ResourceTypes = {
     'aws.cloudfront.distribution': 'aws.cloudfront.Distribution',
     'aws.cloudformation.stack': 'aws.cloudformation.Stack',
     'aws.cloudwatch.alarm': 'aws.cloudwatch.Alarm',
+    'aws.logs.log-group': 'aws.cloudwatch.LogGroup',
     'aws.dynamodb.table': 'aws.dynamodb.Table',
     'aws.ec2.address': 'aws.ec2.Address',
     'aws.ec2.customer-gateway': 'aws.ec2.CustomerGateway',

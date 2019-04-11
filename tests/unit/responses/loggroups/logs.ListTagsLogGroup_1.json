@@ -1,0 +1,12 @@
+{
+    "status_code": 200,
+    "data": {
+        "tags": {
+            "TestKey": "TestValue"
+        },
+        "ResponseMetadata": {
+            "RequestId": "a63bfb1c-5bce-11e9-80b7-b3c9c3e385a5",
+            "HTTPStatusCode": 200
+        }
+    }
+}
