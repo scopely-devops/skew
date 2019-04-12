@@ -154,7 +154,9 @@ class AWSResource(Resource):
                 method, path, param_name, param_value = self.Meta.tags_spec[:4]
                 kwargs = {}
                 filter_type = getattr(self.Meta, 'filter_type', None)
-                if filter_type == 'list':
+                if filter_type == 'arn':
+                    kwargs = {param_name: [getattr(self, param_value)]}
+                elif filter_type == 'list':
                     kwargs = {param_name: [getattr(self, param_value)]}
                 else:
                     kwargs = {param_name: getattr(self, param_value)}
