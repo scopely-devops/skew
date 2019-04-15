@@ -38,7 +38,9 @@ class Resource(object):
             # after we get all of the results.
             filter_name = cls.Meta.filter_name
             if filter_name:
-                if cls.Meta.filter_type == 'list':
+                if cls.Meta.filter_type == 'arn':
+                    kwargs[filter_name] = [str(arn)]
+                elif cls.Meta.filter_type == 'list':
                     kwargs[filter_name] = [resource_id]
                 else:
                     kwargs[filter_name] = resource_id
@@ -47,10 +49,11 @@ class Resource(object):
         enum_op, path, extra_args = cls.Meta.enum_spec
         if extra_args:
             kwargs.update(extra_args)
-        LOG.debug('enum_op=%s' % enum_op)
+        LOG.debug('enum_spec=%s' % str(cls.Meta.enum_spec))
         try:
             data = client.call(enum_op, query=path, **kwargs)
         except ClientError as e:
+            LOG.debug(e)
             data = {}
             # if the error is because the resource was not found, be quiet
             if 'NotFound' not in e.response['Error']['Code']:

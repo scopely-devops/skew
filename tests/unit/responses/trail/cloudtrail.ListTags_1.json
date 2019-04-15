@@ -1,0 +1,20 @@
+{
+    "status_code": 200,
+    "data": {
+        "ResourceTagList": [
+            {
+                "ResourceId": "arn:aws:cloudtrail:us-east-1:123456789012:trail/awslog",
+                "TagsList": [
+                    {
+                        "Key": "TestKey",
+                        "Value": "TestValue"
+                    }
+                ]
+            }
+        ],
+        "ResponseMetadata": {
+            "RequestId": "7757a8e5-438f-4492-a7f1-0274c3f49196",
+            "HTTPStatusCode": 200
+        }
+    }
+}

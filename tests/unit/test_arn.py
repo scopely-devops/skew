@@ -281,3 +281,20 @@ class TestARN(unittest.TestCase):
         self.assertEqual(l[0].arn, 'arn:aws:ec2:us-east-1:123456789012:vpc-flow-log/fl-1234abcd')
         self.assertEqual(l[0].data['LogGroupName'], 'CloudTrail/DefaultLogGroup')
         self.assertEqual(str(l[0].data['CreationTime']), '2017-01-23 19:47:49')
+
+    def test_cloudtrail(self):
+        placebo_cfg = {
+            'placebo': placebo,
+            'placebo_dir': self._get_response_path('trail'),
+            'placebo_mode': 'playback'}
+        arn = scan(
+                    'arn:aws:cloudtrail:us-east-1:123456789012:trail/*',
+                   **placebo_cfg)
+        l = list(arn)
+        self.assertEqual(len(l), 1)
+        print(l[0].tags)
+        self.assertEqual(l[0].arn, 'arn:aws:cloudtrail:us-east-1:123456789012:trail/awslog')
+        self.assertEqual(l[0].data['CloudWatchLogsLogGroupArn'],
+                         'arn:aws:logs:us-east-1:123456789012:log-group:CloudTrail/DefaultLogGroup:*')
+        print(l[0].tags)
+        self.assertEqual(l[0].tags['TestKey'], 'TestValue')
