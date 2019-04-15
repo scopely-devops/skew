@@ -1,0 +1,51 @@
+{
+    "status_code": 200,
+    "data": {
+        "FlowLogs": [
+            {
+                "CreationTime": {
+                    "__class__": "datetime",
+                    "year": 2017,
+                    "month": 1,
+                    "day": 23,
+                    "hour": 19,
+                    "minute": 47,
+                    "second": 49,
+                    "microsecond": 0
+                },
+                "DeliverLogsPermissionArn": "arn:aws:iam::123456789123:role/CloudTrail_CloudWatchLogs_Role",
+                "DeliverLogsStatus": "SUCCESS",
+                "FlowLogId": "fl-1234abcd",
+                "FlowLogStatus": "ACTIVE",
+                "LogGroupName": "CloudTrail/DefaultLogGroup",
+                "ResourceId": "vpc-1234abcd",
+                "TrafficType": "ALL",
+                "LogDestinationType": "cloud-watch-logs"
+            },
+            {
+                "CreationTime": {
+                    "__class__": "datetime",
+                    "year": 2017,
+                    "month": 1,
+                    "day": 23,
+                    "hour": 21,
+                    "minute": 9,
+                    "second": 33,
+                    "microsecond": 0
+                },
+                "DeliverLogsPermissionArn": "arn:aws:iam::123456789012:role/CloudTrail_CloudWatchLogs_Role",
+                "DeliverLogsStatus": "SUCCESS",
+                "FlowLogId": "fl-abcd1234",
+                "FlowLogStatus": "ACTIVE",
+                "LogGroupName": "CloudTrail/DefaultLogGroup",
+                "ResourceId": "vpc-abcd1234",
+                "TrafficType": "ALL",
+                "LogDestinationType": "cloud-watch-logs"
+            }
+        ],
+        "ResponseMetadata": {
+            "RequestId": "90080755-6d2f-4491-a1ae-3b1d3bc317f0",
+            "HTTPStatusCode": 200
+        }
+    }
+}
