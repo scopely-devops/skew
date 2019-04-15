@@ -274,11 +274,11 @@ class TestARN(unittest.TestCase):
             'placebo': placebo,
             'placebo_dir': self._get_response_path('flowlogs'),
             'placebo_mode': 'playback'}
-        arn = scan('arn:aws:ec2:us-east-1:123456789012:vpc-flow-log/*',
+        arn = scan('arn:aws:ec2:us-east-1:123456789012:flow-log/*',
                    **placebo_cfg)
         l = list(arn)
         self.assertEqual(len(l), 2)
-        self.assertEqual(l[0].arn, 'arn:aws:ec2:us-east-1:123456789012:vpc-flow-log/fl-1234abcd')
+        self.assertEqual(l[0].arn, 'arn:aws:ec2:us-east-1:123456789012:flow-log/fl-1234abcd')
         self.assertEqual(l[0].data['LogGroupName'], 'CloudTrail/DefaultLogGroup')
         self.assertEqual(str(l[0].data['CreationTime']), '2017-01-23 19:47:49')
 

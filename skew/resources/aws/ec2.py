@@ -282,11 +282,11 @@ class LaunchTemplate(AWSResource):
         dimension = None
 
 
-class VpcFlowLog(AWSResource):
+class FlowLog(AWSResource):
 
     class Meta(object):
         service = 'ec2'
-        type = 'vpc-flow-log'
+        type = 'flow-log'
         enum_spec = ('describe_flow_logs', 'FlowLogs', None)
         detail_spec = None
         id = 'FlowLogId'
