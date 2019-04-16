@@ -1,27 +1,26 @@
 {
     "status_code": 200,
     "data": {
-        "Users": [
+        "AccessKeyMetadata": [
             {
-                "Path": "/",
                 "UserName": "testuser",
-                "UserId": "AIDAAAAAAAAAAAAAAAAAA",
-                "Arn": "arn:aws:iam::123456789012:user/testuser",
+                "AccessKeyId": "AKIAAAAAAAAAAAAAAAAA",
+                "Status": "Active",
                 "CreateDate": {
                     "__class__": "datetime",
                     "year": 2016,
-                    "month": 3,
-                    "day": 16,
-                    "hour": 20,
-                    "minute": 35,
-                    "second": 19,
+                    "month": 5,
+                    "day": 31,
+                    "hour": 22,
+                    "minute": 13,
+                    "second": 32,
                     "microsecond": 0
                 }
             }
         ],
         "IsTruncated": false,
         "ResponseMetadata": {
-            "RequestId": "a866fbee-6067-11e9-9b32-cb63a411b607",
+            "RequestId": "a8783937-6067-11e9-9b32-cb63a411b607",
             "HTTPStatusCode": 200
         }
     }

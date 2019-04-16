@@ -52,8 +52,8 @@
                     "minute": 12
                 }, 
                 "GroupId": "AGPAJR2DDEWJWVUUZ7IRQ", 
-                "Arn": "arn:aws:iam::234567890123:group/FieBaz", 
-                "GroupName": "FieBaz"
+                "Arn": "arn:aws:iam::123456789012:group/TestGroup", 
+                "GroupName": "TestGroup"
             }
         ]
     }

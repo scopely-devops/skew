@@ -1,0 +1,31 @@
+{
+    "status_code": 200,
+    "data": {
+        "User": {
+            "Path": "/",
+            "UserName": "testuser",
+            "UserId": "AIDAAAAAAAAAAAAAAAAAA",
+            "Arn": "arn:aws:iam::123456789012:user/testuser",
+            "CreateDate": {
+                "__class__": "datetime",
+                "year": 2016,
+                "month": 3,
+                "day": 16,
+                "hour": 20,
+                "minute": 35,
+                "second": 19,
+                "microsecond": 0
+            },
+            "Tags": [
+                {
+                    "Key": "TestKey",
+                    "Value": "TestValue"
+                }
+            ]
+        },
+        "ResponseMetadata": {
+            "RequestId": "a86f125a-6067-11e9-9b32-cb63a411b607",
+            "HTTPStatusCode": 200
+        }
+    }
+}

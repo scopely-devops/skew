@@ -160,16 +160,6 @@ class TestARN(unittest.TestCase):
         l = list(arn)
         self.assertEqual(len(l), 8)
 
-    def test_iam_users(self):
-        placebo_cfg = {
-            'placebo': placebo,
-            'placebo_dir': self._get_response_path('users'),
-            'placebo_mode': 'playback'}
-        arn = scan('arn:aws:iam:*:234567890123:user/*',
-                   **placebo_cfg)
-        l = list(arn)
-        self.assertEqual(len(l), 4)
-
     def test_s3_buckets(self):
         placebo_cfg = {
             'placebo': placebo,
@@ -192,6 +182,27 @@ class TestARN(unittest.TestCase):
         group_resource = l[0]
         self.assertEqual(group_resource.arn,
                          'arn:aws:iam::234567890123:group/Administrators')
+
+    def test_iam_users(self):
+        placebo_cfg = {
+            'placebo': placebo,
+            'placebo_dir': self._get_response_path('users'),
+            'placebo_mode': 'playback'}
+        arn = scan('arn:aws:iam::123456789012:user/*',
+                   **placebo_cfg)
+        l = list(arn)
+        self.assertEqual(len(l), 1)
+        self.assertEqual(l[0].arn, 'arn:aws:iam::123456789012:user/testuser')
+        self.assertEqual(l[0].data['UserName'], 'testuser')
+        self.assertEqual(l[0].tags['TestKey'], 'TestValue')
+        self.assertEqual(l[0].data['AccessKeyMetadata'][0]['AccessKeyId'],
+                         'AKIAAAAAAAAAAAAAAAAA')
+        self.assertEqual(l[0].data['Groups'][0]['GroupId'],
+                         'AGPAAAAAAAAAAAAAAAAAA')
+        self.assertEqual(l[0].data['AttachedPolicies'][0]['PolicyArn'],
+                         'arn:aws:iam::aws:policy/AdministratorAccess')
+        self.assertEqual(l[0].data['SSHPublicKeys'][0]['SSHPublicKeyId'],
+                         'APKAAAAAAAAAAAAAAAAA')
 
     def test_cloudformation_stacks(self):
         placebo_cfg = {

@@ -1,0 +1,16 @@
+{
+    "status_code": 200,
+    "data": {
+        "Tags": [
+            {
+                "Key": "TestKey",
+                "Value": "TestValue"
+            }
+        ],
+        "IsTruncated": false,
+        "ResponseMetadata": {
+            "RequestId": "a9189821-6067-11e9-9b32-cb63a411b607",
+            "HTTPStatusCode": 200
+        }
+    }
+}
