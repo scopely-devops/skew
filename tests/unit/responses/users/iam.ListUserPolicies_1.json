@@ -1,7 +1,9 @@
 {
     "status_code": 200,
     "data": {
-        "PolicyNames": [],
+        "PolicyNames": [
+            "TestInlinePolicy"
+        ],
         "IsTruncated": false,
         "ResponseMetadata": {
             "RequestId": "a88cd2fd-6067-11e9-9b32-cb63a411b607",

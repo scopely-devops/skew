@@ -77,7 +77,6 @@ class User(IAMResource):
 
     def __init__(self, client, data, query=None):
         super(User, self).__init__(client, data, query)
-        # self._id = data[self.name]
 
         LOG.debug(data)
         # add details
@@ -101,6 +100,20 @@ class User(IAMResource):
                     del tmp_data['ResponseMetadata']
                 self.data[detail_key] = tmp_data
                 LOG.debug(data)
+
+            # retrieve all of the inline IAM policies
+            if 'PolicyNames' in self.data \
+                and self.data['PolicyNames']:
+                tmp_dict = {}
+                for policy_name in self.data['PolicyNames']:
+                    params = {
+                        'UserName': self.data['UserName'],
+                        'PolicyName': policy_name
+                    }
+                    tmp_data = self._client.call('get_user_policy', **params)
+                    tmp_data = jmespath.search('PolicyDocument', tmp_data)
+                    tmp_dict[policy_name] = tmp_data
+                self.data['PolicyNames'] = tmp_dict
 
     @classmethod
     def filter(cls, arn, resource_id, data):

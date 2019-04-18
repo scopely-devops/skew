@@ -199,6 +199,8 @@ class TestARN(unittest.TestCase):
                          'AKIAAAAAAAAAAAAAAAAA')
         self.assertEqual(l[0].data['Groups'][0]['GroupId'],
                          'AGPAAAAAAAAAAAAAAAAAA')
+        self.assertEqual(l[0].data['PolicyNames']['TestInlinePolicy']['Version'],
+                         '2012-10-17')
         self.assertEqual(l[0].data['AttachedPolicies'][0]['PolicyArn'],
                          'arn:aws:iam::aws:policy/AdministratorAccess')
         self.assertEqual(l[0].data['SSHPublicKeys'][0]['SSHPublicKeyId'],
