@@ -1,0 +1,20 @@
+{
+    "status_code": 200,
+    "data": {
+        "TagDescriptions": [
+            {
+                "LoadBalancerName": "example",
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "example-web"
+                    }
+                ]
+            }
+        ],
+        "ResponseMetadata": {
+            "RequestId": "96dd1759-5be9-11e9-8df5-332fcd8c3731",
+            "HTTPStatusCode": 200
+        }
+    }
+}

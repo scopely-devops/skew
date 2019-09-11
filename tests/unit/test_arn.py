@@ -125,10 +125,15 @@ class TestARN(unittest.TestCase):
             'placebo': placebo,
             'placebo_dir': self._get_response_path('elbs'),
             'placebo_mode': 'playback'}
-        arn = scan('arn:aws:elb:us-west-2:123456789012:loadbalancer/*',
+        arn = scan('arn:aws:elb:us-east-1:123456789012:loadbalancer/*',
                    **placebo_cfg)
         l = list(arn)
-        self.assertEqual(len(l), 6)
+        self.assertEqual(len(l), 1)
+        self.assertEqual(l[0].arn, 'arn:aws:elb:us-east-1:123456789012:loadbalancer/example')
+        self.assertEqual(l[0].data['DNSName'], 'example-1111111111.us-east-1.elb.amazonaws.com')
+        self.assertEqual(l[0].tags['Name'], 'example-web')
+        self.assertEqual(l[0].data['LoadBalancerAttributes']['CrossZoneLoadBalancing']['Enabled'], False)
+        self.assertEqual(l[0].data['PolicyDescriptions'][0]['PolicyName'], 'AWSConsole-SSLNegotiationPolicy-example-1111111111111')
 
     def test_ec2_vpcs(self):
         placebo_cfg = {
