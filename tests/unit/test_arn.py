@@ -273,7 +273,6 @@ class TestARN(unittest.TestCase):
         arn = scan('arn:aws:logs:us-east-1:123456789012:log-group/*',
                    **placebo_cfg)
         l = list(arn)
-        print(l[0].tags)
         self.assertEqual(len(l), 1)
         self.assertEqual(l[0].arn, 'arn:aws:logs:us-east-1:123456789012:log-group/CloudTrail/DefaultLogGroup')
         self.assertEqual(l[0].data['logGroupName'], 'CloudTrail/DefaultLogGroup')
@@ -283,16 +282,26 @@ class TestARN(unittest.TestCase):
         self.assertEqual(l[0].data['subscriptionFilters'][0]['filterName'], 'TestLambdaTrigger')
         self.assertEqual(l[0].data['queries'][0]['queryId'], '11111111-cfe3-43db-8eca-8862fee615a3')
 
+    def test_vpc_flowlog(self):
+        placebo_cfg = {
+            'placebo': placebo,
+            'placebo_dir': self._get_response_path('flowlogs'),
+            'placebo_mode': 'playback'}
+        arn = scan('arn:aws:ec2:us-east-1:123456789012:flow-log/*',
+                   **placebo_cfg)
+        l = list(arn)
+        self.assertEqual(len(l), 2)
+        self.assertEqual(l[0].arn, 'arn:aws:ec2:us-east-1:123456789012:flow-log/fl-1234abcd')
+        self.assertEqual(l[0].data['LogGroupName'], 'CloudTrail/DefaultLogGroup')
+        self.assertEqual(str(l[0].data['CreationTime']), '2017-01-23 19:47:49')
+
     def test_cloudtrail(self):
         placebo_cfg = {
             'placebo': placebo,
             'placebo_dir': self._get_response_path('trail'),
             'placebo_mode': 'playback'}
         arn = scan(
-                    # 'arn:aws:cloudtrail:*:*:trail/*',
-                    # "arn:aws:cloudtrail:us-east-1:*:trail/*",
                     'arn:aws:cloudtrail:us-east-1:123456789012:trail/*',
-                    # 'arn:aws:cloudtrail:us-east-1:123456789012:trail/awslogs',
                    **placebo_cfg)
         l = list(arn)
         self.assertEqual(len(l), 1)

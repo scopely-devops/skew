@@ -220,6 +220,7 @@ class RouteTable(AWSResource):
         date = None
         dimension = None
 
+
 class NatGateway(AWSResource):
 
     class Meta(object):
@@ -278,4 +279,19 @@ class LaunchTemplate(AWSResource):
         filter_type = 'list'
         name = 'LaunchTemplateName'
         date = 'CreateTime'
+        dimension = None
+
+
+class FlowLog(AWSResource):
+
+    class Meta(object):
+        service = 'ec2'
+        type = 'flow-log'
+        enum_spec = ('describe_flow_logs', 'FlowLogs', None)
+        detail_spec = None
+        id = 'FlowLogId'
+        filter_name = 'FlowLogIds'
+        filter_type = 'list'
+        name = 'LogGroupName'
+        date = 'CreationTime'
         dimension = None
