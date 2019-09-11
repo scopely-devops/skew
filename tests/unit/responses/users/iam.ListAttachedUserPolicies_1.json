@@ -1,0 +1,16 @@
+{
+    "status_code": 200,
+    "data": {
+        "AttachedPolicies": [
+            {
+                "PolicyName": "AdministratorAccess",
+                "PolicyArn": "arn:aws:iam::aws:policy/AdministratorAccess"
+            }
+        ],
+        "IsTruncated": false,
+        "ResponseMetadata": {
+            "RequestId": "a89621e9-6067-11e9-9b32-cb63a411b607",
+            "HTTPStatusCode": 200
+        }
+    }
+}

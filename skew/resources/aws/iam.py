@@ -13,9 +13,8 @@
 # language governing permissions and limitations under the License.
 
 import logging
-
+import jmespath
 from skew.resources.aws import AWSResource
-
 
 LOG = logging.getLogger(__name__)
 
@@ -54,12 +53,67 @@ class User(IAMResource):
         service = 'iam'
         type = 'user'
         enum_spec = ('list_users', 'Users', None)
-        detail_spec = None
+        detail_spec = ('get_user', 'UserName', 'User')
+        attr_spec = [
+            ('list_access_keys', 'UserName',
+                'AccessKeyMetadata', 'AccessKeyMetadata'),
+            ('list_groups_for_user', 'UserName',
+                'Groups', 'Groups'),
+            ('list_user_policies', 'UserName',
+                'PolicyNames', 'PolicyNames'),
+            ('list_attached_user_policies', 'UserName',
+                'AttachedPolicies', 'AttachedPolicies'),
+            ('list_ssh_public_keys', 'UserName',
+                'SSHPublicKeys', 'SSHPublicKeys'),
+            # ('list_mfa_devices', 'UserName', 'MFADevices', 'MFADevices'),
+        ]
         id = 'UserId'
         filter_name = None
         name = 'UserName'
         date = 'CreateDate'
         dimension = None
+        tags_spec = ('list_user_tags', 'Tags[]',
+                     'UserName', 'name')
+
+    def __init__(self, client, data, query=None):
+        super(User, self).__init__(client, data, query)
+
+        LOG.debug(data)
+        # add details
+        if self.Meta.detail_spec is not None:
+            detail_op, param_name, detail_path = self.Meta.detail_spec
+            params = {param_name: self.data[param_name]}
+            data = client.call(detail_op, **params)
+            self.data = jmespath.search(detail_path, data)
+
+        # add attribute data
+        if self.Meta.attr_spec is not None:
+            for attr in self.Meta.attr_spec:
+                LOG.debug(attr)
+                LOG.debug(data)
+                detail_op, param_name, detail_path, detail_key = attr
+                params = {param_name: self.data[param_name]}
+                tmp_data = self._client.call(detail_op, **params)
+                if not (detail_path is None):
+                    tmp_data = jmespath.search(detail_path, tmp_data)
+                if 'ResponseMetadata' in tmp_data:
+                    del tmp_data['ResponseMetadata']
+                self.data[detail_key] = tmp_data
+                LOG.debug(data)
+
+            # retrieve all of the inline IAM policies
+            if 'PolicyNames' in self.data \
+                and self.data['PolicyNames']:
+                tmp_dict = {}
+                for policy_name in self.data['PolicyNames']:
+                    params = {
+                        'UserName': self.data['UserName'],
+                        'PolicyName': policy_name
+                    }
+                    tmp_data = self._client.call('get_user_policy', **params)
+                    tmp_data = jmespath.search('PolicyDocument', tmp_data)
+                    tmp_dict[policy_name] = tmp_data
+                self.data['PolicyNames'] = tmp_dict
 
     @classmethod
     def filter(cls, arn, resource_id, data):
@@ -112,7 +166,7 @@ class Policy(IAMResource):
         type = 'policy'
         enum_spec = ('list_policies', 'Policies', None)
         detail_spec = None
-        id = 'PolicyId'
+        id = 'PolicyArn'
         filter_name = None
         name = 'PolicyName'
         date = 'CreateDate'
@@ -121,7 +175,7 @@ class Policy(IAMResource):
     @classmethod
     def filter(cls, arn, resource_id, data):
         LOG.debug('%s == %s', resource_id, data)
-        return resource_id == data['UserName']
+        return resource_id == data['PolicyName']
 
 
 class ServerCertificate(IAMResource):

@@ -1,0 +1,28 @@
+{
+    "status_code": 200,
+    "data": {
+        "Groups": [
+            {
+                "Path": "/",
+                "GroupName": "TestGroup",
+                "GroupId": "AGPAAAAAAAAAAAAAAAAAA",
+                "Arn": "arn:aws:iam::123456789012:group/TestGroup",
+                "CreateDate": {
+                    "__class__": "datetime",
+                    "year": 2019,
+                    "month": 4,
+                    "day": 16,
+                    "hour": 15,
+                    "minute": 53,
+                    "second": 32,
+                    "microsecond": 0
+                }
+            }
+        ],
+        "IsTruncated": false,
+        "ResponseMetadata": {
+            "RequestId": "a8835cef-6067-11e9-9b32-cb63a411b607",
+            "HTTPStatusCode": 200
+        }
+    }
+}
