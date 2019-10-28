@@ -316,3 +316,14 @@ class TestARN(unittest.TestCase):
                          'arn:aws:logs:us-east-1:123456789012:log-group:CloudTrail/DefaultLogGroup:*')
         print(l[0].tags)
         self.assertEqual(l[0].tags['TestKey'], 'TestValue')
+
+    def test_no_provider(self):
+        placebo_cfg = {
+            'placebo': placebo,
+            'placebo_dir': self._get_response_path('trail'),
+            'placebo_mode': 'playback'}
+        arn = scan(
+                    '::cloudtrail:us-east-1:123456789012:trail/*',
+                   **placebo_cfg)
+        l = list(arn)
+        self.assertEqual(len(l), 1)
