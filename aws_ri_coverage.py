@@ -1,8 +1,30 @@
 import skew
 from collections import namedtuple
 
+services_dict = {
+    'rds' : AWS_service(
+                'db',{'DBInstanceStatus':'available'}, '','DBInstanceClass',
+                {},'DBInstanceCount','',['MultiAZ']
+            ),
+    'ec2' : AWS_service(
+                'instance', {'State':{'Code': 16, 'Name': 'running'}},'','InstanceType', 
+                {},'InstanceCount','',[]
+            ),
+    'elasticache' : AWS_service(
+                'cluster',{},'NumCacheNodes','CacheNodeType', 
+                {},'CacheNodeCount','',[]
+            ),
+    'es' : AWS_service(
+                'domain',{},'ElasticsearchClusterConfig.InstanceCount', 'ElasticsearchClusterConfig.InstanceType',
+                {},'ElasticsearchInstanceCount','ElasticsearchInstanceType',[]
+            ),
+    'redshift' : AWS_service(
+                'cluster',{}, 'NumberOfNodes', 'NodeType', 
+                {},'NodeCount','',[]
+            ),
+}
 AWS_service = namedtuple('AWS_service',
-    "skew_service instances_filters cluster_count  instance_type "
+    "skew_resource instances_filters cluster_count  instance_type "
     "reserved_filters reserved_count reserved_type dimensions")
 
 AWS_services_dict = {
@@ -44,7 +66,7 @@ def getServiceInstances(service,regions,service_def):
     _instances = []
     svc=service_def[service]
     for region in regions:
-        for i in skew.scan('arn:aws:'+service+':'+region+':*:'+svc.skew_service+'/*'):
+        for i in skew.scan('arn:aws:'+service+':'+region+':*:'+svc.skew_resource+'/*'):
             include=True
             for key in svc.instances_filters.keys():
                 include = include and (i.data[key] == svc.instances_filters[key])
@@ -134,7 +156,4 @@ def main():
 if __name__ == '__main__':
     main()
     
-# for service in ['ec2','rds','elasticache','es','redshift']:
-#     for ri in skew.scan('arn:aws:'+service+':us-east-1:*:reserved/*'):
-#         print(ri)
    
