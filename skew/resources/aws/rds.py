@@ -60,3 +60,16 @@ class DBSecurityGroup(AWSResource):
             self._client.region_name,
             self._client.account_id, self.resourcetype, self.id)
 
+class Reserved(AWSResource):
+
+    class Meta(object):
+        service = 'rds'
+        type = 'reserved'
+        enum_spec = ('describe_reserved_db_instances', 'ReservedDBInstances', None)
+        detail_spec = None
+        id = 'ReservedDBInstanceId'
+        filter_name = 'ReservedDBInstanceId'
+        filter_type = 'scalar'
+        name = 'ReservedDBInstanceId'
+        date = 'Start'
+        dimension = 'ReservedDBInstanceId'

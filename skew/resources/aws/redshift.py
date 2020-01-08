@@ -28,3 +28,17 @@ class Cluster(AWSResource):
         name = 'ClusterIdentifier'
         date = 'ClusterCreateTime'
         dimension = 'ClusterIdentifier'
+
+class Reserved(AWSResource):
+
+    class Meta(object):
+        service = 'redshift'
+        type = 'reserved'
+        enum_spec = ('describe_reserved_nodes', 'ReservedNodes', None)
+        detail_spec = None
+        id = 'ReservedNodeId'
+        filter_name = 'ReservedNodeId'
+        filter_type = 'scalar'
+        name = 'ReservedNodeId'
+        date = 'StartTime'
+        dimension = 'ReservedNodeId'

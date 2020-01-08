@@ -39,3 +39,17 @@ class ElasticsearchDomain(AWSResource):
         params = {param_name: self.id}
         data = client.call(detail_op, **params)
         self.data = jmespath.search(detail_path, data)
+
+class Reserved(AWSResource):
+
+    class Meta(object):
+        service = 'es'
+        type = 'reserved'
+        enum_spec = ('describe_reserved_elasticsearch_instances', 'ReservedElasticsearchInstances', None)
+        detail_spec = None
+        id = 'ReservationName'
+        filter_name = 'ReservedElasticsearchInstanceId'
+        filter_type = 'scalar'
+        name = 'ReservationName'
+        date = 'StartTime'
+        dimension = 'ReservedElasticsearchInstanceId'
