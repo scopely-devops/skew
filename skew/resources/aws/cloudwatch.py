@@ -89,3 +89,10 @@ class LogGroup(AWSResource):
     @property
     def logGroupName(self):
         return self.data.get('logGroupName')
+
+    @property
+    def arn(self):
+        return 'arn:aws:%s:%s:%s:%s:%s' % (
+            self._client.service_name,
+            self._client.region_name,
+            self._client.account_id, self.resourcetype, self.id)
