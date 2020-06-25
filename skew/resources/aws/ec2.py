@@ -56,7 +56,7 @@ class KeyPair(AWSResource):
         type = 'key-pair'
         enum_spec = ('describe_key_pairs', 'KeyPairs', None)
         detail_spec = None
-        id = 'KeyName'
+        id = 'KeyPairId'
         filter_name = 'KeyNames'
         name = 'KeyName'
         date = None
