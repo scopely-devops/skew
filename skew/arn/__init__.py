@@ -105,11 +105,11 @@ class Resource(ARNComponent):
 
     def choices(self, context=None):
         if context:
-            service = context[2]
+            provider, service = context[1:3]
         else:
             service = self._arn.service.pattern
-        all_resources = skew.resources.all_types(
-            self._arn.provider.pattern, service)
+            provider = self._arn.provider.pattern
+        all_resources = skew.resources.all_types(provider, service)
         if not all_resources:
             all_resources = ['*']
         return all_resources
