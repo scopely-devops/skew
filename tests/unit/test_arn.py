@@ -329,3 +329,17 @@ class TestARN(unittest.TestCase):
                    **placebo_cfg)
         l = list(arn)
         self.assertEqual(len(l), 1)
+
+    def test_alarm(self):
+        placebo_cfg = {
+            'placebo': placebo,
+            'placebo_dir': self._get_response_path('alarms'),
+            'placebo_mode': 'playback'}
+        arn = scan(
+            'arn:aws:cloudwatch:us-east-1:123456789012:alarm/*',
+            **placebo_cfg)
+        l = list(arn)
+        self.assertEqual(len(l), 1)
+        self.assertEqual(l[0].arn, 'arn:aws:cloudwatch:us-east-1:123456789012:alarm:some-alarm')
+        self.assertEqual(l[0].data['AlarmArn'],
+                         'arn:aws:cloudwatch:us-east-1:123456789012:alarm:some-alarm')
