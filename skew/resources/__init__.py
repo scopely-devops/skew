@@ -49,6 +49,7 @@ ResourceTypes = {
     'aws.elasticache.snapshot': 'aws.elasticache.Snapshot',
     'aws.elasticbeanstalk.application': 'aws.elasticbeanstalk.Application',
     'aws.elasticbeanstalk.environment': 'aws.elasticbeanstalk.Environment',
+    'aws.elasticloadbalancing.loadbalancer': 'aws.elb.LoadBalancerV2',
     'aws.elb.loadbalancer': 'aws.elb.LoadBalancer',
     'aws.es.domain': 'aws.es.ElasticsearchDomain',
     'aws.firehose.deliverystream': 'aws.firehose.DeliveryStream',

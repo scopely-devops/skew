@@ -28,9 +28,9 @@ class LoadBalancer(AWSResource):
         detail_spec = None
         attr_spec = [
             ('describe_load_balancer_attributes', 'LoadBalancerName',
-                'LoadBalancerAttributes', 'LoadBalancerAttributes'),
+             'LoadBalancerAttributes', 'LoadBalancerAttributes'),
             ('describe_load_balancer_policies', 'LoadBalancerName',
-                'PolicyDescriptions', 'PolicyDescriptions'),
+             'PolicyDescriptions', 'PolicyDescriptions'),
         ]
         id = 'LoadBalancerName'
         filter_name = 'LoadBalancerNames'
@@ -57,3 +57,28 @@ class LoadBalancer(AWSResource):
                 del data['ResponseMetadata']
             self.data[detail_key] = data
             LOG.debug(data)
+
+
+class LoadBalancerV2(AWSResource):
+
+    class Meta(object):
+        service = 'elbv2'
+        type = 'loadbalancer'
+        enum_spec = ('describe_load_balancers',
+                     'LoadBalancers', None)
+        detail_spec = None
+        id = 'LoadBalancerArn'
+        filter_name = 'LoadBalancerNames'
+        filter_type = 'list'
+        name = 'DNSName'
+        date = 'CreatedTime'
+        dimension = 'LoadBalancerName'
+        tags_spec = ('describe_tags', 'TagDescriptions[].Tags[]',
+                     'ResourceArn', 'id')
+
+
+    @property
+    def arn(self):
+        return '%s' % (
+            self.id
+        )

@@ -357,3 +357,16 @@ class TestARN(unittest.TestCase):
         self.assertEqual(l[0].arn, 'arn:aws:ec2:us-east-1:123456789012:customer-gateway/cgw-030d9af8cdbcdc12f')
         self.assertEqual(l[0].data['CustomerGatewayId'],
                          'cgw-030d9af8cdbcdc12f')
+
+    def test_elb_loadbalancer_v2(self):
+        placebo_cfg = {
+            'placebo': placebo,
+            'placebo_dir': self._get_response_path('elbsv2'),
+            'placebo_mode': 'playback'}
+        arn = scan('arn:aws:elasticloadbalancing:us-east-1:1111111111:loadbalancer/*',
+                   **placebo_cfg)
+        l = list(arn)
+        self.assertEqual(len(l), 1)
+        self.assertEqual(l[0].arn, 'arn:aws:elasticloadbalancing:us-east-1:1111111111:loadbalancer/app/some-loadbalancer-v2/2277c8dd3340a0e3')
+        self.assertEqual(l[0].data['DNSName'], 'internal-some-loadbalancer-v2-1835498223.us-east-1.elb.amazonaws.com')
+        self.assertEqual(l[0].tags['Name'], 'some-loadbalancer-v2')
