@@ -58,6 +58,13 @@ class LoadBalancer(AWSResource):
             self.data[detail_key] = data
             LOG.debug(data)
 
+    @property
+    def arn(self):
+        return 'arn:aws:elasticloadbalancing:%s:%s:%s/%s' % (
+            self._client.region_name,
+            self._client.account_id,
+            self.resourcetype, self.id)
+
 
 class LoadBalancerV2(AWSResource):
 
@@ -75,7 +82,6 @@ class LoadBalancerV2(AWSResource):
         dimension = 'LoadBalancerName'
         tags_spec = ('describe_tags', 'TagDescriptions[].Tags[]',
                      'ResourceArn', 'id')
-
 
     @property
     def arn(self):
