@@ -343,3 +343,17 @@ class TestARN(unittest.TestCase):
         self.assertEqual(l[0].arn, 'arn:aws:cloudwatch:us-east-1:123456789012:alarm:some-alarm')
         self.assertEqual(l[0].data['AlarmArn'],
                          'arn:aws:cloudwatch:us-east-1:123456789012:alarm:some-alarm')
+
+    def test_customer_gateway(self):
+        placebo_cfg = {
+            'placebo': placebo,
+            'placebo_dir': self._get_response_path('customergateways'),
+            'placebo_mode': 'playback'}
+        arn = scan(
+            'arn:aws:ec2:us-east-1:123456789012:customer-gateway/*',
+            **placebo_cfg)
+        l = list(arn)
+        self.assertEqual(len(l), 1)
+        self.assertEqual(l[0].arn, 'arn:aws:ec2:us-east-1:123456789012:customer-gateway/cgw-030d9af8cdbcdc12f')
+        self.assertEqual(l[0].data['CustomerGatewayId'],
+                         'cgw-030d9af8cdbcdc12f')

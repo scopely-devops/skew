@@ -1,0 +1,20 @@
+{
+  "status_code": 200,
+  "data": {
+    "CustomerGateways": [
+      {
+        "BgpAsn": "65000",
+        "CustomerGatewayId": "cgw-030d9af8cdbcdc12f",
+        "IpAddress": "1.1.1.1",
+        "State": "available",
+        "Type": "ipsec.1",
+        "Tags": [
+          {
+            "Key": "Env",
+            "Value": "Prod"
+          }
+        ]
+      }
+    ]
+  }
+}
