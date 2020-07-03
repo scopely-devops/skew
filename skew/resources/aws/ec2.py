@@ -70,7 +70,7 @@ class Address(AWSResource):
         type = 'address'
         enum_spec = ('describe_addresses', 'Addresses', None)
         detail_spec = None
-        id = 'PublicIp'
+        id = 'AllocationId'
         filter_name = 'PublicIps'
         filter_type = 'list'
         name = 'PublicIp'
