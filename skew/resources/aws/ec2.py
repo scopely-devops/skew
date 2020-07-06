@@ -257,7 +257,7 @@ class VpcPeeringConnection(AWSResource):
         service = 'ec2'
         type = 'vpc-peering-connection'
         enum_spec = ('describe_vpc_peering_connections',
-                     'VpcPeeringConnection', None)
+                     'VpcPeeringConnections', None)
         detail_spec = None
         id = 'VpcPeeringConnectionId'
         filter_name = 'VpcPeeringConnectionIds'
