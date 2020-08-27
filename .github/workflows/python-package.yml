@@ -33,6 +33,6 @@ jobs:
         pytest
     - name: Validate packaging / publishability
       run: |
-        pip install setuptools wheel twine
+        pip install setuptools wheel twine readme_renderer[md]
         python setup.py sdist bdist_wheel
         twine check dist/*
