@@ -35,4 +35,4 @@ jobs:
       run: |
         pip install setuptools wheel twine
         python setup.py sdist bdist_wheel
-        twine check
+        twine check dist/*
