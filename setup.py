@@ -12,7 +12,7 @@ requires = [
 
 
 here = os.path.dirname(os.path.realpath(__file__))
-with open(os.path.join(here, 'README.rst')) as readme:
+with open(os.path.join(here, 'README.md'), encoding='utf-8') as readme:
     long_description = readme.read()
 
 
@@ -21,6 +21,7 @@ setup(
     version=open(os.path.join('skew', '_version')).read().strip(),
     description='A flat address space for all your AWS resources.',
     long_description=long_description,
+    long_description_content_type='text/markdown',
     author='Mitch Garnaat',
     author_email='mitch@garnaat.com',
     url='https://github.com/scopely-devops/skew',
