@@ -30,7 +30,7 @@ setup(
     package_dir={'skew': 'skew'},
     install_requires=requires,
     license='Apache License 2.0',
-    classifiers=(
+    classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
         'Intended Audience :: System Administrators',
@@ -43,5 +43,5 @@ setup(
         'Programming Language :: Python :: 3.5'
         'Programming Language :: Python :: 3.6'
         'Programming Language :: Python :: 3.7'
-    ),
+    ],
 )
