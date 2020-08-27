@@ -31,3 +31,8 @@ jobs:
     - name: Test with pytest
       run: |
         pytest
+    - name: Validate packaging / publishability
+      run: |
+        pip install setuptools wheel twine
+        python setup.py sdist bdist_wheel
+        twine check
