@@ -29,7 +29,7 @@ setup(
     package_data={'skew': ['_version']},
     package_dir={'skew': 'skew'},
     install_requires=requires,
-    license=open("LICENSE").read(),
+    license='Apache License 2.0',
     classifiers=(
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
