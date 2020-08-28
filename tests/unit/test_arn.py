@@ -281,7 +281,7 @@ class TestARN(unittest.TestCase):
                    **placebo_cfg)
         l = list(arn)
         self.assertEqual(len(l), 1)
-        self.assertEqual(l[0].arn, 'arn:aws:logs:us-east-1:123456789012:log-group/CloudTrail/DefaultLogGroup')
+        self.assertEqual(l[0].arn, 'arn:aws:logs:us-east-1:123456789012:log-group:CloudTrail/DefaultLogGroup')
         self.assertEqual(l[0].data['logGroupName'], 'CloudTrail/DefaultLogGroup')
         self.assertEqual(l[0].tags['TestKey'], 'TestValue')
         self.assertEqual(l[0].data['logStreams'][0]['logStreamName'], '123456789012_CloudTrail_us-east-1')
