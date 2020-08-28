@@ -357,3 +357,16 @@ class TestARN(unittest.TestCase):
         self.assertEqual(l[0].arn, 'arn:aws:ec2:us-east-1:123456789012:customer-gateway/cgw-030d9af8cdbcdc12f')
         self.assertEqual(l[0].data['CustomerGatewayId'],
                          'cgw-030d9af8cdbcdc12f')
+
+    def test_beanstalk_environments(self):
+        placebo_cfg = {
+            'placebo': placebo,
+            'placebo_dir': self._get_response_path('environments'),
+            'placebo_mode': 'playback'}
+        arn = scan('arn:aws:elasticbeanstalk:us-west-2:123456789012:environment/*',
+                   **placebo_cfg)
+        l = list(arn)
+        r = l[0]
+        self.assertEqual(r.data['EnvironmentName'], "Env1")
+        self.assertEqual(r.arn, "arn:aws:elasticbeanstalk:us-west-2:123456789012:environment/sample-application/Env1")
+        self.assertEqual(r.data['ApplicationName'], "sample-application")
