@@ -70,7 +70,7 @@ class Address(AWSResource):
         type = 'address'
         enum_spec = ('describe_addresses', 'Addresses', None)
         detail_spec = None
-        id = 'PublicIp'
+        id = 'AllocationId'
         filter_name = 'PublicIps'
         filter_type = 'list'
         name = 'PublicIp'
@@ -257,7 +257,7 @@ class VpcPeeringConnection(AWSResource):
         service = 'ec2'
         type = 'vpc-peering-connection'
         enum_spec = ('describe_vpc_peering_connections',
-                     'VpcPeeringConnection', None)
+                     'VpcPeeringConnections', None)
         detail_spec = None
         id = 'VpcPeeringConnectionId'
         filter_name = 'VpcPeeringConnectionIds'
