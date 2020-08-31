@@ -1,5 +1,7 @@
 # skew
 
+![PyPI](https://img.shields.io/pypi/v/skew)
+
 `Skew` is a package for identifying and enumerating cloud resources.
 The name is a homonym for SKU (Stock Keeping Unit).  Skew allows you to
 define different SKU `schemes` which are a particular encoding of a
