@@ -172,20 +172,12 @@ class Region(ARNComponent):
                          'cn-north-1',
                          'cn-northwest-1']
 
-    _region_names_limited = ['us-east-1',
-                             'us-west-2',
-                             'eu-west-1',
-                             'ap-southeast-1',
-                             'ap-southeast-2',
-                             'ap-northeast-1']
-
     _no_region_required = ['']
 
     _service_region_map = {
         'redshift': _all_region_names,
         'glacier': ['ap-northeast-1', 'ap-northeast-2', 'ap-south-1', 'ap-southeast-2', 'ca-central-1', 'eu-central-1',
                     'eu-west-1', 'eu-west-2', 'us-east-1', 'us-east-2', 'us-west-1', 'us-west-2'],
-        'kinesis': _region_names_limited,
         'cloudfront': _no_region_required,
         'iam': _no_region_required,
         'route53': _no_region_required
