@@ -28,6 +28,7 @@ class Queue(AWSResource):
         name = 'QueueUrl'
         date = None
         dimension = 'QueueName'
+        tags_spec = ('list_queue_tags', 'Tags', 'QueueUrl', 'name')
 
     def __init__(self, client, data, query=None):
         super(Queue, self).__init__(client, data, query)

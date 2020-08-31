@@ -24,6 +24,8 @@ class Application(AWSResource):
         name = 'ApplicationName'
         date = None
         dimension = None
+        tags_spec = ('list_tags_for_resource', 'ResourceTags[]',
+                     'ResourceArn', 'arn')
 
 
 class Environment(AWSResource):
@@ -38,6 +40,8 @@ class Environment(AWSResource):
         name = 'EnvironmentName'
         date = None
         dimension = None
+        tags_spec = ('list_tags_for_resource', 'ResourceTags[]',
+                     'ResourceArn', 'arn')
 
     @property
     def arn(self):

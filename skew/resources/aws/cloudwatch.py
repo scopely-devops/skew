@@ -26,11 +26,12 @@ class Alarm(AWSResource):
         enum_spec = ('describe_alarms', 'MetricAlarms', None)
         id = 'AlarmName'
         filter_name = 'AlarmNames'
-        filter_type = 'list'
+        filter_type = None
         detail_spec = None
         name = 'AlarmName'
         date = 'AlarmConfigurationUpdatedTimestamp'
         dimension = None
+        tags_spec = ('list_tags_for_resource', 'Tags[]', 'ResourceARN', 'arn')
 
     @property
     def arn(self):
