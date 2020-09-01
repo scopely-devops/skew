@@ -343,6 +343,8 @@ class TestARN(unittest.TestCase):
         self.assertEqual(l[0].arn, 'arn:aws:cloudwatch:us-east-1:123456789012:alarm:some-alarm')
         self.assertEqual(l[0].data['AlarmArn'],
                          'arn:aws:cloudwatch:us-east-1:123456789012:alarm:some-alarm')
+        self.assertEqual(l[0].tags['Env'], 'Production')
+        self.assertEqual(l[0].tags['Project'], 'Marketing')
 
     def test_customer_gateway(self):
         placebo_cfg = {
@@ -367,9 +369,11 @@ class TestARN(unittest.TestCase):
                    **placebo_cfg)
         l = list(arn)
         r = l[0]
-        self.assertEqual(r.data['EnvironmentName'], "Env1")
-        self.assertEqual(r.arn, "arn:aws:elasticbeanstalk:us-west-2:123456789012:environment/sample-application/Env1")
-        self.assertEqual(r.data['ApplicationName'], "sample-application")
+        self.assertEqual(r.data['EnvironmentName'], 'Env1')
+        self.assertEqual(r.arn, 'arn:aws:elasticbeanstalk:us-west-2:123456789012:environment/sample-application/Env1')
+        self.assertEqual(r.data['ApplicationName'], 'sample-application')
+        self.assertEqual(r.tags['Env'], 'Production')
+        self.assertEqual(r.tags['Project'], 'Marketing')
 
     def test_ec2_address(self):
         placebo_cfg = {
@@ -388,7 +392,6 @@ class TestARN(unittest.TestCase):
         self.assertEqual(l[2].data['Tags'],
                          [{'Key': 'Name', 'Value': 'some-name'}, {'Key': 'Env', 'Value': 'Prod'}])
 
-
     def test_vpc_peering_connection(self):
         placebo_cfg = {
             'placebo': placebo,
@@ -401,4 +404,58 @@ class TestARN(unittest.TestCase):
         self.assertEqual(len(l), 1)
         self.assertEqual(l[0].arn, 'arn:aws:ec2:us-east-1:123456789012:vpc-peering-connection/pcx-027a582b95db2af78')
 
+    def test_sns(self):
+        placebo_cfg = {
+            'placebo': placebo,
+            'placebo_dir': self._get_response_path('topics'),
+            'placebo_mode': 'playback'}
+        arn = scan(
+            'arn:aws:sns:us-east-1:123456789012:topic/*',
+            **placebo_cfg)
+        l = list(arn)
+        self.assertEqual(len(l), 1)
+        self.assertEqual(l[0].arn, 'arn:aws:sns:us-east-1:123456789012:SomeTopic')
+        self.assertEqual(l[0].tags['Env'], 'Production')
+        self.assertEqual(l[0].tags['Project'], 'Marketing')
 
+    def test_elasticbeanstalk_application(self):
+        placebo_cfg = {
+            'placebo': placebo,
+            'placebo_dir': self._get_response_path('applications'),
+            'placebo_mode': 'playback'}
+        arn = scan(
+            'arn:aws:elasticbeanstalk:us-east-1:123456789012:application/*',
+            **placebo_cfg)
+        l = list(arn)
+        self.assertEqual(len(l), 1)
+        self.assertEqual(l[0].arn, 'arn:aws:elasticbeanstalk:us-east-1:123456789012:application/super-app')
+        self.assertEqual(l[0].tags['Env'], 'Production')
+        self.assertEqual(l[0].tags['Project'], 'Marketing')
+
+    def test_rds_sec_grp(self):
+        placebo_cfg = {
+            'placebo': placebo,
+            'placebo_dir': self._get_response_path('rdssecgrps'),
+            'placebo_mode': 'playback'}
+        arn = scan(
+            'arn:aws:rds:us-east-1:123456789012:secgrp/*',
+            **placebo_cfg)
+        l = list(arn)
+        self.assertEqual(len(l), 1)
+        self.assertEqual(l[0].arn, 'arn:aws:rds:us-east-1:123456789012:secgrp:default')
+        self.assertEqual(l[0].tags['Env'], 'Production')
+        self.assertEqual(l[0].tags['Project'], 'Marketing')
+
+    def test_firehose(self):
+        placebo_cfg = {
+            'placebo': placebo,
+            'placebo_dir': self._get_response_path('deliverystreams'),
+            'placebo_mode': 'playback'}
+        arn = scan(
+            'arn:aws:firehose:us-east-1:123456789012:deliverystream/*',
+            **placebo_cfg)
+        l = list(arn)
+        self.assertEqual(len(l), 1)
+        self.assertEqual(l[0].arn, 'arn:aws:firehose:us-east-1:123456789012:deliverystream/delivery-stream-1')
+        self.assertEqual(l[0].tags['Env'], 'Production')
+        self.assertEqual(l[0].tags['Project'], 'Marketing')

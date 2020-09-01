@@ -1,0 +1,9 @@
+{
+  "status_code": 200,
+  "data": {
+    "DeliveryStreamNames": [
+      "delivery-stream-1"
+    ],
+    "HasMoreDeliveryStreams": false
+  }
+}
