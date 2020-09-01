@@ -1,0 +1,47 @@
+{
+  "status_code": 200,
+  "data": {
+    "Roles": [
+      {
+        "Path": "/",
+        "RoleName": "aws-elasticbeanstalk-ec2-role",
+        "RoleId": "AROA4TJGIIIZTEMWZ7AX5",
+        "Arn": "arn:aws:iam::123456789012:role/aws-elasticbeanstalk-ec2-role",
+        "CreateDate": "2020-07-09T06:02:54Z",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": "arn:aws:iam::123456789012:root"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "MaxSessionDuration": 3600
+      },
+      {
+        "Path": "/",
+        "RoleName": "aws-lambda-role",
+        "RoleId": "AROA4TJGIIIZTEMWZ7AX4",
+        "Arn": "arn:aws:iam::123456789012:role/aws-lambda-role",
+        "CreateDate": "2020-07-09T08:05:54Z",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": "arn:aws:iam::123456789012:root"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "MaxSessionDuration": 3600
+      }
+    ]
+  }
+}

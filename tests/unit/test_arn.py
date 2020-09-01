@@ -212,6 +212,16 @@ class TestARN(unittest.TestCase):
                          'arn:aws:iam::aws:policy/AdministratorAccess')
         self.assertEqual(l[0].data['SSHPublicKeys'][0]['SSHPublicKeyId'],
                          'APKAAAAAAAAAAAAAAAAA')
+    def test_iam_roles(self):
+        placebo_cfg = {
+            'placebo': placebo,
+            'placebo_dir': self._get_response_path('roles'),
+            'placebo_mode': 'playback'}
+        arn = scan('arn:aws:iam::123456789012:role/*',
+                   **placebo_cfg)
+        l = list(arn)
+        self.assertEqual(len(l), 2)
+        self.assertEqual(l[0].arn, 'arn:aws:iam::123456789012:role/aws-elasticbeanstalk-ec2-role')
 
     def test_cloudformation_stacks(self):
         placebo_cfg = {
