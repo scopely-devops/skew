@@ -1,0 +1,31 @@
+{
+  "status_code": 200,
+  "data": {
+    "Applications": [
+      {
+        "ApplicationArn": "arn:aws:elasticbeanstalk:us-east-1:123456789012:application/super-app",
+        "ApplicationName": "super-app",
+        "DateCreated": "2020-08-28T07:07:41.158Z",
+        "DateUpdated": "2020-08-28T07:07:41.158Z",
+        "Versions": [
+          "Sample Application"
+        ],
+        "ConfigurationTemplates": [],
+        "ResourceLifecycleConfig": {
+          "VersionLifecycleConfig": {
+            "MaxCountRule": {
+              "Enabled": false,
+              "MaxCount": 200,
+              "DeleteSourceFromS3": false
+            },
+            "MaxAgeRule": {
+              "Enabled": false,
+              "MaxAgeInDays": 180,
+              "DeleteSourceFromS3": false
+            }
+          }
+        }
+      }
+    ]
+  }
+}

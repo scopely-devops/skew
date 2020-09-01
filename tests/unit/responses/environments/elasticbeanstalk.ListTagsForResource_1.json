@@ -1,0 +1,16 @@
+{
+  "status_code": 200,
+  "data": {
+    "ResourceArn": "arn:aws:elasticbeanstalk:us-west-2:123456789012:environment/sample-application/Env1",
+    "ResourceTags": [
+      {
+        "Key": "Env",
+        "Value": "Production"
+      },
+      {
+        "Key": "Project",
+        "Value": "Marketing"
+      }
+    ]
+  }
+}

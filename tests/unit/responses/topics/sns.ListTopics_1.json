@@ -1,0 +1,10 @@
+{
+  "status_code": 200,
+  "data": {
+    "Topics": [
+      {
+        "TopicArn": "arn:aws:sns:us-east-1:123456789012:SomeTopic"
+      }
+    ]
+  }
+}
