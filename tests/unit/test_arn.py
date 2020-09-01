@@ -388,7 +388,6 @@ class TestARN(unittest.TestCase):
         self.assertEqual(l[2].data['Tags'],
                          [{'Key': 'Name', 'Value': 'some-name'}, {'Key': 'Env', 'Value': 'Prod'}])
 
-
     def test_vpc_peering_connection(self):
         placebo_cfg = {
             'placebo': placebo,
@@ -401,4 +400,17 @@ class TestARN(unittest.TestCase):
         self.assertEqual(len(l), 1)
         self.assertEqual(l[0].arn, 'arn:aws:ec2:us-east-1:123456789012:vpc-peering-connection/pcx-027a582b95db2af78')
 
+    def test_sqs_queue(self):
+        placebo_cfg = {
+            'placebo': placebo,
+            'placebo_dir': self._get_response_path('queues'),
+            'placebo_mode': 'playback'}
 
+        arn = scan(
+            'arn:aws:sqs:us-east-1:123456789012:queue/*',
+            **placebo_cfg)
+        l = list(arn)
+        self.assertEqual(len(l), 1)
+        self.assertEqual(l[0].arn, 'arn:aws:sqs:us-east-1:123456789012:someq')
+        self.assertEqual(l[0].tags['Env'], 'Production')
+        self.assertEqual(l[0].tags['Project'], 'Marketing')
