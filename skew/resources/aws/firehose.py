@@ -26,6 +26,7 @@ class DeliveryStream(AWSResource):
         name = 'DeliveryStreamName'
         date = 'CreateTimestamp'
         dimension = 'DeliveryStreamName'
+        tags_spec = ('list_tags_for_delivery_stream', 'Tags[]', 'DeliveryStreamName', 'id')
 
     def __init__(self, client, data, query=None):
         super(DeliveryStream, self).__init__(client, data, query)

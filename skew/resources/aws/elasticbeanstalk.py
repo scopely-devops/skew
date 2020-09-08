@@ -13,7 +13,6 @@ from skew.resources.aws import AWSResource
 
 
 class Application(AWSResource):
-
     class Meta(object):
         service = 'elasticbeanstalk'
         type = 'application'
@@ -25,9 +24,11 @@ class Application(AWSResource):
         name = 'ApplicationName'
         date = None
         dimension = None
+        tags_spec = ('list_tags_for_resource', 'ResourceTags[]',
+                     'ResourceArn', 'arn')
+
 
 class Environment(AWSResource):
-
     class Meta(object):
         service = 'elasticbeanstalk'
         type = 'environment'
@@ -39,3 +40,16 @@ class Environment(AWSResource):
         name = 'EnvironmentName'
         date = None
         dimension = None
+        tags_spec = ('list_tags_for_resource', 'ResourceTags[]',
+                     'ResourceArn', 'arn')
+
+    @property
+    def arn(self):
+        return 'arn:aws:%s:%s:%s:%s/%s/%s' % (
+            self._client.service_name,
+            self._client.region_name,
+            self._client.account_id,
+            self.resourcetype,
+            self.data['ApplicationName'],
+            self.id
+        )

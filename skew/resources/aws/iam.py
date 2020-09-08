@@ -133,6 +133,7 @@ class Role(IAMResource):
         name = 'RoleName'
         date = 'CreateDate'
         dimension = None
+        tags_spec = ('list_role_tags', 'Tags[]', 'RoleName', 'name')
 
     @classmethod
     def filter(cls, arn, resource_id, data):

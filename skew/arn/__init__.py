@@ -105,11 +105,11 @@ class Resource(ARNComponent):
 
     def choices(self, context=None):
         if context:
-            service = context[2]
+            provider, service = context[1:3]
         else:
             service = self._arn.service.pattern
-        all_resources = skew.resources.all_types(
-            self._arn.provider.pattern, service)
+            provider = self._arn.provider.pattern
+        all_resources = skew.resources.all_types(provider, service)
         if not all_resources:
             all_resources = ['*']
         return all_resources
@@ -155,21 +155,22 @@ class Region(ARNComponent):
                          'us-west-2',
                          'eu-west-1',
                          'eu-west-2',
+                         'eu-west-3',
                          'eu-central-1',
+                         'eu-north-1',
+                         'eu-south-1',
                          'ap-southeast-1',
                          'ap-southeast-2',
                          'ap-northeast-1',
                          'ap-northeast-2',
                          'ap-south-1',
+                         'ap-east-1',
+                         'af-south-1'
                          'ca-central-1',
-                         'sa-east-1']
-
-    _region_names_limited = ['us-east-1',
-                             'us-west-2',
-                             'eu-west-1',
-                             'ap-southeast-1',
-                             'ap-southeast-2',
-                             'ap-northeast-1']
+                         'sa-east-1',
+                         'me-south-1',
+                         'cn-north-1',
+                         'cn-northwest-1']
 
     _no_region_required = ['']
 
@@ -177,14 +178,9 @@ class Region(ARNComponent):
         'redshift': _all_region_names,
         'glacier': ['ap-northeast-1', 'ap-northeast-2', 'ap-south-1', 'ap-southeast-2', 'ca-central-1', 'eu-central-1',
                     'eu-west-1', 'eu-west-2', 'us-east-1', 'us-east-2', 'us-west-1', 'us-west-2'],
-        'kinesis': _region_names_limited,
         'cloudfront': _no_region_required,
         'iam': _no_region_required,
-        'route53': _no_region_required,
-        'lambda': ['ap-northeast-1', 'ap-northeast-2', 'ap-south-1', 'ap-southeast-1', 'ap-southeast-2', 'eu-central-1',
-                   'eu-west-1', 'eu-west-2', 'sa-east-1', 'us-east-1', 'us-east-2', 'us-west-1', 'us-west-2'],
-        'firehose': ['us-east-1', 'us-west-2', 'eu-west-1'],
-        'apigateway': ['us-east-1', 'us-west-2', 'eu-west-1', 'ap-northeast-1'],
+        'route53': _no_region_required
     }
 
     def choices(self, context=None):

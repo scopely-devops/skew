@@ -1,0 +1,30 @@
+{
+  "status_code": 200,
+  "data": {
+    "Environments": [
+      {
+        "EnvironmentName": "Env1",
+        "EnvironmentId": "e-abc32nm323",
+        "ApplicationName": "sample-application",
+        "VersionLabel": "Sample Application",
+        "SolutionStackName": "64bit Amazon Linux 2 v3.0.3 running Docker",
+        "PlatformArn": "arn:aws:elasticbeanstalk:us-west-2::platform/Docker running on 64bit Amazon Linux 2/3.0.3",
+        "EndpointURL": "111.111.111.111",
+        "CNAME": "Env1.eba-2dmwpyrc.us-west-2.elasticbeanstalk.com",
+        "DateCreated": "2020-05-18T14:36:31.201Z",
+        "DateUpdated": "2020-04-24T21:11:56.759Z",
+        "Status": "Ready",
+        "AbortableOperationInProgress": false,
+        "Health": "Green",
+        "HealthStatus": "Ok",
+        "Tier": {
+          "Name": "WebServer",
+          "Type": "Standard",
+          "Version": "1.0"
+        },
+        "EnvironmentLinks": [],
+        "EnvironmentArn": "arn:aws:elasticbeanstalk:us-west-2:123456789012:environment/sample-application/Env1"
+      }
+    ]
+  }
+}

@@ -1,28 +1,7 @@
 import skew
 from collections import namedtuple
 
-services_dict = {
-    'rds' : AWS_service(
-                'db',{'DBInstanceStatus':'available'}, '','DBInstanceClass',
-                {},'DBInstanceCount','',['MultiAZ']
-            ),
-    'ec2' : AWS_service(
-                'instance', {'State':{'Code': 16, 'Name': 'running'}},'','InstanceType', 
-                {},'InstanceCount','',[]
-            ),
-    'elasticache' : AWS_service(
-                'cluster',{},'NumCacheNodes','CacheNodeType', 
-                {},'CacheNodeCount','',[]
-            ),
-    'es' : AWS_service(
-                'domain',{},'ElasticsearchClusterConfig.InstanceCount', 'ElasticsearchClusterConfig.InstanceType',
-                {},'ElasticsearchInstanceCount','ElasticsearchInstanceType',[]
-            ),
-    'redshift' : AWS_service(
-                'cluster',{}, 'NumberOfNodes', 'NodeType', 
-                {},'NodeCount','',[]
-            ),
-}
+
 AWS_service = namedtuple('AWS_service',
     "skew_resource instances_filters cluster_count  instance_type "
     "reserved_filters reserved_count reserved_type dimensions")
@@ -94,8 +73,8 @@ def serviceReservedInstanceReportEx(service,regions,service_def):
     instances += getServiceReservedInstances(service,regions,service_def)
 
     svc=service_def[service]
-    print("\n{}".format(service))
-    print('=' * len(service))
+    # print("\n{}".format(service))
+    # print('=' * len(service))
     # Now see if we have enough of each type
     for region in regions:        
         merged = {} # structure: { 'm1.small': {'running':1,'reserved':5} }

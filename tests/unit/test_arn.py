@@ -104,8 +104,10 @@ class TestARN(unittest.TestCase):
                    debug=True, **placebo_cfg)
         l = list(arn)
         self.assertEqual(len(l), 2)
-        self.assertEqual(l[0].id, 'admin')
-        self.assertEqual(l[1].id, 'FooBar')
+        self.assertEqual(l[0].id, 'key-1274ea12942819e24')
+        self.assertEqual(l[1].id, 'key-1274ea12942819e25')
+        self.assertEqual(l[0].name, 'admin')
+        self.assertEqual(l[1].name, 'FooBar')
         self.assertEqual(
             l[0].data['KeyFingerprint'],
             "85:83:08:25:fa:96:45:ea:c9:15:04:12:af:45:3f:c0:ef:e8:b8:ce")
@@ -279,7 +281,7 @@ class TestARN(unittest.TestCase):
                    **placebo_cfg)
         l = list(arn)
         self.assertEqual(len(l), 1)
-        self.assertEqual(l[0].arn, 'arn:aws:logs:us-east-1:123456789012:log-group/CloudTrail/DefaultLogGroup')
+        self.assertEqual(l[0].arn, 'arn:aws:logs:us-east-1:123456789012:log-group:CloudTrail/DefaultLogGroup')
         self.assertEqual(l[0].data['logGroupName'], 'CloudTrail/DefaultLogGroup')
         self.assertEqual(l[0].tags['TestKey'], 'TestValue')
         self.assertEqual(l[0].data['logStreams'][0]['logStreamName'], '123456789012_CloudTrail_us-east-1')
@@ -316,3 +318,87 @@ class TestARN(unittest.TestCase):
                          'arn:aws:logs:us-east-1:123456789012:log-group:CloudTrail/DefaultLogGroup:*')
         print(l[0].tags)
         self.assertEqual(l[0].tags['TestKey'], 'TestValue')
+
+    def test_no_provider(self):
+        placebo_cfg = {
+            'placebo': placebo,
+            'placebo_dir': self._get_response_path('trail'),
+            'placebo_mode': 'playback'}
+        arn = scan(
+                    '::cloudtrail:us-east-1:123456789012:trail/*',
+                   **placebo_cfg)
+        l = list(arn)
+        self.assertEqual(len(l), 1)
+
+    def test_alarm(self):
+        placebo_cfg = {
+            'placebo': placebo,
+            'placebo_dir': self._get_response_path('alarms'),
+            'placebo_mode': 'playback'}
+        arn = scan(
+            'arn:aws:cloudwatch:us-east-1:123456789012:alarm/*',
+            **placebo_cfg)
+        l = list(arn)
+        self.assertEqual(len(l), 1)
+        self.assertEqual(l[0].arn, 'arn:aws:cloudwatch:us-east-1:123456789012:alarm:some-alarm')
+        self.assertEqual(l[0].data['AlarmArn'],
+                         'arn:aws:cloudwatch:us-east-1:123456789012:alarm:some-alarm')
+
+    def test_customer_gateway(self):
+        placebo_cfg = {
+            'placebo': placebo,
+            'placebo_dir': self._get_response_path('customergateways'),
+            'placebo_mode': 'playback'}
+        arn = scan(
+            'arn:aws:ec2:us-east-1:123456789012:customer-gateway/*',
+            **placebo_cfg)
+        l = list(arn)
+        self.assertEqual(len(l), 1)
+        self.assertEqual(l[0].arn, 'arn:aws:ec2:us-east-1:123456789012:customer-gateway/cgw-030d9af8cdbcdc12f')
+        self.assertEqual(l[0].data['CustomerGatewayId'],
+                         'cgw-030d9af8cdbcdc12f')
+
+    def test_beanstalk_environments(self):
+        placebo_cfg = {
+            'placebo': placebo,
+            'placebo_dir': self._get_response_path('environments'),
+            'placebo_mode': 'playback'}
+        arn = scan('arn:aws:elasticbeanstalk:us-west-2:123456789012:environment/*',
+                   **placebo_cfg)
+        l = list(arn)
+        r = l[0]
+        self.assertEqual(r.data['EnvironmentName'], "Env1")
+        self.assertEqual(r.arn, "arn:aws:elasticbeanstalk:us-west-2:123456789012:environment/sample-application/Env1")
+        self.assertEqual(r.data['ApplicationName'], "sample-application")
+
+    def test_ec2_address(self):
+        placebo_cfg = {
+            'placebo': placebo,
+            'placebo_dir': self._get_response_path('addresses'),
+            'placebo_mode': 'playback'}
+        arn = scan(
+            'arn:aws:ec2:us-east-1:123456789012:address/*',
+            **placebo_cfg)
+        l = list(arn)
+        self.assertEqual(len(l), 3)
+        self.assertEqual(l[0].arn, 'arn:aws:ec2:us-east-1:123456789012:address/eipalloc-091f2b843804f008c')
+        self.assertEqual(l[0].data['AllocationId'],
+                         'eipalloc-091f2b843804f008c')
+
+        self.assertEqual(l[2].data['Tags'],
+                         [{'Key': 'Name', 'Value': 'some-name'}, {'Key': 'Env', 'Value': 'Prod'}])
+
+
+    def test_vpc_peering_connection(self):
+        placebo_cfg = {
+            'placebo': placebo,
+            'placebo_dir': self._get_response_path('peeringconnections'),
+            'placebo_mode': 'playback'}
+        arn = scan(
+            'arn:aws:ec2:us-east-1:123456789012:vpc-peering-connection/*',
+            **placebo_cfg)
+        l = list(arn)
+        self.assertEqual(len(l), 1)
+        self.assertEqual(l[0].arn, 'arn:aws:ec2:us-east-1:123456789012:vpc-peering-connection/pcx-027a582b95db2af78')
+
+

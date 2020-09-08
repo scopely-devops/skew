@@ -50,6 +50,7 @@ class Reserved(AWSResource):
         id = 'ReservationName'
         filter_name = 'ReservedElasticsearchInstanceId'
         filter_type = 'scalar'
-        name = 'ReservationName'
+        # name = 'ReservationName'
+        name = 'ReservedElasticsearchInstanceId'
         date = 'StartTime'
         dimension = 'ReservedElasticsearchInstanceId'

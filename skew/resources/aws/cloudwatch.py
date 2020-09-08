@@ -24,13 +24,22 @@ class Alarm(AWSResource):
         service = 'cloudwatch'
         type = 'alarm'
         enum_spec = ('describe_alarms', 'MetricAlarms', None)
-        id = 'AlarmArn'
+        id = 'AlarmName'
         filter_name = 'AlarmNames'
-        filter_type = 'list'
+        filter_type = None
         detail_spec = None
         name = 'AlarmName'
         date = 'AlarmConfigurationUpdatedTimestamp'
         dimension = None
+        tags_spec = ('list_tags_for_resource', 'Tags[]', 'ResourceARN', 'arn')
+
+    @property
+    def arn(self):
+        return 'arn:aws:%s:%s:%s:%s:%s' % (
+            self._client.service_name,
+            self._client.region_name,
+            self._client.account_id,
+            self.resourcetype, self.id)
 
 
 class LogGroup(AWSResource):
@@ -41,13 +50,13 @@ class LogGroup(AWSResource):
         enum_spec = ('describe_log_groups', 'logGroups[]', None)
         attr_spec = [
             ('describe_log_streams', 'logGroupName',
-                'logStreams', 'logStreams'),
+             'logStreams', 'logStreams'),
             ('describe_metric_filters', 'logGroupName',
-                'metricFilters', 'metricFilters'),
+             'metricFilters', 'metricFilters'),
             ('describe_subscription_filters', 'logGroupName',
-                'subscriptionFilters', 'subscriptionFilters'),
+             'subscriptionFilters', 'subscriptionFilters'),
             ('describe_queries', 'logGroupName',
-                'queries', 'queries'),
+             'queries', 'queries'),
         ]
         detail_spec = None
         id = 'logGroupName'
@@ -81,3 +90,10 @@ class LogGroup(AWSResource):
     @property
     def logGroupName(self):
         return self.data.get('logGroupName')
+
+    @property
+    def arn(self):
+        return 'arn:aws:%s:%s:%s:%s:%s' % (
+            self._client.service_name,
+            self._client.region_name,
+            self._client.account_id, self.resourcetype, self.id)

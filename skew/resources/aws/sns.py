@@ -31,6 +31,7 @@ class Topic(AWSResource):
         name = 'DisplayName'
         date = None
         dimension = 'TopicName'
+        tags_spec = ('list_tags_for_resource', 'Tags[]', 'ResourceArn', 'arn')
 
     @classmethod
     def filter(cls, arn, resource_id, data):

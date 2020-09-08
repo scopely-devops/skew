@@ -3,10 +3,12 @@
     "data": {
         "KeyPairs": [
             {
+                "KeyPairId": "key-1274ea12942819e24",
                 "KeyName": "admin", 
                 "KeyFingerprint": "85:83:08:25:fa:96:45:ea:c9:15:04:12:af:45:3f:c0:ef:e8:b8:ce"
             }, 
             {
+                "KeyPairId": "key-1274ea12942819e25",
                 "KeyName": "FooBar", 
                 "KeyFingerprint": "9b:02:68:c2:ff:32:38:1a:49:ec:c4:b5:b3:98:36:cf:cd:1f:73:cc"
             }

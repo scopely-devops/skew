@@ -1,8 +1,6 @@
 # skew
 
-[![Build Status](https://travis-ci.org/scopely-devops/skew.svg?branch=develop)](https://travis-ci.org/scopely-devops/skew)
-
-[![Code Health](https://landscape.io/github/scopely-devops/skew/develop/landscape.svg?style=flat)](https://landscape.io/github/scopely-devops/skew/develop)
+![PyPI](https://img.shields.io/pypi/v/skew) https://pypi.org/project/skew/
 
 `Skew` is a package for identifying and enumerating cloud resources.
 The name is a homonym for SKU (Stock Keeping Unit).  Skew allows you to

@@ -52,6 +52,7 @@ class DBSecurityGroup(AWSResource):
         name = 'DBSecurityGroupDescription'
         date = None
         dimension = None
+        tags_spec = ('list_tags_for_resource', 'TagList', 'ResourceName', 'arn')
 
     @property
     def arn(self):
