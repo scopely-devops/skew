@@ -165,7 +165,7 @@ class Region(ARNComponent):
                          'ap-northeast-2',
                          'ap-south-1',
                          'ap-east-1',
-                         'af-south-1'
+                         'af-south-1',
                          'ca-central-1',
                          'sa-east-1',
                          'me-south-1',
