@@ -8,6 +8,7 @@
 - Separate dev dependencies from module dependencies
 - Update dependencies version
 - Align python syntax on version 3
+- add boto3 config default with retries={"max_attempts": 20, "mode": "adaptive"}
 
 ## 0.19.0
 
