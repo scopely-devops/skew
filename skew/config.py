@@ -18,7 +18,7 @@ import logging
 import yaml
 
 from skew.exception import ConfigNotFoundError
-
+from skew.awsdefaults import get_caller_identity_account_id
 LOG = logging.getLogger(__name__)
 
 
@@ -37,4 +37,6 @@ def get_config():
         else:
             LOG.warning("Unable to find skew config file")
             _config = { 'accounts': {}}
+            _config['accounts'][get_caller_identity_account_id()] = {}
+            LOG.warning(f"Default skew Configuration: {_config}")
     return _config
