@@ -19,6 +19,8 @@ import datetime
 import jmespath
 import boto3
 from botocore.exceptions import ClientError
+from botocore.config import Config
+import botocore
 
 from skew.config import get_config
 
@@ -32,8 +34,14 @@ def json_encoder(obj):
     else:
         return obj
 
+from functools import lru_cache
+
 
 class AWSClient(object):
+
+    boto3_retry_config = {"max_attempts": 20, "mode": "adaptive"}
+
+
     def __init__(self, service_name, region_name, account_id, **kwargs):
         _config = get_config()
         self._service_name = service_name
@@ -84,6 +92,7 @@ class AWSClient(object):
         return session.client(
             self.service_name,
             region_name=self.region_name if self.region_name else None,
+            config = Config(retries=self.boto3_retry_config)
         )
 
     def call(self, op_name, query=None, **kwargs):
