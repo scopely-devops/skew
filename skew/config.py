@@ -22,7 +22,7 @@ from skew.exception import ConfigNotFoundError
 LOG = logging.getLogger(__name__)
 
 
-_config = None
+_config = { 'accounts': {}}
 
 
 def get_config():
@@ -33,7 +33,6 @@ def get_config():
         path = os.path.expandvars(path)
         if not os.path.exists(path):
             LOG.warning("Unable to find skew config file")
-            _config = { 'accounts': {}}
         with open(path) as config_file:
             _config = yaml.load(config_file, Loader=yaml.FullLoader)
     return _config
