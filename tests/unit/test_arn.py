@@ -300,7 +300,7 @@ class TestARN(unittest.TestCase):
         self.assertEqual(len(l), 2)
         self.assertEqual(l[0].arn, 'arn:aws:ec2:us-east-1:123456789012:flow-log/fl-1234abcd')
         self.assertEqual(l[0].data['LogGroupName'], 'CloudTrail/DefaultLogGroup')
-        self.assertEqual(str(l[0].data['CreationTime']), '2017-01-23 19:47:49')
+        self.assertEqual(str(l[0].data['CreationTime']), '2017-01-23 19:47:49+00:00')
 
     def test_cloudtrail(self):
         placebo_cfg = {
