@@ -41,11 +41,12 @@ class AWSClient(object):
         self._account_id = account_id
         self._has_credentials = False
         self.aws_creds = kwargs.get("aws_creds")
+        self._profile = None
         if self.aws_creds is None and account_id in _config["accounts"]:
             self.aws_creds = _config["accounts"][account_id].get("credentials")
-        if self.aws_creds is None and account_id in _config["accounts"]:
-            # no aws_creds, need profile to get creds from ~/.aws/credentials or iam metadata role instance
-            self._profile = _config["accounts"][account_id].get("profile")
+            if self.aws_creds:
+                # no aws_creds, need profile to get creds from ~/.aws/credentials or iam metadata role instance
+                self._profile = _config["accounts"][account_id].get("profile")
         self.placebo = kwargs.get("placebo")
         self.placebo_dir = kwargs.get("placebo_dir")
         self.placebo_mode = kwargs.get("placebo_mode", "record")
@@ -75,7 +76,7 @@ class AWSClient(object):
         else:
             session = boto3.Session()
         if self.placebo and self.placebo_dir:
-            pill = self.placebo.attach(session, self.placebo_dir)
+            pill = self.placebo.attach(session, data_path=self.placebo_dir)
             if self.placebo_mode == "record":
                 pill.record()
             elif self.placebo_mode == "playback":
