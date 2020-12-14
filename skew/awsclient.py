@@ -34,23 +34,21 @@ def json_encoder(obj):
 
 
 class AWSClient(object):
-
     def __init__(self, service_name, region_name, account_id, **kwargs):
-        self._config = get_config()
+        _config = get_config()
         self._service_name = service_name
         self._region_name = region_name
         self._account_id = account_id
         self._has_credentials = False
-        self.aws_creds = kwargs.get('aws_creds')
-        if self.aws_creds is None:
-            self.aws_creds = self._config['accounts'][account_id].get(
-                'credentials')
-        if self.aws_creds is None:
-            # no aws_creds, need profile to get creds from ~/.aws/credentials
-            self._profile = self._config['accounts'][account_id]['profile']
-        self.placebo = kwargs.get('placebo')
-        self.placebo_dir = kwargs.get('placebo_dir')
-        self.placebo_mode = kwargs.get('placebo_mode', 'record')
+        self.aws_creds = kwargs.get("aws_creds")
+        if self.aws_creds is None and account_id in _config["accounts"]:
+            self.aws_creds = _config["accounts"][account_id].get("credentials")
+        if self.aws_creds is None and account_id in _config["accounts"]:
+            # no aws_creds, need profile to get creds from ~/.aws/credentials or iam metadata role instance
+            self._profile = _config["accounts"][account_id].get("profile")
+        self.placebo = kwargs.get("placebo")
+        self.placebo_dir = kwargs.get("placebo_dir")
+        self.placebo_mode = kwargs.get("placebo_mode", "record")
         self._client = self._create_client()
 
     @property
@@ -72,17 +70,20 @@ class AWSClient(object):
     def _create_client(self):
         if self.aws_creds:
             session = boto3.Session(**self.aws_creds)
+        elif self.profile:
+            session = boto3.Session(profile_name=self.profile)
         else:
-            session = boto3.Session(
-                profile_name=self.profile)
+            session = boto3.Session()
         if self.placebo and self.placebo_dir:
             pill = self.placebo.attach(session, self.placebo_dir)
-            if self.placebo_mode == 'record':
+            if self.placebo_mode == "record":
                 pill.record()
-            elif self.placebo_mode == 'playback':
+            elif self.placebo_mode == "playback":
                 pill.playback()
-        return session.client(self.service_name,
-                              region_name=self.region_name if self.region_name else None)
+        return session.client(
+            self.service_name,
+            region_name=self.region_name if self.region_name else None,
+        )
 
     def call(self, op_name, query=None, **kwargs):
         """
@@ -128,11 +129,11 @@ class AWSClient(object):
                     done = True
                 except ClientError as e:
                     LOG.debug(e, kwargs)
-                    if 'Throttling' in str(e):
+                    if "Throttling" in str(e):
                         time.sleep(1)
-                    elif 'AccessDenied' in str(e):
+                    elif "AccessDenied" in str(e):
                         done = True
-                    elif 'NoSuchTagSet' in str(e):
+                    elif "NoSuchTagSet" in str(e):
                         done = True
                 except Exception:
                     done = True
@@ -142,6 +143,6 @@ class AWSClient(object):
 
 
 def get_awsclient(service_name, region_name, account_id, **kwargs):
-    if region_name == '':
+    if region_name == "":
         region_name = None
     return AWSClient(service_name, region_name, account_id, **kwargs)
