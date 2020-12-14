@@ -34,13 +34,13 @@ def json_encoder(obj):
     else:
         return obj
 
+
 from functools import lru_cache
 
 
 class AWSClient(object):
 
     boto3_retry_config = {"max_attempts": 20, "mode": "adaptive"}
-
 
     def __init__(self, service_name, region_name, account_id, **kwargs):
         _config = get_config()
@@ -55,10 +55,16 @@ class AWSClient(object):
             if self.aws_creds:
                 # no aws_creds, need profile to get creds from ~/.aws/credentials or iam metadata role instance
                 self._profile = _config["accounts"][account_id].get("profile")
-        self.placebo = kwargs.get("placebo")
-        self.placebo_dir = kwargs.get("placebo_dir")
-        self.placebo_mode = kwargs.get("placebo_mode", "record")
-        self._client = self._create_client()
+
+        self._client = self._create_client(
+            placebo=kwargs.get("placebo"),
+            placebo_dir=kwargs.get("placebo_dir"),
+            placebo_mode=kwargs.get("placebo_mode", "record"),
+        )
+        kwargs.pop('placebo', None)
+        kwargs.pop('placebo_dir', None)
+        kwargs.pop('placebo_mode', None)
+
 
     @property
     def service_name(self):
@@ -76,23 +82,26 @@ class AWSClient(object):
     def profile(self):
         return self._profile
 
-    def _create_client(self):
+    def _create_client(self, placebo=None, placebo_dir=None, placebo_mode=None):
+        # Initialize Session
         if self.aws_creds:
             session = boto3.Session(**self.aws_creds)
         elif self.profile:
             session = boto3.Session(profile_name=self.profile)
         else:
             session = boto3.Session()
-        if self.placebo and self.placebo_dir:
-            pill = self.placebo.attach(session, data_path=self.placebo_dir)
-            if self.placebo_mode == "record":
+        # Placebo Condiguration
+        if placebo and placebo_dir:
+            pill = placebo.attach(session, data_path=placebo_dir)
+            if placebo_mode == "record":
                 pill.record()
-            elif self.placebo_mode == "playback":
+            elif placebo_mode == "playback":
                 pill.playback()
+        # create boto3 client
         return session.client(
             self.service_name,
             region_name=self.region_name if self.region_name else None,
-            config = Config(retries=self.boto3_retry_config)
+            config=Config(retries=self.boto3_retry_config),
         )
 
     def call(self, op_name, query=None, **kwargs):
