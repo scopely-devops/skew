@@ -61,10 +61,9 @@ class AWSClient(object):
             placebo_dir=kwargs.get("placebo_dir"),
             placebo_mode=kwargs.get("placebo_mode", "record"),
         )
-        kwargs.pop('placebo', None)
-        kwargs.pop('placebo_dir', None)
-        kwargs.pop('placebo_mode', None)
-
+        kwargs.pop("placebo", None)
+        kwargs.pop("placebo_dir", None)
+        kwargs.pop("placebo_mode", None)
 
     @property
     def service_name(self):
@@ -162,6 +161,6 @@ class AWSClient(object):
 
 
 def get_awsclient(service_name, region_name, account_id, **kwargs):
-    if region_name == "":
-        region_name = None
-    return AWSClient(service_name, region_name, account_id, **kwargs)
+    return AWSClient(
+        service_name, None if region_name == "" else region_name, account_id, **kwargs
+    )
