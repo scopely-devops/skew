@@ -36,7 +36,7 @@ class Stack(AWSResource):
 
     @property
     def arn(self):
-        return self.data.get("Arn")
+        return self._data.get("Arn")
 
     @classmethod
     def set_tags(cls, arn, region, account, tags, resource_id=None, **kwargs):

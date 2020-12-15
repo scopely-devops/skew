@@ -43,7 +43,7 @@ class Certificate(AWSResource):
 
     @property
     def arn(self):
-        return self.data["CertificateArn"]
+        return self._data["CertificateArn"]
 
     def __init__(self, client, data, query=None):
         super(Certificate, self).__init__(client, data, query)

@@ -48,22 +48,23 @@ class LogGroup(AWSResource):
         service = "logs"
         type = "log-group"
         enum_spec = ("describe_log_groups", "logGroups[]", None)
-        attr_spec = [
-            ("describe_log_streams", "logGroupName", "logStreams", "logStreams"),
-            (
+        attr_spec = {
+            "logStreams": ("describe_log_streams", "logStreams", "logGroupName", "id"),
+            "metricFilters": (
                 "describe_metric_filters",
+                "metricFilters",
                 "logGroupName",
-                "metricFilters",
-                "metricFilters",
+                "id",
             ),
-            (
+            "queries": ("describe_queries", "queries", "logGroupName", "id"),
+            "subscription": (
                 "describe_subscription_filters",
+                "subscriptionFilters",
                 "logGroupName",
-                "subscriptionFilters",
-                "subscriptionFilters",
+                "id",
             ),
-            ("describe_queries", "logGroupName", "queries", "queries"),
-        ]
+        }
+
         detail_spec = None
         id = "logGroupName"
         tags_spec = ("list_tags_log_group", "tags", "logGroupName", "id")
@@ -75,25 +76,45 @@ class LogGroup(AWSResource):
 
     def __init__(self, client, data, query=None):
         super(LogGroup, self).__init__(client, data, query)
-        self._data = data
         self._keys = []
         self._id = data["logGroupName"]
-        self._attr_spec_loaded = False
 
-    def _load_extra_attribute(self):
-        # add addition attribute data
-        for attr in self.Meta.attr_spec:
-            LOG.debug(attr)
-            detail_op, param_name, detail_path, detail_key = attr
-            params = {param_name: self._id}
-            data = self._client.call(detail_op, **params)
-            if not (detail_path is None):
-                data = jmespath.search(detail_path, data)
-            if "ResponseMetadata" in data:
-                del data["ResponseMetadata"]
-            self._data[detail_key] = data
-            LOG.debug(data)
-        self._attr_spec_loaded = True
+    @property
+    def log_streams(self):
+        if "logStreams" not in self._data:
+            self._data["logStreams"] = self._remove_response_metadata(
+                self._feed_from_spec(attr_spec=self.Meta.attr_spec["logStreams"])
+            )
+        return self._data["logStreams"]
+
+    @property
+    def metric_filters(self):
+        if "metricFilters" not in self._data:
+            self._data["metricFilters"] = self._remove_response_metadata(
+                self._feed_from_spec(attr_spec=self.Meta.attr_spec["metricFilters"])
+            )
+        return self._data["metricFilters"]
+
+    @property
+    def queries(self):
+        if "queries" not in self._data:
+            self._data["queries"] = self._remove_response_metadata(
+                self._feed_from_spec(attr_spec=self.Meta.attr_spec["queries"])
+            )
+        return self._data["queries"]
+
+    @property
+    def subscriptions(self):
+        if "subscriptionFilters" not in self._data:
+            self._data["subscriptionFilters"] = self._remove_response_metadata(
+                self._feed_from_spec(attr_spec=self.Meta.attr_spec["subscription"])
+            )
+        return self._data["subscriptionFilters"]
+
+    def _remove_response_metadata(self, data):
+        if "ResponseMetadata" in data:
+            del data["ResponseMetadata"]
+        return data
 
     @property
     def logGroupName(self):
@@ -108,9 +129,3 @@ class LogGroup(AWSResource):
             self.resourcetype,
             self.id,
         )
-
-    @property
-    def data(self):
-        if not self._attr_spec_loaded:
-            self._load_extra_attribute()
-        return super(LogGroup, self).data

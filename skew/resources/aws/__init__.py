@@ -83,6 +83,8 @@ class AWSResource(Resource):
       given type.  But you can also tell it to filter the results by
       passing in a list of id's.  This parameter tells it the name of the
       parameter to use to specify this list of id's.
+
+
     """
 
     class Meta(object):
@@ -101,16 +103,25 @@ class AWSResource(Resource):
     def __init__(self, client, data, query=None):
         super(AWSResource, self).__init__(client=client, data=data)
         self._query = query
-        self.filtered_data = self._query.search(self.data) if self._query else None
+        self.filtered_data = self._query.search(self._data) if self._query else None
         self._cloudwatch = None
         if hasattr(self.Meta, "dimension") and self.Meta.dimension:
             self._cloudwatch = skew.awsclient.get_awsclient(
                 "cloudwatch", self._client.region_name, self._client.account_id
             )
         self._tags = None
+        self._extra_attribute_loaded = False
 
     def __repr__(self):
         return self.arn
+
+    @property
+    def data(self):
+        if not self._extra_attribute_loaded:
+            if hasattr(self, "_load_extra_attribute"):
+                self._load_extra_attribute()
+            self._extra_attribute_loaded = True
+        return super(AWSResource, self).data
 
     @property
     def arn(self):
@@ -268,6 +279,14 @@ class AWSResource(Resource):
             return MetricData(jmespath.search("Datapoints", data), period)
         else:
             raise ValueError("Metric (%s) not available" % metric_name)
+
+    def _feed_from_spec(self, attr_spec):
+        """Utilty to call boto3 on demand."""
+        method, path, param_name, param_value = attr_spec[:4]
+        kwargs = {param_name: getattr(self, param_value)}
+        if path:
+            kwargs["query"] = path
+        return self._client.call(method, **kwargs)
 
 
 ArnComponents = namedtuple(

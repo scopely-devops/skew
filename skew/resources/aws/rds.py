@@ -39,7 +39,7 @@ class DBInstance(AWSResource):
             self._client.account_id, self.resourcetype, self.id)
 
     def sleek(self):
-        self.data['LatestRestorableTime'] = ''
+        self._data['LatestRestorableTime'] = ''
 
 
 class DBSecurityGroup(AWSResource):

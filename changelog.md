@@ -29,7 +29,8 @@
 - Fix resource enumeration when no resource type is define
 - Rewrote filtering resource and add a warning if filter operation is missing when needed
 - Change enumerate to avoir loading all resources loaded in memory
-- Add lazy loading of full data
+- Add lazy loading of full data with method _load_extra_attribute on Resource
+- add lazy load per item on Log group for log_streams, metric_filters, queries
 
 ## 0.19.0
 

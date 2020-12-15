@@ -32,4 +32,4 @@ class Queue(AWSResource):
     def __init__(self, client, data, query=None):
         super(Queue, self).__init__(client, data, query)
         self._data = {self.Meta.id: data, "QueueName": data.split("/")[-1]}
-        self._id = self.data["QueueName"]
+        self._id = self._data["QueueName"]

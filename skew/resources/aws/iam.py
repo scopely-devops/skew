@@ -82,7 +82,7 @@ class User(IAMResource):
         # add details
         if self.Meta.detail_spec is not None:
             detail_op, param_name, detail_path = self.Meta.detail_spec
-            params = {param_name: self.data[param_name]}
+            params = {param_name: self._data[param_name]}
             data = client.call(detail_op, **params)
             self._data = jmespath.search(detail_path, data)
 
@@ -92,27 +92,27 @@ class User(IAMResource):
                 LOG.debug(attr)
                 LOG.debug(data)
                 detail_op, param_name, detail_path, detail_key = attr
-                params = {param_name: self.data[param_name]}
+                params = {param_name: self._data[param_name]}
                 tmp_data = self._client.call(detail_op, **params)
                 if not (detail_path is None):
                     tmp_data = jmespath.search(detail_path, tmp_data)
                 if 'ResponseMetadata' in tmp_data:
                     del tmp_data['ResponseMetadata']
-                self.data[detail_key] = tmp_data
+                self._data[detail_key] = tmp_data
                 LOG.debug(data)
 
             # retrieve all of the inline IAM policies
-            if 'PolicyNames' in self.data and self.data['PolicyNames']:
+            if 'PolicyNames' in self._data and self._data['PolicyNames']:
                 tmp_dict = {}
-                for policy_name in self.data['PolicyNames']:
+                for policy_name in self._data['PolicyNames']:
                     params = {
-                        'UserName': self.data['UserName'],
+                        'UserName': self._data['UserName'],
                         'PolicyName': policy_name
                     }
                     tmp_data = self._client.call('get_user_policy', **params)
                     tmp_data = jmespath.search('PolicyDocument', tmp_data)
                     tmp_dict[policy_name] = tmp_data
-                self.data['PolicyNames'] = tmp_dict
+                self._data['PolicyNames'] = tmp_dict
 
     @classmethod
     def filter(cls, arn, resource_id, data):

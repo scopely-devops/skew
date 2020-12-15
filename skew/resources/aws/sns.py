@@ -40,7 +40,7 @@ class Topic(AWSResource):
 
     @property
     def arn(self):
-        return self.data.get("TopicArn")
+        return self._data.get("TopicArn")
 
     def __init__(self, client, data, query=None):
         super(Topic, self).__init__(client, data, query)
@@ -72,7 +72,7 @@ class Subscription(AWSResource):
 
     @property
     def arn(self):
-        return self.data.get("SubscriptionArn")
+        return self._data.get("SubscriptionArn")
 
     @classmethod
     def enumerate(cls, arn, region, account, resource_id=None, **kwargs):

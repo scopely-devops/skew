@@ -53,7 +53,7 @@ class Filesystem(AWSResource):
         self._name = self.tags.get("Name", self.data["FileSystemId"])
 
     def sleek(self):
-        self.data["SizeInBytes"] = 0
+        self._data["SizeInBytes"] = 0
 
     @classmethod
     def set_tags(cls, arn, region, account, tags, resource_id=None, **kwargs):

@@ -58,48 +58,49 @@ class Bucket(AWSResource):
         dimension = None
         tags_spec = ("get_bucket_tagging", "TagSet[]", "Bucket", "id")
 
-        location_spec = ("get_bucket_location", "LocationConstraint", "Bucket", "id")
-        acl_spec = ("get_bucket_acl", "Grants", "Bucket", "id")
-        cors_spec = ("get_bucket_cors", "CORSRules", "Bucket", "id")
-        encryption_spec = (
-            "get_bucket_encryption",
-            "ServerSideEncryptionConfiguration",
-            "Bucket",
-            "id",
-        )
-        lifecycle_spec = (
-            "get_bucket_lifecycle_configuration",
-            "Rules",
-            "Bucket",
-            "id",
-        )
-        logging_spec = ("get_bucket_logging", "LoggingEnabled", "Bucket", "id")
-        policy_spec = ("get_bucket_policy", "Policy", "Bucket", "id")
-        policy_status_spec = (
-            "get_bucket_policy_status",
-            "PolicyStatus",
-            "Bucket",
-            "id",
-        )
-        notification_spec = (
-            "get_bucket_notification_configuration",
-            None,
-            "Bucket",
-            "id",
-        )
-        versioning_spec = (
-            "get_bucket_versioning",
-            None,
-            "Bucket",
-            "id",
-        )
-        website_spec = (
-            "get_bucket_website",
-            None,
-            "Bucket",
-            "id",
-        )
-
+        attr_spec = {
+            "location": ("get_bucket_location", "LocationConstraint", "Bucket", "id"),
+            "acl": ("get_bucket_acl", "Grants", "Bucket", "id"),
+            "cors": ("get_bucket_cors", "CORSRules", "Bucket", "id"),
+            "encryption": (
+                "get_bucket_encryption",
+                "ServerSideEncryptionConfiguration",
+                "Bucket",
+                "id",
+            ),
+            "lifecycle": (
+                "get_bucket_lifecycle_configuration",
+                "Rules",
+                "Bucket",
+                "id",
+            ),
+            "logging": ("get_bucket_logging", "LoggingEnabled", "Bucket", "id"),
+            "policy": ("get_bucket_policy", "Policy", "Bucket", "id"),
+            "policy_status": (
+                "get_bucket_policy_status",
+                "PolicyStatus",
+                "Bucket",
+                "id",
+            ),
+            "notifications": (
+                "get_bucket_notification_configuration",
+                None,
+                "Bucket",
+                "id",
+            ),
+            "versioning": (
+                "get_bucket_versioning",
+                None,
+                "Bucket",
+                "id",
+            ),
+            "website": (
+                "get_bucket_website",
+                None,
+                "Bucket",
+                "id",
+            ),
+        }
 
     @classmethod
     def filter(cls, arn, resource_id, data):
@@ -119,64 +120,89 @@ class Bucket(AWSResource):
     def arn(self):
         return f"arn:aws:s3:::{self.id}"
 
+    def _load_extra_attribute(self):
+        # loaded when self.data is called
+        self.location
+        self.acl
+        self.cors
+        self.encryption
+        self.lifecycle
+        self.logging
+        self.policy
+        self.policy_status
+
     @property
     def location(self):
         if "LocationConstraint" not in self._data:
-            self.data["LocationConstraint"] = self._feed(spec=self.Meta.location_spec)
+            self._data["LocationConstraint"] = self._feed_from_spec(
+                attr_spec=self.Meta.attr_spec["location"]
+            )
         return self._data["LocationConstraint"]
 
     @property
     def acl(self):
         if "Acl" not in self._data:
-            self.data["Acl"] = {"Grants": self._feed(spec=self.Meta.acl_spec)}
+            self._data["Acl"] = {
+                "Grants": self._feed_from_spec(attr_spec=self.Meta.attr_spec["acl"])
+            }
         return self._data["Acl"]
 
     @property
     def cors(self):
         if "CORSRules" not in self._data:
-            self.data["CORSRules"] = self._feed(spec=self.Meta.cors_spec)
+            self._data["CORSRules"] = self._feed_from_spec(
+                attr_spec=self.Meta.attr_spec["cors"]
+            )
         return self._data["CORSRules"]
 
     @property
     def encryption(self):
         if "ServerSideEncryptionConfiguration" not in self._data:
-            self.data["ServerSideEncryptionConfiguration"] = self._feed(
-                spec=self.Meta.encryption_spec
+            self._data["ServerSideEncryptionConfiguration"] = self._feed_from_spec(
+                attr_spec=self.Meta.attr_spec["encryption"]
             )
         return self._data["ServerSideEncryptionConfiguration"]
 
     @property
     def lifecycle(self):
         if "LifecycleConfiguration" not in self._data:
-            self.data["LifecycleConfiguration"] = {
-                "Rules": self._feed(spec=self.Meta.lifecycle_spec)
+            self._data["LifecycleConfiguration"] = {
+                "Rules": self._feed_from_spec(
+                    attr_spec=self.Meta.attr_spec["lifecycle"]
+                )
             }
         return self._data["LifecycleConfiguration"]
 
     @property
     def logging(self):
         if "Logging" not in self._data:
-            self.data["Logging"] = {
-                "LoggingEnabled": self._feed(spec=self.Meta.logging_spec)
+            self._data["Logging"] = {
+                "LoggingEnabled": self._feed_from_spec(
+                    attr_spec=self.Meta.attr_spec["logging"]
+                )
             }
         return self._data["Logging"]
 
     @property
     def policy(self):
         if "Policy" not in self._data:
-            self.data["Policy"] = self._feed(spec=self.Meta.policy_spec)
+            self._data["Policy"] = self._feed_from_spec(
+                attr_spec=self.Meta.attr_spec["policy"]
+            )
         return self._data["Policy"]
 
     @property
     def policy_status(self):
         if "PolicyStatus" not in self._data:
-            self.data["PolicyStatus"] = self._feed(spec=self.Meta.policy_status_spec)
+            self._data["PolicyStatus"] = self._feed_from_spec(
+                attr_spec=self.Meta.attr_spec["policy_status"]
+            )
         return self._data["PolicyStatus"]
 
     @property
     def notifications(self):
         if "NotificationConfiguration" not in self._data:
-            _rep = self._feed(spec=self.Meta.notification_spec)
+            _rep = self._feed_from_spec(attr_spec=self.Meta.attr_spec["notifications"])
             self._data["NotificationConfiguration"] = {}
             if "TopicConfigurations" in _rep:
                 self._data["NotificationConfiguration"]["TopicConfigurations"] = _rep[
@@ -195,7 +221,7 @@ class Bucket(AWSResource):
     @property
     def versioning(self):
         if "Versioning" not in self._data:
-            _rep = self._feed(spec=self.Meta.versioning_spec)
+            _rep = self._feed_from_spec(attr_spec=self.Meta.attr_spec["versioning"])
             self._data["Versioning"] = {}
             if "Status" in _rep:
                 self._data["Versioning"]["Status"] = _rep["Status"]
@@ -206,15 +232,10 @@ class Bucket(AWSResource):
     @property
     def website(self):
         if "Website" not in self._data:
-            self._data["Website"] = self._feed(spec=self.Meta.website_spec)
+            self._data["Website"] = self._feed_from_spec(
+                attr_spec=self.Meta.attr_spec["website"]
+            )
         return self._data["Website"]
-
-    def _feed(self, spec):
-        method, path, param_name, param_value = spec[:4]
-        kwargs = {param_name: getattr(self, param_value)}
-        if path:
-            kwargs["query"] = path
-        return self._client.call(method, **kwargs)
 
     def __iter__(self):
         detail_op, param_name, detail_path = self.Meta.detail_spec

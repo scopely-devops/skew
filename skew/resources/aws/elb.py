@@ -65,7 +65,7 @@ class LoadBalancer(AWSResource):
                 data = jmespath.search(detail_path, data)
             if "ResponseMetadata" in data:
                 del data["ResponseMetadata"]
-            self.data[detail_key] = data
+            self._data[detail_key] = data
             LOG.debug(data)
 
     @property

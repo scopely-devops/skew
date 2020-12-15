@@ -71,4 +71,4 @@ class TaskDefinition(AWSResource):
 
     @property
     def arn(self):
-        return self.data["taskDefinitionArn"]
+        return self._data["taskDefinitionArn"]

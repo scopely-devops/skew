@@ -34,4 +34,4 @@ class Stream(AWSResource):
     def __init__(self, client, data, query=None):
         super(Stream, self).__init__(client, data, query)
         self._data = {self.Meta.id: data}
-        self._id = self.data[self.Meta.id]
+        self._id = self._data[self.Meta.id]

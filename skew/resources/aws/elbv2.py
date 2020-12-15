@@ -33,15 +33,15 @@ class LoadBalancer(AWSResource):
 
     @property
     def arn(self):
-        return self.data["LoadBalancerArn"]
+        return self._data["LoadBalancerArn"]
 
     def __init__(self, client, data, query=None):
         super(LoadBalancer, self).__init__(client, data, query)
         if data and "LoadBalancerArn" in data:
             detail_op, param_name, detail_path = self.Meta.detail_spec
-            params = {param_name: self.data["LoadBalancerArn"]}
+            params = {param_name: self._data["LoadBalancerArn"]}
             data = client.call(detail_op, **params)
-            self.data["Listeners"] = jmespath.search(detail_path, data)
+            self._data["Listeners"] = jmespath.search(detail_path, data)
 
 
 class TargetGroup(AWSResource):
@@ -65,4 +65,4 @@ class TargetGroup(AWSResource):
 
     @property
     def arn(self):
-        return self.data["TargetGroupArn"]
+        return self._data["TargetGroupArn"]
