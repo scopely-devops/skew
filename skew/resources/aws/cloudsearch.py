@@ -37,4 +37,4 @@ class Domain(AWSResource):
 
     @property
     def arn(self):
-        return self.data["ARN"]
+        return self._data["ARN"]

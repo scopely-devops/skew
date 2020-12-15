@@ -6,6 +6,11 @@
   - State machine
   - KMS
   - Account
+  - Cloud Watch Event/Rule
+- FIX:
+  - aws.cloudsearch.Domain
+  - aws.cloudtrail.CloudTrail
+  - aws.opsworks.Stack
 
 ## (current)
 
@@ -29,8 +34,10 @@
 - Rewrote filtering resource and add a warning if filter operation is missing when needed
 - Change enumerate to avoir loading all resources loaded in memory
 - Add lazy loading of full data with method _load_extra_attribute on Resource
-- add lazy load per item on Log group for log_streams, metric_filters, queries
-
+- Add lazy load per item on Log group for log_streams, metric_filters, queries, subscriptions
+- Add Group users, policy inline and attached
+- Add kinesis description
+  
 ## 0.19.0
 
 - no change log

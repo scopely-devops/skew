@@ -4,6 +4,15 @@ import boto3
 from functools import lru_cache
 from botocore.config import Config
 
+__all__ = [
+    "get_default_region",
+    "get_all_regions",
+    "get_caller_identity_account_id",
+    "get_default_session",
+    "get_client",
+]
+
+
 @lru_cache(maxsize=10)
 def get_default_region() -> str:
     default_region = os.environ.get("DEFAULT_AWS_REGION", "us-east-1")

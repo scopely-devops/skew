@@ -16,22 +16,22 @@ from skew.resources.aws import AWSResource
 
 
 class Stream(AWSResource):
-
     class Meta(object):
-        service = 'kinesis'
-        type = 'stream'
-        enum_spec = ('list_streams', 'StreamNames', None)
-        detail_spec = None
-        id = 'StreamName'
+        service = "kinesis"
+        type = "stream"
+        enum_spec = ("list_streams", "StreamNames", None)
+        detail_spec = ("describe_stream", "StreamDescription", "StreamName", "name")
+
+        id = "StreamName"
         filter_name = None
         filter_type = None
-        name = 'StreamName'
+        name = "StreamName"
         date = None
-        dimension = 'StreamName'
-        tags_spec = ('list_tags_for_stream', 'Tags[]',
-                     'StreamName', 'id')
+        dimension = "StreamName"
+        tags_spec = ("list_tags_for_stream", "Tags[]", "StreamName", "id")
 
     def __init__(self, client, data, query=None):
         super(Stream, self).__init__(client, data, query)
         self._data = {self.Meta.id: data}
         self._id = self._data[self.Meta.id]
+        self._data = self._feed_from_spec(attr_spec=self.Meta.detail_spec)

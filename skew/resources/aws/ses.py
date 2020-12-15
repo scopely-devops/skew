@@ -23,22 +23,29 @@ LOG = logging.getLogger(__name__)
 
 
 class Identity(AWSResource):
-
     class Meta(object):
-        service = 'ses'
-        type = 'identity'
-        enum_spec = ('list_identities', 'Identities', None)
-        detail_spec = ('describe_table', 'TableName', 'Table')
-        id = 'Identity'
+        service = "ses"
+        type = "identity"
+        enum_spec = ("list_identities", "Identities", None)
+        detail_spec = ("describe_table", "TableName", "Table")
+        id = "Identity"
         tags_spec = None
         filter_name = None
-        name = 'IdentityName'
+        name = "IdentityName"
         date = None
-        dimension = 'IdentityName'
+        dimension = "IdentityName"
+
+    def __init__(self, client, data, query=None):
+        super(Identity, self).__init__(client, data, query)
+        arn = self._data
+        self._data = {"IdentityName": arn}
 
     @property
     def arn(self):
-        return 'arn:aws:%s:%s:%s:%s/%s' % (
+        return "arn:aws:%s:%s:%s:%s/%s" % (
             self._client.service_name,
             self._client.region_name,
-            self._client.account_id, self.resourcetype, self._data)
+            self._client.account_id,
+            self.resourcetype,
+            self._data["IdentityName"],
+        )

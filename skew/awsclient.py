@@ -35,9 +35,6 @@ def json_encoder(obj):
         return obj
 
 
-from functools import lru_cache
-
-
 class AWSClient(object):
 
     boto3_retry_config = {"max_attempts": 20, "mode": "adaptive"}
@@ -140,7 +137,7 @@ class AWSClient(object):
             data = results.build_full_result()
         else:
             op = getattr(self._client, op_name)
-            done = False    
+            done = False
             while not done:
                 try:
                     data = op(**kwargs)

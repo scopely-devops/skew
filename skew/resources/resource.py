@@ -111,7 +111,7 @@ class Resource(object):
     @property
     def name(self):
         if not self._name:
-            self._name = jmespath.search(self.Meta.name, self.data)
+            self._name = jmespath.search(self.Meta.name, self._data)
         return self._name
 
     @property
@@ -121,7 +121,7 @@ class Resource(object):
     @property
     def date(self):
         if not self._date:
-            self._date = jmespath.search(self.Meta.date, self.data)
+            self._date = jmespath.search(self.Meta.date, self._data)
         return self._date
 
     @property
