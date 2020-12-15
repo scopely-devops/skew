@@ -17,21 +17,28 @@ LOG = logging.getLogger(__name__)
 
 
 class RestAPI(AWSResource):
-
     class Meta(object):
-        service = 'apigateway'
-        type = 'restapis'
-        enum_spec = ('get_rest_apis', 'items', None)
-        id = 'id'
+        service = "apigateway"
+        type = "restapis"
+        enum_spec = ("get_rest_apis", "items", None)
+        id = "id"
         filter_name = None
         filter_type = None
         detail_spec = None
-        name = 'name'
-        date = 'createdDate'
-        dimension = 'GatewayName'
+        name = "name"
+        date = "createdDate"
+        dimension = "GatewayName"
 
     @classmethod
     def filter(cls, arn, resource_id, data):
         api_id = data.get(cls.Meta.id)
-        LOG.debug('%s == %s', resource_id, api_id)
+        LOG.debug("%s == %s", resource_id, api_id)
         return resource_id == api_id
+
+    @property
+    def arn(self):
+        # arn:aws:apigateway:us-east-1::/restapis/vwxyz12345
+        return "arn:aws:apigateway:%s::restapis/%s" % (
+            self._client.region_name,
+            self.id,
+        )

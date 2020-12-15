@@ -39,6 +39,7 @@ class Function(AWSResource):
         type = 'function'
         enum_spec = ('list_functions', 'Functions', None)
         detail_spec = None
+
         id = 'FunctionName'
         filter_name = None
         name = 'FunctionName'

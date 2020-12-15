@@ -34,4 +34,4 @@ class DeliveryStream(AWSResource):
         detail_op, param_name, detail_path = self.Meta.detail_spec
         params = {param_name: self.id}
         data = client.call(detail_op, **params)
-        self.data = jmespath.search(detail_path, data)
+        self._data = jmespath.search(detail_path, data)

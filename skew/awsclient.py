@@ -61,6 +61,7 @@ class AWSClient(object):
             placebo_dir=kwargs.get("placebo_dir"),
             placebo_mode=kwargs.get("placebo_mode", "record"),
         )
+        # remove test key from client call
         kwargs.pop("placebo", None)
         kwargs.pop("placebo_dir", None)
         kwargs.pop("placebo_mode", None)
@@ -131,16 +132,15 @@ class AWSClient(object):
             to the method when making the request.
         """
         LOG.debug(kwargs)
-        if query:
-            query = jmespath.compile(query)
+
+        data = {}
         if self._client.can_paginate(op_name):
             paginator = self._client.get_paginator(op_name)
             results = paginator.paginate(**kwargs)
             data = results.build_full_result()
         else:
             op = getattr(self._client, op_name)
-            done = False
-            data = {}
+            done = False    
             while not done:
                 try:
                     data = op(**kwargs)
@@ -151,16 +151,25 @@ class AWSClient(object):
                         time.sleep(1)
                     elif "AccessDenied" in str(e):
                         done = True
+                    elif "UnrecognizedClientException" in str(e):
+                        LOG.error(e)
+                        self._client = self._create_client()
                     elif "NoSuchTagSet" in str(e):
+                        done = True
+                    else:
+                        # Avoid infinite loop
                         done = True
                 except Exception:
                     done = True
         if query:
-            data = query.search(data)
+            return jmespath.compile(query).search(data)
         return data
 
 
 def get_awsclient(service_name, region_name, account_id, **kwargs):
     return AWSClient(
-        service_name, None if region_name == "" else region_name, account_id, **kwargs
+        service_name=service_name,
+        region_name=None if region_name == "" else region_name,
+        account_id=account_id,
+        **kwargs
     )

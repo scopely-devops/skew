@@ -19,18 +19,21 @@ LOG = logging.getLogger(__name__)
 
 
 class CloudTrail(AWSResource):
-
     class Meta(object):
-        service = 'cloudtrail'
-        type = 'trail'
-        enum_spec = ('describe_trails', 'trailList[]', None)
+        service = "cloudtrail"
+        type = "trail"
+        enum_spec = ("describe_trails", "trailList[]", None)
         attr_spec = None
         detail_spec = None
-        id = 'Name'
-        tags_spec = ('list_tags', 'ResourceTagList[].TagsList[]',
-                     'ResourceIdList', 'name')
-        filter_name = 'trailNameList'
-        filter_type = 'arn'
-        name = 'TrailARN'
+        id = "Name"
+        tags_spec = (
+            "list_tags",
+            "ResourceTagList[].TagsList[]",
+            "ResourceIdList",
+            "name",
+        )
+        filter_name = "trailNameList"
+        filter_type = "arn"
+        name = "TrailARN"
         date = None
         dimension = None

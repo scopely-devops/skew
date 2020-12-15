@@ -12,26 +12,25 @@
 # ANY KIND, either express or implied. See the License for the specific
 # language governing permissions and limitations under the License.
 
+import logging
+
+import jmespath
+
 from skew.resources.aws import AWSResource
 
 
-class Stream(AWSResource):
+LOG = logging.getLogger(__name__)
 
+
+class Check(AWSResource):
     class Meta(object):
-        service = 'kinesis'
-        type = 'stream'
-        enum_spec = ('list_streams', 'StreamNames', None)
+        service = "support"
+        type = "check"
+        enum_spec = ("describe_trusted_advisor_checks", "checks", None)
         detail_spec = None
-        id = 'StreamName'
+        id = "id"
+        tags_spec = None
         filter_name = None
-        filter_type = None
-        name = 'StreamName'
+        name = "name"
         date = None
-        dimension = 'StreamName'
-        tags_spec = ('list_tags_for_stream', 'Tags[]',
-                     'StreamName', 'id')
-
-    def __init__(self, client, data, query=None):
-        super(Stream, self).__init__(client, data, query)
-        self._data = {self.Meta.id: data}
-        self._id = self.data[self.Meta.id]
+        dimension = "IdentityName"

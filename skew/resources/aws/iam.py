@@ -84,7 +84,7 @@ class User(IAMResource):
             detail_op, param_name, detail_path = self.Meta.detail_spec
             params = {param_name: self.data[param_name]}
             data = client.call(detail_op, **params)
-            self.data = jmespath.search(detail_path, data)
+            self._data = jmespath.search(detail_path, data)
 
         # add attribute data
         if self.Meta.attr_spec is not None:
@@ -102,8 +102,7 @@ class User(IAMResource):
                 LOG.debug(data)
 
             # retrieve all of the inline IAM policies
-            if 'PolicyNames' in self.data \
-                and self.data['PolicyNames']:
+            if 'PolicyNames' in self.data and self.data['PolicyNames']:
                 tmp_dict = {}
                 for policy_name in self.data['PolicyNames']:
                     params = {

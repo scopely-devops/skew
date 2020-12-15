@@ -16,35 +16,34 @@ from skew.resources.aws import AWSResource
 
 
 class Stack(AWSResource):
-
     @classmethod
     def enumerate(cls, arn, region, account, resource_id=None, **kwargs):
-        resources = super(Stack, cls).enumerate(arn, region, account,
-                                                resource_id, **kwargs)
+        resources = list(
+            super(Stack, cls).enumerate(arn, region, account, resource_id, **kwargs)
+        )
+        """
+        DEAD CODE
         for stack in resources:
-            stack.data['Resources'] = []
+            stack.data["Resources"] = []
             for stack_resource in stack:
-                resource_id = stack_resource.get('PhysicalResourceId')
+                resource_id = stack_resource.get("PhysicalResourceId")
                 if not resource_id:
-                    resource_id = stack_resource.get('LogicalResourceId')
-                stack.data['Resources'].append(
-                    {
-                        'id': resource_id,
-                        'type': stack_resource['ResourceType']
-                    }
+                    resource_id = stack_resource.get("LogicalResourceId")
+                stack.data["Resources"].append(
+                    {"id": resource_id, "type": stack_resource["ResourceType"]}
                 )
+        """
         return resources
 
     class Meta(object):
-        service = 'cloudformation'
-        type = 'stack'
-        enum_spec = ('describe_stacks', 'Stacks[]', None)
-        detail_spec = ('describe_stack_resources', 'StackName',
-                       'StackResources[]')
-        id = 'StackName'
-        filter_name = 'StackName'
-        name = 'StackName'
-        date = 'CreationTime'
+        service = "cloudformation"
+        type = "stack"
+        enum_spec = ("describe_stacks", "Stacks[]", None)
+        detail_spec = ("describe_stack_resources", "StackName", "StackResources[]")
+        id = "StackName"
+        filter_name = "StackName"
+        name = "StackName"
+        date = "CreationTime"
         dimension = None
 
     def __init__(self, client, data, query=None):
@@ -63,4 +62,4 @@ class Stack(AWSResource):
 
     @property
     def arn(self):
-        return self._data['StackId']
+        return self._data["StackId"]

@@ -19,31 +19,41 @@ LOG = logging.getLogger(__name__)
 
 
 class LoadBalancer(AWSResource):
-
     class Meta(object):
-        service = 'elb'
-        type = 'loadbalancer'
-        enum_spec = ('describe_load_balancers',
-                     'LoadBalancerDescriptions', None)
+        service = "elb"
+        type = "loadbalancer"
+        enum_spec = ("describe_load_balancers", "LoadBalancerDescriptions", None)
         detail_spec = None
         attr_spec = [
-            ('describe_load_balancer_attributes', 'LoadBalancerName',
-                'LoadBalancerAttributes', 'LoadBalancerAttributes'),
-            ('describe_load_balancer_policies', 'LoadBalancerName',
-                'PolicyDescriptions', 'PolicyDescriptions'),
+            (
+                "describe_load_balancer_attributes",
+                "LoadBalancerName",
+                "LoadBalancerAttributes",
+                "LoadBalancerAttributes",
+            ),
+            (
+                "describe_load_balancer_policies",
+                "LoadBalancerName",
+                "PolicyDescriptions",
+                "PolicyDescriptions",
+            ),
         ]
-        id = 'LoadBalancerName'
-        filter_name = 'LoadBalancerNames'
-        filter_type = 'list'
-        name = 'DNSName'
-        date = 'CreatedTime'
-        dimension = 'LoadBalancerName'
-        tags_spec = ('describe_tags', 'TagDescriptions[].Tags[]',
-                     'LoadBalancerNames', 'id')
+        id = "LoadBalancerName"
+        filter_name = "LoadBalancerNames"
+        filter_type = "list"
+        name = "DNSName"
+        date = "CreatedTime"
+        dimension = "LoadBalancerName"
+        tags_spec = (
+            "describe_tags",
+            "TagDescriptions[].Tags[]",
+            "LoadBalancerNames",
+            "id",
+        )
 
     def __init__(self, client, data, query=None):
         super(LoadBalancer, self).__init__(client, data, query)
-        self._id = data['LoadBalancerName']
+        self._id = data["LoadBalancerName"]
 
         # add addition attribute data
         for attr in self.Meta.attr_spec:
@@ -53,7 +63,16 @@ class LoadBalancer(AWSResource):
             data = self._client.call(detail_op, **params)
             if not (detail_path is None):
                 data = jmespath.search(detail_path, data)
-            if 'ResponseMetadata' in data:
-                del data['ResponseMetadata']
+            if "ResponseMetadata" in data:
+                del data["ResponseMetadata"]
             self.data[detail_key] = data
             LOG.debug(data)
+
+    @property
+    def arn(self):
+        return "arn:aws:elb:%s:%s:%s/%s" % (
+            self._client.region_name,
+            self._client.account_id,
+            self.resourcetype,
+            self.id,
+        )

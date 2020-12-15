@@ -19,61 +19,68 @@ LOG = logging.getLogger(__name__)
 
 
 class Alarm(AWSResource):
-
     class Meta(object):
-        service = 'cloudwatch'
-        type = 'alarm'
-        enum_spec = ('describe_alarms', 'MetricAlarms', None)
-        id = 'AlarmName'
-        filter_name = 'AlarmNames'
+        service = "cloudwatch"
+        type = "alarm"
+        enum_spec = ("describe_alarms", "MetricAlarms", None)
+        id = "AlarmName"
+        filter_name = "AlarmNames"
         filter_type = None
         detail_spec = None
-        name = 'AlarmName'
-        date = 'AlarmConfigurationUpdatedTimestamp'
+        name = "AlarmName"
+        date = "AlarmConfigurationUpdatedTimestamp"
         dimension = None
-        tags_spec = ('list_tags_for_resource', 'Tags[]', 'ResourceARN', 'arn')
+        tags_spec = ("list_tags_for_resource", "Tags[]", "ResourceARN", "arn")
 
     @property
     def arn(self):
-        return 'arn:aws:%s:%s:%s:%s:%s' % (
+        return "arn:aws:%s:%s:%s:%s:%s" % (
             self._client.service_name,
             self._client.region_name,
             self._client.account_id,
-            self.resourcetype, self.id)
+            self.resourcetype,
+            self.id,
+        )
 
 
 class LogGroup(AWSResource):
-
     class Meta(object):
-        service = 'logs'
-        type = 'log-group'
-        enum_spec = ('describe_log_groups', 'logGroups[]', None)
+        service = "logs"
+        type = "log-group"
+        enum_spec = ("describe_log_groups", "logGroups[]", None)
         attr_spec = [
-            ('describe_log_streams', 'logGroupName',
-             'logStreams', 'logStreams'),
-            ('describe_metric_filters', 'logGroupName',
-             'metricFilters', 'metricFilters'),
-            ('describe_subscription_filters', 'logGroupName',
-             'subscriptionFilters', 'subscriptionFilters'),
-            ('describe_queries', 'logGroupName',
-             'queries', 'queries'),
+            ("describe_log_streams", "logGroupName", "logStreams", "logStreams"),
+            (
+                "describe_metric_filters",
+                "logGroupName",
+                "metricFilters",
+                "metricFilters",
+            ),
+            (
+                "describe_subscription_filters",
+                "logGroupName",
+                "subscriptionFilters",
+                "subscriptionFilters",
+            ),
+            ("describe_queries", "logGroupName", "queries", "queries"),
         ]
         detail_spec = None
-        id = 'logGroupName'
-        tags_spec = ('list_tags_log_group', 'tags',
-                     'logGroupName', 'id')
-        filter_name = 'logGroupNamePrefix'
-        filter_type = 'dict'
-        name = 'logGroupName'
-        date = 'creationTime'
-        dimension = 'logGroupName'
+        id = "logGroupName"
+        tags_spec = ("list_tags_log_group", "tags", "logGroupName", "id")
+        filter_name = "logGroupNamePrefix"
+        filter_type = "dict"
+        name = "logGroupName"
+        date = "creationTime"
+        dimension = "logGroupName"
 
     def __init__(self, client, data, query=None):
         super(LogGroup, self).__init__(client, data, query)
         self._data = data
         self._keys = []
-        self._id = data['logGroupName']
+        self._id = data["logGroupName"]
+        self._attr_spec_loaded = False
 
+    def _load_extra_attribute(self):
         # add addition attribute data
         for attr in self.Meta.attr_spec:
             LOG.debug(attr)
@@ -82,18 +89,28 @@ class LogGroup(AWSResource):
             data = self._client.call(detail_op, **params)
             if not (detail_path is None):
                 data = jmespath.search(detail_path, data)
-            if 'ResponseMetadata' in data:
-                del data['ResponseMetadata']
-            self.data[detail_key] = data
+            if "ResponseMetadata" in data:
+                del data["ResponseMetadata"]
+            self._data[detail_key] = data
             LOG.debug(data)
+        self._attr_spec_loaded = True
 
     @property
     def logGroupName(self):
-        return self.data.get('logGroupName')
+        return self.data.get("logGroupName")
 
     @property
     def arn(self):
-        return 'arn:aws:%s:%s:%s:%s:%s' % (
+        return "arn:aws:%s:%s:%s:%s:%s" % (
             self._client.service_name,
             self._client.region_name,
-            self._client.account_id, self.resourcetype, self.id)
+            self._client.account_id,
+            self.resourcetype,
+            self.id,
+        )
+
+    @property
+    def data(self):
+        if not self._attr_spec_loaded:
+            self._load_extra_attribute()
+        return super(LogGroup, self).data
