@@ -6,7 +6,6 @@
   - State machine
   - KMS
   - Account
-- test log loading
 
 ## (current)
 
