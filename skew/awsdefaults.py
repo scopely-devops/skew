@@ -25,8 +25,9 @@ def get_default_region() -> str:
     return default_region
 
 
-@lru_cache(maxsize=128)
+@lru_cache(maxsize=10)
 def get_all_regions() -> List[str]:
+    """Return a list of enabled region of caller account."""
     return list(
         map(
             lambda r: r["RegionName"],

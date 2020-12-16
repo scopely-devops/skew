@@ -23,7 +23,7 @@ ResourceTypes = {
     "aws.autoscaling.launchConfigurationName": "aws.autoscaling.LaunchConfiguration",
     "aws.cloudfront.distribution": "aws.cloudfront.Distribution",
     "aws.cloudformation.stack": "aws.cloudformation.Stack",
-    #"aws.cloudsearch.domain": "aws.cloudsearch.Domain",
+    "aws.cloudsearch.domain": "aws.cloudsearch.Domain",
     "aws.cloudwatch.alarm": "aws.cloudwatch.Alarm",
     "aws.logs.log-group": "aws.cloudwatch.LogGroup",
     #"aws.cloudtrail.trail": "aws.cloudtrail.CloudTrail",
