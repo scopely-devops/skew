@@ -1,16 +1,6 @@
 # Change log
 
-## TODO
-
-- Add Resources:
-  - State machine
-  - KMS
-  - Account
-  - Cloud Watch Event/Rule
-- FIX:
-  - aws.cloudtrail.CloudTrail
-
-## (current)
+## 1.0.0 (coming soon)
 
 - Fix yam constructor DeprecationWarning and update PyYaml
 - Remove mandatory needs for skew.yaml (using iam metadata associated and default boto3 credentials initialization)
