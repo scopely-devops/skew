@@ -129,18 +129,28 @@ if __name__ == '__main__':
 
     parser=argparse.ArgumentParser(description='Generates AWS Reserved Instance Reports')
     parser.add_argument("-r","--regions",required=True,nargs='+',help="One or more aws region e.g. us-west-1") # string
-    parser.add_argument("-s","--services",required=True,nargs='+',help="One or more aws services in ec2,rds,elasticache,es,redshift. e.g. ec2 rds") # string
+    parser.add_argument("-s","--services",nargs='+',help="One or more aws services in ec2,rds,elasticache,es,redshift. e.g. ec2 rds") # string
     parser.add_argument("-f","--format", choices=["default","csv"],default="default")
 
     # parse the command line
     args = parser.parse_args()
-    if format == "csv" :
-        print('region,service,running,reserved,status,details')
+    # if format == "csv" :
+    print('region,service,resource,id,product,state')
 
     for aws_region in args.regions:
-        if format != "csv" :
-            print('\n {:^15s}\n {:^15s}'.format(aws_region, '=' * (len(aws_region)+2)))
-        for aws_service in args.services:
-            generateRIReport(aws_service,aws_region,skew_dict[aws_service],args.format)
-    
-   
+        # if format != "csv":
+        #     print('\n {:^15s}\n {:^15s}'.format(aws_region, '=' * (len(aws_region)+2)))
+        # for aws_service in args.services:
+        #     generateRIReport(aws_service,aws_region,skew_dict[aws_service],args.format)
+            # for i in skew.scan('arn:aws:'+aws_service+':'+aws_region+':*:*/*'):
+            for i in skew.scan('arn:aws:*:'+aws_region+':*:*/*'):
+                aws_service = i.arn.split(':')[2]
+                if "product" in i.tags:
+                    tag_product = i.tags["product"]
+                else:
+                    tag_product = "NO-PRODUCT-TAG"
+                if "State" in i.data:
+                    state = i.data['State']
+                else:
+                    state = ""
+                print("{},{},{},{},{},{}".format(aws_region,aws_service,i.resourcetype,i.id,tag_product,state))
