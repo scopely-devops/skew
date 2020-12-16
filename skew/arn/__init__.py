@@ -181,7 +181,6 @@ class Region(ARNComponent):
     _no_region_required = [""]
 
     _service_region_map = {
-        "redshift": _all_region_names,
         "glacier": [
             "ap-northeast-1",
             "ap-northeast-2",
@@ -208,10 +207,21 @@ class Region(ARNComponent):
             "sa-east-1",
             "ap-southeast-1",
             "ap-northeast-1",
-            "ap-southeast-2"
-        ]
+            "ap-southeast-2",
+        ],
+        "opsworks": [
+            "us-east-2",
+            "us-west-1",
+            "us-east-1",
+            "us-west-2",
+            "eu-central-1",
+            "eu-west-1",
+            "ap-southeast-1",
+            "ap-northeast-1",
+            "ap-southeast-2",
+        ],
     }
-  
+
     def choices(self, context=None):
         if context:
             service = context[2]

@@ -66,7 +66,7 @@ ResourceTypes = {
     "aws.iam.server-certificate": "aws.iam.ServerCertificate",
     "aws.kinesis.stream": "aws.kinesis.Stream",
     "aws.lambda.function": "aws.lambda.Function",
-    #"aws.opsworks.stack": "aws.opsworks.Stack",
+    "aws.opsworks.stack": "aws.opsworks.Stack",
     "aws.rds.db": "aws.rds.DBInstance",
     "aws.rds.secgrp": "aws.rds.DBSecurityGroup",
     "aws.redshift.cluster": "aws.redshift.Cluster",
