@@ -32,6 +32,9 @@
   - api gateway
   - Name EC2 with Instane Id or Tag Name value if exists
   - Cloudtrail: fix enumeration and tags, add trail detail and trail status
+- Github:
+  - set master branch as base branch
+  - update workflow
   
 ## 0.19.0
 
