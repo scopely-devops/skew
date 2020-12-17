@@ -63,7 +63,8 @@ from skew import scan
 
 arn = scan('arn:aws:ec2:us-west-2:123456789012:instance/i-12345678')
 for resource in arn:
-    print(resource.data)
+    print(resource.data) # return a dict
+    print(resource.json_dump()) # dump resource in json
 ```
 
 The call to `scan` returns an ARN object which implements the

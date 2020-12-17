@@ -17,6 +17,7 @@ import logging
 import jmespath
 
 from skew.awsclient import get_awsclient
+from skew.resources.json_dump import json_dump
 
 from botocore.exceptions import ClientError
 
@@ -135,3 +136,6 @@ class Resource(object):
             if m["MetricName"] == metric_name:
                 return m
         return None
+
+    def json_dump(self, normalize=True):
+        return json_dump(self.data, normalize=normalize)
