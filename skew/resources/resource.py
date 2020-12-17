@@ -50,7 +50,6 @@ class Resource(object):
         if extra_args:
             kwargs.update(extra_args)
         LOG.debug("enum_spec=%s" % str(cls.Meta.enum_spec))
-
         try:
             data = client.call(enum_op, query=path, **kwargs)
             if data:

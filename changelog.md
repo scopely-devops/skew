@@ -31,6 +31,7 @@
   - opsworks availaible on 9 regions
   - api gateway
   - Name EC2 with Instane Id or Tag Name value if exists
+  - Cloudtrail: fix enumeration and tags, add trail detail and trail status
   
 ## 0.19.0
 

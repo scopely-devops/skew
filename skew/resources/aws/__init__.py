@@ -149,7 +149,7 @@ class AWSResource(Resource):
     @property
     def tags(self):
         """
-        Convert the ugly Tags JSON into a real dictionary and
+        Load and Convert the ugly Tags JSON into a real dictionary and
         memorize the result.
         """
         if self._tags is None:
@@ -170,25 +170,12 @@ class AWSResource(Resource):
                 if len(self.Meta.tags_spec) > 4:
                     kwargs.update(self.Meta.tags_spec[4])
                 LOG.debug("fetching tags")
-                self.data["Tags"] = self._client.call(method, query=path, **kwargs)
-                LOG.debug(self.data["Tags"])
+                self._data["Tags"] = self._client.call(method, query=path, **kwargs)
+                LOG.debug(self._data["Tags"])
 
-            if "Tags" in self.data:
-                _tags = self.data["Tags"]
-                if isinstance(_tags, list):
-                    for kvpair in _tags:
-                        # Compatibility fix for ECS, that use lowercase 'key' and 'value' as dict keys
-                        # https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ecs.html#ECS.Client.list_tags_for_resource
-                        tags_key = kvpair.get("Key", kvpair.get("key"))
-                        tags_value = kvpair.get("Value", kvpair.get("value"))
-                        if tags_key in self._tags:
-                            if not isinstance(self._tags[tags_key], list):
-                                self._tags[tags_key] = [self._tags[tags_key]]
-                            self._tags[tags_key].append(tags_value)
-                        else:
-                            self._tags[tags_key] = tags_value
-                elif isinstance(_tags, dict):
-                    self._tags = _tags
+            if "Tags" in self._data:
+                self._tags = self._normalize_tags(self._data["Tags"])
+
         return self._tags
 
     def find_metric(self, metric_name):
@@ -279,6 +266,25 @@ class AWSResource(Resource):
             return MetricData(jmespath.search("Datapoints", data), period)
         else:
             raise ValueError("Metric (%s) not available" % metric_name)
+
+    def _normalize_tags(self, tags):
+        """Convert the ugly Tags JSON into a real dictionary. """
+        result = {}
+        if isinstance(tags, list):
+            for kvpair in tags:
+                # Compatibility fix for ECS, that use lowercase 'key' and 'value' as dict keys
+                # https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ecs.html#ECS.Client.list_tags_for_resource
+                tags_key = kvpair.get("Key", kvpair.get("key"))
+                tags_value = kvpair.get("Value", kvpair.get("value"))
+                if tags_key in tags:
+                    if not isinstance(tags[tags_key], list):
+                        result[tags_key] = [tags[tags_key]]
+                    result[tags_key].append(tags_value)
+                else:
+                    result[tags_key] = tags_value
+        elif isinstance(tags, dict):
+            result = tags
+        return result
 
     def _feed_from_spec(self, attr_spec):
         """Utilty to call boto3 on demand."""
