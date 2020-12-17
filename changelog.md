@@ -35,6 +35,7 @@
   - Add json_dump with optional normalisation
   - Add ECR Registery
   - Add ECR Repository
+  - Add Kms Key
 - Github:
   - set master branch as base branch
   - update workflow
