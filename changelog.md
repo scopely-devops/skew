@@ -38,7 +38,8 @@
 - Github:
   - set master branch as base branch
   - update workflow
-  
+- Add Command line utility
+
 ## 0.19.0
 
 - no change log
