@@ -48,6 +48,8 @@ ResourceTypes = {
     "aws.ec2.launch-template": "aws.ec2.LaunchTemplate",
     "aws.ecs.cluster": "aws.ecs.Cluster",
     "aws.ecs.task-definition": "aws.ecs.TaskDefinition",
+    "aws.ecr.registery": "aws.ecr.Registery",
+    "aws.ecr.repository": "aws.ecr.Repository",
     "aws.efs.filesystem": "aws.efs.Filesystem",
     "aws.elasticache.cluster": "aws.elasticache.Cluster",
     "aws.elasticache.subnet-group": "aws.elasticache.SubnetGroup",

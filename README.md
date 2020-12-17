@@ -249,6 +249,7 @@ for service in arn.service.choices():
 | elasticbeanstalk |
 | kinesis          |
 | ecs              |
+| ecr              |
 | route53          |
 | dynamodb         |
 | apigateway       |
@@ -296,6 +297,8 @@ for service in arn.service.choices():
 | aws.ec2.launch-template                 |
 | aws.ecs.cluster                         |
 | aws.ecs.task-definition                 |
+| aws.ecr.registery                       |
+| aws.ecr.repository                      |
 | aws.efs.filesystem                      |
 | aws.elasticache.cluster                 |
 | aws.elasticache.subnet-group            |

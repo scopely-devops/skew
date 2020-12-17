@@ -33,6 +33,8 @@
   - Name EC2 with Instane Id or Tag Name value if exists
   - Cloudtrail: fix enumeration and tags, add trail detail and trail status
   - Add json_dump with optional normalisation
+  - Add ECR Registery
+  - Add ECR Repository
 - Github:
   - set master branch as base branch
   - update workflow
