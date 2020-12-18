@@ -36,6 +36,7 @@
   - Add ECR Registery
   - Add ECR Repository
   - Add Kms Key
+  - Add service definition on ecs cluster
 - Github:
   - set master branch as base branch
   - update workflow
