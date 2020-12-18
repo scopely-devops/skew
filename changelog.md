@@ -38,6 +38,7 @@
   - Add Kms Key
   - Add service definition on ecs cluster
   - Add StepFunction (alias states)
+  - Add Event rule
 - Github:
   - set master branch as base branch
   - update workflow

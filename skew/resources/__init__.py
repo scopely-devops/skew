@@ -60,6 +60,7 @@ ResourceTypes = {
     "aws.elbv2.loadbalancer": "aws.elbv2.LoadBalancer",
     "aws.elbv2.targetgroup": "aws.elbv2.TargetGroup",
     "aws.es.domain": "aws.es.ElasticsearchDomain",
+    "aws.events.rule": "aws.cloudwatch.CloudWatchEventRule",
     "aws.firehose.deliverystream": "aws.firehose.DeliveryStream",
     "aws.iam.group": "aws.iam.Group",
     "aws.iam.instance-profile": "aws.iam.InstanceProfile",

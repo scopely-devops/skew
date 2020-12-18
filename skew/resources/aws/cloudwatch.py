@@ -130,3 +130,24 @@ class LogGroup(AWSResource):
             self.resourcetype,
             self.id,
         )
+
+
+class CloudWatchEventRule(AWSResource):
+    class Meta(object):
+        service = "events"
+        type = "rule"
+        enum_spec = ("list_rules", "Rules[]", None)
+        id = "Name"
+        filter_name = None
+        filter_type = None
+        name = "Name"
+        attr_spec = ("list_targets_by_rule", "Targets[]", "Rule", "id")
+        # tags_spec = ("list_tags_log_group", "tags", "logGroupName", "id")
+
+    @classmethod
+    def filter(cls, arn, resource_id, data):
+        return resource_id == data["None"]
+
+    def __init__(self, client, data, query=None):
+        super(CloudWatchEventRule, self).__init__(client, data, query)
+        self._data["Targets"] = self._feed_from_spec(attr_spec=self.Meta.attr_spec)
