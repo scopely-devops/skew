@@ -4,7 +4,7 @@
 
 - Python 3 and dependencies:
   - Fix yam constructor DeprecationWarning and update PyYaml
-  - Remove python 2 support, add 3.8, 3.9 test unit configuration
+  - Remove python 2, python 3.4 and 3.5 support, add 3.8, 3.9 test unit configuration
   - Update and separate dev dependencies from module dependencies
   - Align python syntax on version 3
 - Integrate Change from Christophe Morio (https://github.com/lbncmorio/skew/tree/more-resources)
