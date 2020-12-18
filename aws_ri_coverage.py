@@ -1,6 +1,16 @@
 import skew
-from collections import namedtuple
 import argparse
+from collections import namedtuple
+
+aws_service = namedtuple("aws_service","name skew_resource instances_filters cluster_count instance_type reserved_filters reserved_count reserved_type dimensions")
+
+aws_services = [
+            aws_service('ec2','instance', {'State':{'Code': 16, 'Name': 'running'}},'','InstanceType', {},'InstanceCount','',[]),
+            aws_service('rds','db',{'DBInstanceStatus':'available'}, '','DBInstanceClass', {},'DBInstanceCount','',['MultiAZ']),
+            aws_service('elasticache','cluster',{},'NumCacheNodes','CacheNodeType', {},'CacheNodeCount','',[]),
+            aws_service('es','domain',{},'ElasticsearchClusterConfig.InstanceCount', 'ElasticsearchClusterConfig.InstanceType',{},'ElasticsearchInstanceCount','ElasticsearchInstanceType',[]),
+            aws_service('redshift','cluster',{}, 'NumberOfNodes', 'NodeType', {},'NodeCount','',[])
+            ]
 
 skew_tuple = namedtuple("skew_tuple",
     "skew_resource instances_filters cluster_count  instance_type "
@@ -29,7 +39,7 @@ skew_dict = {
             ),
 }
 
-# regions = ['us-east-1','us-west-2','eu-west-2','eu-central-1']
+
 
 def flatten(d, parent_key='', sep='.'):
     items = []
@@ -41,35 +51,35 @@ def flatten(d, parent_key='', sep='.'):
     return dict(items)
 
 
-def getServiceInstances(aws_service,aws_region,skew_params):
-    _instances = []
-    for i in skew.scan('arn:aws:'+aws_service+':'+aws_region+':*:'+skew_params.skew_resource+'/*'):
+def getServiceInstances(service,region,skew_params):
+    instances = []
+    for instance in skew.scan('arn:aws:'+service+':'+region+':*:'+skew_params.skew_resource+'/*'):
         include=True
         for key in skew_params.instances_filters.keys():
-            include = include and (i.data[key] == skew_params.instances_filters[key])
+            include = include and (instance.data[key] == skew_params.instances_filters[key])
         if not include:
             continue # Skip to the next loop (instance)
-        i.data['Region'] = aws_region
-        _instances.append(i.data)
+        instance.data['Region'] = region
+        instances.append(instance.data)
     # All done
-    return _instances
+    return instances
 
-def getServiceRIs(aws_service,aws_region):
-    _instances = []
-    for i in skew.scan('arn:aws:'+aws_service+':'+aws_region+':*:reserved/*'):
-        if i.data['State'] == 'active':
-            i.data['Region'] = aws_region
-            _instances.append(i.data)
-    return _instances
+def getServiceRIs(service,region):
+    instances = []
+    for instance in skew.scan('arn:aws:'+service+':'+region+':*:reserved/*'):
+        if instance.data['State'] == 'active':
+            instance.data['Region'] = region
+            instances.append(instance.data)
+    return instances
 
-def generateRIReport(aws_service,aws_region,skew_params,format):
+def generateRIReport(service,region,skew_params):
     # put both running and reserved instances in one list.
-    instances = getServiceInstances(aws_service,aws_region,skew_params)
-    instances += getServiceRIs(aws_service,aws_region)
+    instances = getServiceInstances(service,region,skew_params)
+    instances += getServiceRIs(service,region)
 
     merged = {} # structure: { 'm1.small': {'running':1,'reserved':5} }
     
-    for instance in [ i for i in instances if i['Region'] == aws_region ]:
+    for instance in [ i for i in instances if i['Region'] == region ]:
         # flatten the structure to access the dictionary sub-keys
         # from {'foo':{'bar':1}} to {'foo.bar':1}
         instance = flatten(instance)
@@ -103,44 +113,46 @@ def generateRIReport(aws_service,aws_region,skew_params,format):
     # Okay ready for the output        
     maxlen = len(max(merged.keys(),key=len))
 
-    if format == "csv" :
-        for item in sorted(merged.items()):
-            if merged[item[0]]['running']>merged[item[0]]['reserved']:
-                status = '>'
-            elif merged[item[0]]['running']<merged[item[0]]['reserved']:
-                status = '<'
-            else:
-                status = '='
-            print(u"{},{},{:2d},{:2d},{},{}".format(aws_region,aws_service,
-                merged[item[0]]['running'],merged[item[0]]['reserved'],status,item[0]))
-    else:    
-        for item in sorted(merged.items()):
-            if merged[item[0]]['running']>merged[item[0]]['reserved']:
-                status = '>\u274C'
-            elif merged[item[0]]['running']<merged[item[0]]['reserved']:
-                status = '<\u2757'
-            else:
-                status = '=\u2705'
-            print(u' {} Running:{:2d} {} Reserved:{:2d} : {}'.format(aws_service,merged[item[0]]['running'],
-                status,merged[item[0]]['reserved'],item[0]))
+    # if format == "csv" :
+    for item in sorted(merged.items()):
+        if merged[item[0]]['running']>merged[item[0]]['reserved']:
+            status = '>'
+        elif merged[item[0]]['running']<merged[item[0]]['reserved']:
+            status = '<'
+        else:
+            status = '='
+        print(u"{},{},{:2d},{:2d},{},{}".format(aws_region,aws_service,
+            merged[item[0]]['running'],merged[item[0]]['reserved'],status,item[0]))
+    # else:    
+    #     for item in sorted(merged.items()):
+    #         if merged[item[0]]['running']>merged[item[0]]['reserved']:
+    #             status = '>\u274C'
+    #         elif merged[item[0]]['running']<merged[item[0]]['reserved']:
+    #             status = '<\u2757'
+    #         else:
+    #             status = '=\u2705'
+    #         print(u' {} Running:{:2d} {} Reserved:{:2d} : {}'.format(aws_service,merged[item[0]]['running'],
+    #             status,merged[item[0]]['reserved'],item[0]))
                     
 
 if __name__ == '__main__':
 
-    parser=argparse.ArgumentParser(description='Generates AWS Reserved Instance Reports')
-    parser.add_argument("-r","--regions",required=True,nargs='+',help="One or more aws region e.g. us-west-1") # string
-    parser.add_argument("-s","--services",required=True,nargs='+',help="One or more aws services in ec2,rds,elasticache,es,redshift. e.g. ec2 rds") # string
-    parser.add_argument("-f","--format", choices=["default","csv"],default="default")
-
-    # parse the command line
+    parser=argparse.ArgumentParser(description='Generates AWS Reserved Instance Coverage Reports')
+    parser.add_argument("-r","--regions",required=True,nargs='*',help="space delimitted aws region e.g. us-east-1 us-west-1") # string
+    # parser.add_argument("-s","--services",required=True,nargs='*',help="space delimitted aws services (ec2,rds,elasticache,es,redshift). e.g. ec2 rds") # string
+    # parser.add_argument("-f","--format", choices=["default","csv"],default="default")
     args = parser.parse_args()
-    if format == "csv" :
-        print('region,service,running,reserved,status,details')
 
-    for aws_region in args.regions:
-        if format != "csv" :
-            print('\n {:^15s}\n {:^15s}'.format(aws_region, '=' * (len(aws_region)+2)))
-        for aws_service in args.services:
-            generateRIReport(aws_service,aws_region,skew_dict[aws_service],args.format)
+    default_regions = ['us-east-1','us-west-2','eu-west-1','eu-central-1']
+    regions = args.regions if args.regions else default_regions
+
+    # if format == "csv" :
+    print('region,service,running,reserved,status,details')
+
+    for region in regions:
+        # if format != "csv" :
+        #     print('\n {:^15s}\n {:^15s}'.format(aws_region, '=' * (len(aws_region)+2)))
+        for aws_service in aws_services:
+            generateRIReport(aws_service.name,region,aws_service)
     
    
