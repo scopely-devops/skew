@@ -77,6 +77,7 @@ ResourceTypes = {
     "aws.route53.hostedzone": "aws.route53.HostedZone",
     "aws.route53.healthcheck": "aws.route53.HealthCheck",
     "aws.s3.bucket": "aws.s3.Bucket",
+    "aws.stepfunctions.statemachine": "aws.stepfunctions.StateMachines",
     "aws.sqs.queue": "aws.sqs.Queue",
     "aws.ses.identity": "aws.ses.Identity",
     "aws.sns.subscription": "aws.sns.Subscription",
