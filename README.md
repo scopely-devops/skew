@@ -91,6 +91,27 @@ you would use:
 arn = scan('arn:aws:dynamodb:us-.*:234567890123:table/*')
 ```
 
+## Command line Usage
+
+```bash
+python -m "skew" --uri "arn:aws:events:eu-west-1:*:rule/*" --output-path "./data"
+```
+
+In order to retreive all options:
+
+```bash
+python -m "skew" -h
+usage: __main__.py [-h] --uri URI --output-path OUTPUT_PATH [--normalize]
+
+SKEW alias Stock Keeping Unit
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --uri URI             scan uri (arn:aws:*:*:1235678910:*/*)
+  --output-path OUTPUT_PATH
+                        output directory
+```
+
 ## CloudWatch Metrics
 
 In addition to making the metadata about a particular AWS resource available

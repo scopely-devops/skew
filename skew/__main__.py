@@ -14,7 +14,7 @@
 
 import os
 import argparse
-
+import skew
 
 def _make_directory(path):
     try:
@@ -24,9 +24,9 @@ def _make_directory(path):
         pass
 
 
-def _call_back(service, region, resource):
+def _call_back(resource):
     resource.tags
-    if service == "s3":
+    if resource.Meta.service == "s3":
         resource.location
         resource.acl
         resource.cors
@@ -74,11 +74,10 @@ def _create_parser():
 args = _create_parser().parse_args()
 
 
-_uri = args.uri[0]
+_uri = str(args.uri[0])
 _output_path = args.output_path[0]
-
-for resource in skew.scan(args.uri):
-    _call_back(service, region, resource)
+for resource in skew.scan(_uri):
+    _call_back(resource)
     directory = None
     identifier = None
     if "/" in resource.arn:
