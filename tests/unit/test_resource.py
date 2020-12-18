@@ -61,4 +61,8 @@ class TestResource(unittest.TestCase):
 
     def test_all_services(self):
         all_providers = skew.resources.all_services('aws')
-        self.assertEqual(len(all_providers), 24)
+        self.assertEqual(len(all_providers), 35)
+
+    def test_all_regions(self):
+        all_regions = skew.arn.Region('arn:aws:*:*:*:*', 'arn:aws:*:*:*:*').__getattribute__('_all_region_names')
+        self.assertEqual(len(all_regions), 22)

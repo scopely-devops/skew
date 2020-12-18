@@ -54,3 +54,6 @@ docs/_build/
 
 # Emacs backup files
 *~
+
+datalake_auditor
+data

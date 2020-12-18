@@ -16,22 +16,20 @@ from skew.resources.aws import AWSResource
 
 
 class Queue(AWSResource):
-
     class Meta(object):
-        service = 'sqs'
-        type = 'queue'
-        enum_spec = ('list_queues', 'QueueUrls', None)
-        detail_spec = ('get_queue_attributes', 'QueueUrl', 'QueueUrl')
-        id = 'QueueUrl'
-        filter_name = 'QueueNamePrefix'
-        filter_type = 'scalar'
-        name = 'QueueUrl'
+        service = "sqs"
+        type = "queue"
+        enum_spec = ("list_queues", "QueueUrls", None)
+        detail_spec = ("get_queue_attributes", "QueueUrl", "QueueUrl")
+        id = "QueueUrl"
+        filter_name = "QueueNamePrefix"
+        filter_type = "scalar"
+        name = "QueueName"
         date = None
-        dimension = 'QueueName'
-        tags_spec = ('list_queue_tags', 'Tags', 'QueueUrl', 'name')
+        dimension = "QueueName"
+        tags_spec = ("list_queue_tags", "Tags", "QueueUrl", "name")
 
     def __init__(self, client, data, query=None):
         super(Queue, self).__init__(client, data, query)
-        self.data = {self.Meta.id: data,
-                     'QueueName': data.split('/')[-1]}
-        self._id = self.data['QueueName']
+        self._data = {self.Meta.id: data, "QueueName": data.split("/")[-1]}
+        self._id = self._data["QueueName"]

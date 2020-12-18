@@ -50,6 +50,6 @@ class Environment(AWSResource):
             self._client.region_name,
             self._client.account_id,
             self.resourcetype,
-            self.data['ApplicationName'],
+            self._data['ApplicationName'],
             self.id
         )

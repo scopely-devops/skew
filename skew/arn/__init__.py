@@ -1,5 +1,6 @@
 # Copyright 2014 Scopely, Inc.
 # Copyright (c) 2015 Mitch Garnaat
+# Copyright (c) 2020 Jerome Guibert
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,13 +24,13 @@ import skew.resources
 from skew.config import get_config
 
 LOG = logging.getLogger(__name__)
-DebugFmtString = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+DebugFmtString = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 
 
 class ARNComponent(object):
-
     def __init__(self, pattern, arn):
         self.pattern = pattern
+        # arn is Arn parent instance
         self._arn = arn
 
     def __repr__(self):
@@ -62,8 +63,11 @@ class ARNComponent(object):
         """
         matches = []
         regex = pattern
-        if regex == '*':
-            regex = '.*'
+        if regex == "*":
+            regex = ".*"
+        elif regex:
+            # avoid match of elb and elbv2
+            regex += "$"
         regex = re.compile(regex)
         for choice in self.choices(context):
             if regex.search(choice):
@@ -77,25 +81,26 @@ class ARNComponent(object):
         """
         return self.match(self.pattern, context)
 
-    def complete(self, prefix='', context=None):
+    def complete(self, prefix="", context=None):
         return [c for c in self.choices(context) if c.startswith(prefix)]
 
 
 class Resource(ARNComponent):
-
     def _split_resource(self, resource):
-        LOG.debug('split_resource: %s', resource)
-        if '/' in resource:
-            resource_type, resource_id = resource.split('/', 1)
-        elif ':' in resource:
-            resource_type, resource_id = resource.split(':', 1)
+        LOG.debug("split_resource: %s", resource)
+        if "/" in resource:
+            resource_type, resource_id = resource.split("/", 1)
+        elif ":" in resource:
+            resource_type, resource_id = resource.split(":", 1)
         else:
             # TODO: Some services use ARN's that include only a resource
             # identifier (i.e. no resource type).  SNS is one example but
             # there are others.  We need to refactor this code to allow
             # the splitting of the resource part of the ARN to be handled
             # by the individual resource classes rather than here.
-            resource_type = None
+
+            # Fix resource enumeration when no resource type is define
+            resource_type = "*"  # one resource type in this case per service
             resource_id = resource
         return (resource_type, resource_id)
 
@@ -111,76 +116,111 @@ class Resource(ARNComponent):
             provider = self._arn.provider.pattern
         all_resources = skew.resources.all_types(provider, service)
         if not all_resources:
-            all_resources = ['*']
+            all_resources = ["*"]
         return all_resources
 
     def enumerate(self, context, **kwargs):
-        LOG.debug('Resource.enumerate %s', context)
+        LOG.debug("Resource.enumerate %s", context)
         _, provider, service_name, region, account = context
         resource_type, resource_id = self._split_resource(self.pattern)
-        LOG.debug('resource_type=%s, resource_id=%s',
-                  resource_type, resource_id)
+        LOG.debug("resource_type=%s, resource_id=%s", resource_type, resource_id)
         resources = []
         for resource_type in self.matches(context):
-            resource_path = '.'.join([provider, service_name, resource_type])
+            resource_path = ".".join([provider, service_name, resource_type])
             resource_cls = skew.resources.find_resource_class(resource_path)
-            resources.extend(resource_cls.enumerate(
-                self._arn, region, account, resource_id, **kwargs))
+            resources.extend(
+                resource_cls.enumerate(
+                    self._arn, region, account, resource_id, **kwargs
+                )
+            )
         return resources
 
 
 class Account(ARNComponent):
-
     def __init__(self, pattern, arn):
-        self._accounts = get_config()['accounts']
+        self._accounts = get_config()["accounts"]
         super(Account, self).__init__(pattern, arn)
 
     def choices(self, context=None):
         return list(self._accounts.keys())
 
     def enumerate(self, context, **kwargs):
-        LOG.debug('Account.enumerate %s', context)
+        LOG.debug("Account.enumerate %s", context)
         for match in self.matches(context):
             context.append(match)
-            for resource in self._arn.resource.enumerate(
-                    context, **kwargs):
+            for resource in self._arn.resource.enumerate(context, **kwargs):
                 yield resource
             context.pop()
 
 
 class Region(ARNComponent):
-    _all_region_names = ['us-east-1',
-                         'us-east-2',
-                         'us-west-1',
-                         'us-west-2',
-                         'eu-west-1',
-                         'eu-west-2',
-                         'eu-west-3',
-                         'eu-central-1',
-                         'eu-north-1',
-                         'eu-south-1',
-                         'ap-southeast-1',
-                         'ap-southeast-2',
-                         'ap-northeast-1',
-                         'ap-northeast-2',
-                         'ap-south-1',
-                         'ap-east-1',
-                         'af-south-1'
-                         'ca-central-1',
-                         'sa-east-1',
-                         'me-south-1',
-                         'cn-north-1',
-                         'cn-northwest-1']
+    _all_region_names = [
+        "us-east-1",
+        "us-east-2",
+        "us-west-1",
+        "us-west-2",
+        "eu-west-1",
+        "eu-west-2",
+        "eu-west-3",
+        "eu-central-1",
+        "eu-north-1",
+        "eu-south-1",
+        "ap-southeast-1",
+        "ap-southeast-2",
+        "ap-northeast-1",
+        "ap-northeast-2",
+        "ap-south-1",
+        "ap-east-1",
+        "af-south-1",
+        "ca-central-1",
+        "sa-east-1",
+        "me-south-1",
+        "cn-north-1",
+        "cn-northwest-1",
+    ]
 
-    _no_region_required = ['']
+    _no_region_required = [""]
 
     _service_region_map = {
-        'redshift': _all_region_names,
-        'glacier': ['ap-northeast-1', 'ap-northeast-2', 'ap-south-1', 'ap-southeast-2', 'ca-central-1', 'eu-central-1',
-                    'eu-west-1', 'eu-west-2', 'us-east-1', 'us-east-2', 'us-west-1', 'us-west-2'],
-        'cloudfront': _no_region_required,
-        'iam': _no_region_required,
-        'route53': _no_region_required
+        "glacier": [
+            "ap-northeast-1",
+            "ap-northeast-2",
+            "ap-south-1",
+            "ap-southeast-2",
+            "ca-central-1",
+            "eu-central-1",
+            "eu-west-1",
+            "eu-west-2",
+            "us-east-1",
+            "us-east-2",
+            "us-west-1",
+            "us-west-2",
+        ],
+        "cloudfront": _no_region_required,
+        "iam": _no_region_required,
+        "route53": _no_region_required,
+        "cloudsearch": [
+            "us-east-1",
+            "us-west-2",
+            "us-west-1",
+            "eu-west-1",
+            "eu-central-1",
+            "sa-east-1",
+            "ap-southeast-1",
+            "ap-northeast-1",
+            "ap-southeast-2",
+        ],
+        "opsworks": [
+            "us-east-2",
+            "us-west-1",
+            "us-east-1",
+            "us-west-2",
+            "eu-central-1",
+            "eu-west-1",
+            "ap-southeast-1",
+            "ap-northeast-1",
+            "ap-southeast-2",
+        ],
     }
 
     def choices(self, context=None):
@@ -188,21 +228,18 @@ class Region(ARNComponent):
             service = context[2]
         else:
             service = self._arn.service
-        return self._service_region_map.get(
-            service, self._all_region_names)
+        return self._service_region_map.get(service, self._all_region_names)
 
     def enumerate(self, context, **kwargs):
-        LOG.debug('Region.enumerate %s', context)
+        LOG.debug("Region.enumerate %s", context)
         for match in self.matches(context):
             context.append(match)
-            for account in self._arn.account.enumerate(
-                    context, **kwargs):
+            for account in self._arn.account.enumerate(context, **kwargs):
                 yield account
             context.pop()
 
 
 class Service(ARNComponent):
-
     def choices(self, context=None):
         if context:
             provider = context[1]
@@ -211,41 +248,36 @@ class Service(ARNComponent):
         return skew.resources.all_services(provider)
 
     def enumerate(self, context, **kwargs):
-        LOG.debug('Service.enumerate %s', context)
+        LOG.debug("Service.enumerate %s", context)
         for match in self.matches(context):
             context.append(match)
-            for region in self._arn.region.enumerate(
-                    context, **kwargs):
+            for region in self._arn.region.enumerate(context, **kwargs):
                 yield region
             context.pop()
 
 
 class Provider(ARNComponent):
-
     def choices(self, context=None):
-        return ['aws']
+        return ["aws"]
 
     def enumerate(self, context, **kwargs):
-        LOG.debug('Provider.enumerate %s', context)
+        LOG.debug("Provider.enumerate %s", context)
         for match in self.matches(context):
             context.append(match)
-            for service in self._arn.service.enumerate(
-                    context, **kwargs):
+            for service in self._arn.service.enumerate(context, **kwargs):
                 yield service
             context.pop()
 
 
 class Scheme(ARNComponent):
-
     def choices(self, context=None):
-        return ['arn']
+        return ["arn"]
 
     def enumerate(self, context, **kwargs):
-        LOG.debug('Scheme.enumerate %s', context)
+        LOG.debug("Scheme.enumerate %s", context)
         for match in self.matches(context):
             context.append(match)
-            for provider in self._arn.provider.enumerate(
-                    context, **kwargs):
+            for provider in self._arn.provider.enumerate(context, **kwargs):
                 yield provider
             context.pop()
 
@@ -254,17 +286,17 @@ class ARN(object):
 
     ComponentClasses = [Scheme, Provider, Service, Region, Account, Resource]
 
-    def __init__(self, arn_string='arn:aws:*:*:*:*', **kwargs):
+    def __init__(self, arn_string="arn:aws:*:*:*:*", **kwargs):
         self.query = None
         self._components = None
         self._build_components_from_string(arn_string)
         self.kwargs = kwargs
 
     def __repr__(self):
-        return ':'.join([str(c) for c in self._components])
+        return ":".join([str(c) for c in self._components])
 
     def debug(self):
-        self.set_logger('skew', logging.DEBUG)
+        self.set_logger("skew", logging.DEBUG)
 
     def set_logger(self, logger_name, level=logging.DEBUG):
         """
@@ -287,11 +319,12 @@ class ARN(object):
         log.addHandler(ch)
 
     def _build_components_from_string(self, arn_string):
-        if '|' in arn_string:
-            arn_string, query = arn_string.split('|')
+        if "|" in arn_string:
+            arn_string, query = arn_string.split("|")
             self.query = jmespath.compile(query)
         pairs = zip_longest(
-            self.ComponentClasses, arn_string.split(':', 5), fillvalue='*')
+            self.ComponentClasses, arn_string.split(":", 5), fillvalue="*"
+        )
         self._components = [c(n, self) for c, n in pairs]
 
     @property

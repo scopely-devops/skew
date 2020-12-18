@@ -1,5 +1,6 @@
 # Copyright (c) 2014 Scopely, Inc.
 # Copyright (c) 2015 Mitch Garnaat
+# Copyright (c) 2019 Christophe Morio
 # Copyright (c) 2020 Jerome Guibert
 #
 # Licensed under the Apache License, Version 2.0 (the "License"). You
@@ -23,28 +24,30 @@ from skew.resources.aws import AWSResource
 LOG = logging.getLogger(__name__)
 
 
-class Table(AWSResource):
+class Identity(AWSResource):
     class Meta(object):
-        service = "dynamodb"
-        type = "table"
-        enum_spec = ("list_tables", "TableNames", None)
-        id = "TableName"
+        service = "ses"
+        type = "identity"
+        enum_spec = ("list_identities", "Identities", None)
         detail_spec = ("describe_table", "TableName", "Table")
-        tags_spec = ("list_tags_of_resource", "Tags[]", "ResourceArn", "arn")
+        id = "Identity"
+        tags_spec = None
         filter_name = None
-        name = "TableName"
-        date = "CreationDateTime"
-        dimension = "TableName"
-
-    @classmethod
-    def filter(cls, arn, resource_id, data):
-        LOG.debug("%s: %s == %s", arn, resource_id, data)
-        return resource_id == data
+        name = "IdentityName"
+        date = None
+        dimension = "IdentityName"
 
     def __init__(self, client, data, query=None):
-        # data from list_tables operation is a table name
-        super(Table, self).__init__(client, data={"TableName": data}, query=query)
-        detail_op, param_name, detail_path = self.Meta.detail_spec
-        params = {param_name: self.id}
-        data = client.call(detail_op, **params)
-        self._data = jmespath.search(detail_path, data)
+        super(Identity, self).__init__(client, data, query)
+        arn = self._data
+        self._data = {"IdentityName": arn}
+
+    @property
+    def arn(self):
+        return "arn:aws:%s:%s:%s:%s/%s" % (
+            self._client.service_name,
+            self._client.region_name,
+            self._client.account_id,
+            self.resourcetype,
+            self._data["IdentityName"],
+        )
