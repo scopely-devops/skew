@@ -1,5 +1,6 @@
 # Copyright (c) 2014 Scopely, Inc.
 # Copyright (c) 2015 Mitch Garnaat
+# Copyright (c) 2020 Jerome Guibert
 #
 # Licensed under the Apache License, Version 2.0 (the "License"). You
 # may not use this file except in compliance with the License. A copy of
@@ -15,7 +16,8 @@
 import logging
 import jmespath
 
-import skew.awsclient
+from skew.awsclient import get_awsclient
+from skew.resources.json_dump import json_dump
 
 from botocore.exceptions import ClientError
 
@@ -25,9 +27,7 @@ LOG = logging.getLogger(__name__)
 class Resource(object):
     @classmethod
     def enumerate(cls, arn, region, account, resource_id=None, **kwargs):
-        client = skew.awsclient.get_awsclient(
-            cls.Meta.service, region, account, **kwargs
-        )
+        client = get_awsclient(cls.Meta.service, region, account, **kwargs)
         kwargs = {}
         do_client_side_filtering = False
         if resource_id and resource_id != "*":
@@ -136,3 +136,6 @@ class Resource(object):
             if m["MetricName"] == metric_name:
                 return m
         return None
+
+    def json_dump(self, normalize=True):
+        return json_dump(self.data, normalize=normalize)

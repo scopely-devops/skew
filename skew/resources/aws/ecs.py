@@ -1,5 +1,6 @@
 # Copyright (c) 2014 Scopely, Inc.
 # Copyright (c) 2015 Mitch Garnaat
+# Copyright (c) 2020 Jerome Guibert
 #
 # Licensed under the Apache License, Version 2.0 (the "License"). You
 # may not use this file except in compliance with the License. A copy of
@@ -36,6 +37,8 @@ class Cluster(AWSResource):
         date = None
         dimension = None
 
+        attr_spec = ("list_services", "serviceArns[]", "cluster", "id")
+
     @property
     def arn(self):
         return self.data["clusterArn"]
@@ -47,6 +50,19 @@ class Cluster(AWSResource):
         params = {param_name: [self.id]}
         data = client.call(detail_op, **params)
         self._data = jmespath.search(detail_path, data)
+
+        service_arns = self._feed_from_spec(attr_spec=self.Meta.attr_spec)
+        self._data["services"] = {}
+        for service_arn in service_arns:
+            kwargs = {
+                "cluster": self._id,
+                "services": [service_arn],
+                "include": ["TAGS"],
+            }
+            service_def = self._client.call(
+                "describe_services", query="services[0]", **kwargs
+            )
+            self._data["services"][service_def["serviceName"]] = service_def
 
 
 class TaskDefinition(AWSResource):

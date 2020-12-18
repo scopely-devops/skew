@@ -1,5 +1,6 @@
 # Copyright (c) 2014 Scopely, Inc.
 # Copyright (c) 2015 Mitch Garnaat
+# Copyright (c) 2020 Jerome Guibert
 #
 # Licensed under the Apache License, Version 2.0 (the "License"). You
 # may not use this file except in compliance with the License. A copy of
@@ -47,6 +48,8 @@ ResourceTypes = {
     "aws.ec2.launch-template": "aws.ec2.LaunchTemplate",
     "aws.ecs.cluster": "aws.ecs.Cluster",
     "aws.ecs.task-definition": "aws.ecs.TaskDefinition",
+    "aws.ecr.registery": "aws.ecr.Registery",
+    "aws.ecr.repository": "aws.ecr.Repository",
     "aws.efs.filesystem": "aws.efs.Filesystem",
     "aws.elasticache.cluster": "aws.elasticache.Cluster",
     "aws.elasticache.subnet-group": "aws.elasticache.SubnetGroup",
@@ -57,6 +60,7 @@ ResourceTypes = {
     "aws.elbv2.loadbalancer": "aws.elbv2.LoadBalancer",
     "aws.elbv2.targetgroup": "aws.elbv2.TargetGroup",
     "aws.es.domain": "aws.es.ElasticsearchDomain",
+    "aws.events.rule": "aws.cloudwatch.CloudWatchEventRule",
     "aws.firehose.deliverystream": "aws.firehose.DeliveryStream",
     "aws.iam.group": "aws.iam.Group",
     "aws.iam.instance-profile": "aws.iam.InstanceProfile",
@@ -65,6 +69,7 @@ ResourceTypes = {
     "aws.iam.user": "aws.iam.User",
     "aws.iam.server-certificate": "aws.iam.ServerCertificate",
     "aws.kinesis.stream": "aws.kinesis.Stream",
+    "aws.kms.key": "aws.kms.Key",
     "aws.lambda.function": "aws.lambda.Function",
     "aws.opsworks.stack": "aws.opsworks.Stack",
     "aws.rds.db": "aws.rds.DBInstance",
@@ -73,6 +78,7 @@ ResourceTypes = {
     "aws.route53.hostedzone": "aws.route53.HostedZone",
     "aws.route53.healthcheck": "aws.route53.HealthCheck",
     "aws.s3.bucket": "aws.s3.Bucket",
+    "aws.stepfunctions.statemachine": "aws.stepfunctions.StateMachines",
     "aws.sqs.queue": "aws.sqs.Queue",
     "aws.ses.identity": "aws.ses.Identity",
     "aws.sns.subscription": "aws.sns.Subscription",

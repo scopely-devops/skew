@@ -1,4 +1,5 @@
 # Copyright (c) 2014 Scopely, Inc.
+# Copyright (c) 2020 Jerome Guibert
 #
 # Licensed under the Apache License, Version 2.0 (the "License"). You
 # may not use this file except in compliance with the License. A copy of
@@ -21,18 +22,6 @@ class Stack(AWSResource):
         resources = list(
             super(Stack, cls).enumerate(arn, region, account, resource_id, **kwargs)
         )
-        """
-        DEAD CODE
-        for stack in resources:
-            stack.data["Resources"] = []
-            for stack_resource in stack:
-                resource_id = stack_resource.get("PhysicalResourceId")
-                if not resource_id:
-                    resource_id = stack_resource.get("LogicalResourceId")
-                stack.data["Resources"].append(
-                    {"id": resource_id, "type": stack_resource["ResourceType"]}
-                )
-        """
         return resources
 
     class Meta(object):
