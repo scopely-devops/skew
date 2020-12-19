@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import skew
 import argparse
 from collections import namedtuple
@@ -11,8 +12,6 @@ services = [
             aws_service('es','domain','ElasticsearchClusterConfig.InstanceType',{'Created':True},'ElasticsearchClusterConfig.InstanceCount','DomainName'),
             aws_service('redshift','cluster','NodeType',{'ClusterStatus':'available'},'NumberOfNodes','DBName')
             ]
-
-
 
 def flatten(d, parent_key='', sep='.'):
     items = []
@@ -36,7 +35,7 @@ if __name__ == '__main__':
 
     for region in regions:
         for service in services:
-            resources = skew.scan('arn:aws:'+service.name+':'+region+':*:'+service.skew_resource+'/*')
+            resources = skew.scan('arn:aws:'+service.name+':'+region+':*:'+service.skew_resource+':*')
 
             for resource in resources:
                 data = flatten(resource.data)
