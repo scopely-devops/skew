@@ -56,3 +56,19 @@ class Function(AWSResource):
     @property
     def arn(self):
         return self.data.get('FunctionArn')
+
+class Layer(AWSResource):
+    class Meta(object):
+        service = 'lambda'
+        type = 'layer'
+        enum_spec = ('list_layers', 'Layers', None)
+        detail_spec = None
+        id = 'LayerName'
+        filter_name = None
+        name = 'LayerName'
+        date = None
+        dimension = None
+
+    @property
+    def arn(self):
+        return self.data.get('LayerArn')
