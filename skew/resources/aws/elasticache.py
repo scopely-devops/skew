@@ -78,3 +78,17 @@ class Snapshot(AWSResource):
             self._client.service_name,
             self._client.region_name,
             self._client.account_id, self.resourcetype, self.id)
+
+class Reserved(AWSResource):
+
+    class Meta(object):
+        service = 'elasticache'
+        type = 'reserved'
+        enum_spec = ('describe_reserved_cache_nodes', 'ReservedCacheNodes', None)
+        detail_spec = None
+        id = 'ReservedCacheNodeId'
+        filter_name = 'ReservedCacheNodeId'
+        filter_type = 'scalar'
+        name = 'ReservedCacheNodeId'
+        date = 'StartTime'
+        dimension = 'ReservedCacheNodeId'
