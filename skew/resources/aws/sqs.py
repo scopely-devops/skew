@@ -35,3 +35,11 @@ class Queue(AWSResource):
         self.data = {self.Meta.id: data,
                      'QueueName': data.split('/')[-1]}
         self._id = self.data['QueueName']
+
+    @property
+    def arn(self):
+        return 'arn:aws:%s:%s:%s:%s' % (
+            self._client.service_name,
+            self._client.region_name,
+            self._client.account_id,
+            self.id)
