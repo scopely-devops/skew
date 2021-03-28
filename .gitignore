@@ -5,9 +5,13 @@ __pycache__/
 # C extensions
 *.so
 
+#vscode
+.vscode
+
 # Distribution / packaging
 .Python
 env/
+venv
 bin/
 build/
 develop-eggs/
