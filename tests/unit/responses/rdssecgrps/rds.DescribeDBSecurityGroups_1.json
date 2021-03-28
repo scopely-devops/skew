@@ -1,0 +1,15 @@
+{
+  "status_code": 200,
+  "data": {
+    "DBSecurityGroups": [
+      {
+        "OwnerId": "123456789012",
+        "DBSecurityGroupName": "default",
+        "DBSecurityGroupDescription": "default",
+        "EC2SecurityGroups": [],
+        "IPRanges": [],
+        "DBSecurityGroupArn": "arn:aws:rds:us-east-1:123456789012:secgrp:default"
+      }
+    ]
+  }
+}

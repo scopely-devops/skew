@@ -1,0 +1,16 @@
+{
+  "status_code": 200,
+  "data": {
+    "Tags": [
+      {
+        "Key": "Env",
+        "Value": "Production"
+      },
+      {
+        "Key": "Project",
+        "Value": "Marketing"
+      }
+    ],
+    "HasMoreTags": false
+  }
+}
