@@ -1,13 +1,13 @@
 language: python
 dist: xenial
 python:
-  - "2.7"
-  - "3.4"
-  - "3.5"
   - "3.6"
   - "3.7"
+  - "3.8"
+  - "3.9"
 install:
   - pip install -r requirements.txt
+  - pip install -r requirements-dev.txt
   - pip install coverage python-coveralls
 script: nosetests tests/unit --cover-erase --with-coverage --cover-package skew
 after_success: coveralls

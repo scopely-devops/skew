@@ -1,5 +1,7 @@
 # Copyright (c) 2014 Scopely, Inc.
 # Copyright (c) 2015 Mitch Garnaat
+# Copyright (c) 2019 Christophe Morio
+# Copyright (c) 2020 Jerome Guibert
 #
 # Licensed under the Apache License, Version 2.0 (the "License"). You
 # may not use this file except in compliance with the License. A copy of
@@ -19,31 +21,41 @@ LOG = logging.getLogger(__name__)
 
 
 class LoadBalancer(AWSResource):
-
     class Meta(object):
-        service = 'elb'
-        type = 'loadbalancer'
-        enum_spec = ('describe_load_balancers',
-                     'LoadBalancerDescriptions', None)
+        service = "elb"
+        type = "loadbalancer"
+        enum_spec = ("describe_load_balancers", "LoadBalancerDescriptions", None)
         detail_spec = None
         attr_spec = [
-            ('describe_load_balancer_attributes', 'LoadBalancerName',
-                'LoadBalancerAttributes', 'LoadBalancerAttributes'),
-            ('describe_load_balancer_policies', 'LoadBalancerName',
-                'PolicyDescriptions', 'PolicyDescriptions'),
+            (
+                "describe_load_balancer_attributes",
+                "LoadBalancerName",
+                "LoadBalancerAttributes",
+                "LoadBalancerAttributes",
+            ),
+            (
+                "describe_load_balancer_policies",
+                "LoadBalancerName",
+                "PolicyDescriptions",
+                "PolicyDescriptions",
+            ),
         ]
-        id = 'LoadBalancerName'
-        filter_name = 'LoadBalancerNames'
-        filter_type = 'list'
-        name = 'DNSName'
-        date = 'CreatedTime'
-        dimension = 'LoadBalancerName'
-        tags_spec = ('describe_tags', 'TagDescriptions[].Tags[]',
-                     'LoadBalancerNames', 'id')
+        id = "LoadBalancerName"
+        filter_name = "LoadBalancerNames"
+        filter_type = "list"
+        name = "DNSName"
+        date = "CreatedTime"
+        dimension = "LoadBalancerName"
+        tags_spec = (
+            "describe_tags",
+            "TagDescriptions[].Tags[]",
+            "LoadBalancerNames",
+            "id",
+        )
 
     def __init__(self, client, data, query=None):
         super(LoadBalancer, self).__init__(client, data, query)
-        self._id = data['LoadBalancerName']
+        self._id = data["LoadBalancerName"]
 
         # add addition attribute data
         for attr in self.Meta.attr_spec:
@@ -53,7 +65,16 @@ class LoadBalancer(AWSResource):
             data = self._client.call(detail_op, **params)
             if not (detail_path is None):
                 data = jmespath.search(detail_path, data)
-            if 'ResponseMetadata' in data:
-                del data['ResponseMetadata']
-            self.data[detail_key] = data
+            if "ResponseMetadata" in data:
+                del data["ResponseMetadata"]
+            self._data[detail_key] = data
             LOG.debug(data)
+
+    @property
+    def arn(self):
+        return "arn:aws:elb:%s:%s:%s/%s" % (
+            self._client.region_name,
+            self._client.account_id,
+            self.resourcetype,
+            self.id,
+        )

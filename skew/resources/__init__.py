@@ -1,5 +1,6 @@
 # Copyright (c) 2014 Scopely, Inc.
 # Copyright (c) 2015 Mitch Garnaat
+# Copyright (c) 2020 Jerome Guibert
 #
 # Licensed under the Apache License, Version 2.0 (the "License"). You
 # may not use this file except in compliance with the License. A copy of
@@ -24,6 +25,7 @@ ResourceTypes = {
     'aws.cloudfront.distribution': 'aws.cloudfront.Distribution',
     'aws.cloudformation.stack': 'aws.cloudformation.Stack',
     'aws.cloudwatch.alarm': 'aws.cloudwatch.Alarm',
+    "aws.cloudsearch.domain": "aws.cloudsearch.Domain",
     'aws.logs.log-group': 'aws.cloudwatch.LogGroup',
     'aws.cloudtrail.trail': 'aws.cloudtrail.CloudTrail',
     'aws.dynamodb.table': 'aws.dynamodb.Table',
@@ -45,15 +47,23 @@ ResourceTypes = {
     'aws.ec2.subnet': 'aws.ec2.Subnet',
     'aws.ec2.launch-template': 'aws.ec2.LaunchTemplate',
     'aws.ec2.reserved': 'aws.ec2.Reserved',
+    "aws.ecs.cluster": "aws.ecs.Cluster",
+    "aws.ecs.task-definition": "aws.ecs.TaskDefinition",
+    "aws.ecr.registery": "aws.ecr.Registery",
+    "aws.ecr.repository": "aws.ecr.Repository",
+    "aws.efs.filesystem": "aws.efs.Filesystem",
     'aws.elasticache.cluster': 'aws.elasticache.Cluster',
+    'aws.elasticache.reserved': 'aws.elasticache.Reserved',
     'aws.elasticache.subnet-group': 'aws.elasticache.SubnetGroup',
     'aws.elasticache.snapshot': 'aws.elasticache.Snapshot',
     'aws.elasticbeanstalk.application': 'aws.elasticbeanstalk.Application',
     'aws.elasticbeanstalk.environment': 'aws.elasticbeanstalk.Environment',
-    'aws.elasticache.reserved': 'aws.elasticache.Reserved',
     'aws.elb.loadbalancer': 'aws.elb.LoadBalancer',
+    "aws.elbv2.loadbalancer": "aws.elbv2.LoadBalancer",
+    "aws.elbv2.targetgroup": "aws.elbv2.TargetGroup",
     'aws.es.domain': 'aws.es.ElasticsearchDomain',
     'aws.es.reserved': 'aws.es.Reserved',
+    "aws.events.rule": "aws.cloudwatch.CloudWatchEventRule",
     'aws.firehose.deliverystream': 'aws.firehose.DeliveryStream',
     'aws.iam.group': 'aws.iam.Group',
     'aws.iam.instance-profile': 'aws.iam.InstanceProfile',
@@ -62,8 +72,10 @@ ResourceTypes = {
     'aws.iam.user': 'aws.iam.User',
     'aws.iam.server-certificate': 'aws.iam.ServerCertificate',
     'aws.kinesis.stream': 'aws.kinesis.Stream',
+    "aws.kms.key": "aws.kms.Key",
     'aws.lambda.function': 'aws.lambda.Function',
     'aws.lambda.layer': 'aws.lambda.Layer',
+    "aws.opsworks.stack": "aws.opsworks.Stack",
     'aws.rds.db': 'aws.rds.DBInstance',
     'aws.rds.secgrp': 'aws.rds.DBSecurityGroup',
     'aws.rds.reserved': 'aws.rds.Reserved',
@@ -72,23 +84,26 @@ ResourceTypes = {
     'aws.route53.hostedzone': 'aws.route53.HostedZone',
     'aws.route53.healthcheck': 'aws.route53.HealthCheck',
     'aws.s3.bucket': 'aws.s3.Bucket',
+    "aws.ses.identity": "aws.ses.Identity",
+    "aws.stepfunctions.statemachine": "aws.stepfunctions.StateMachines",
     'aws.sqs.queue': 'aws.sqs.Queue',
     'aws.sns.subscription': 'aws.sns.Subscription',
-    'aws.sns.topic': 'aws.sns.Topic'
+    'aws.sns.topic': 'aws.sns.Topic',
+    "aws.support.check": "aws.support.Check",
 }
 
 
 def all_providers():
     providers = set()
     for resource_type in ResourceTypes:
-        providers.add(resource_type.split('.')[0])
+        providers.add(resource_type.split(".")[0])
     return list(providers)
 
 
 def all_services(provider_name):
     services = set()
     for resource_type in ResourceTypes:
-        t = resource_type.split('.')
+        t = resource_type.split(".")
         if t[0] == provider_name:
             services.add(t[1])
     return list(services)
@@ -97,7 +112,7 @@ def all_services(provider_name):
 def all_types(provider_name, service_name):
     types = set()
     for resource_type in ResourceTypes:
-        t = resource_type.split('.')
+        t = resource_type.split(".")
         if t[0] == provider_name and t[1] == service_name:
             types.add(t[2])
     return list(types)
@@ -109,7 +124,7 @@ def find_resource_class(resource_path):
     """
     class_path = ResourceTypes[resource_path]
     # First prepend our __name__ to the resource string passed in.
-    full_path = '.'.join([__name__, class_path])
+    full_path = ".".join([__name__, class_path])
     class_data = full_path.split(".")
     module_path = ".".join(class_data[:-1])
     class_str = class_data[-1]

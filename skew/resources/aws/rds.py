@@ -27,7 +27,7 @@ class DBInstance(AWSResource):
         id = 'DBInstanceIdentifier'
         filter_name = 'DBInstanceIdentifier'
         filter_type = 'scalar'
-        name = 'Endpoint.Address'
+        name = 'DBInstanceIdentifier'
         date = 'InstanceCreateTime'
         dimension = 'DBInstanceIdentifier'
 
@@ -37,6 +37,9 @@ class DBInstance(AWSResource):
             self._client.service_name,
             self._client.region_name,
             self._client.account_id, self.resourcetype, self.id)
+
+    def sleek(self):
+        self._data['LatestRestorableTime'] = ''
 
 
 class DBSecurityGroup(AWSResource):

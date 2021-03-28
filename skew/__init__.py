@@ -14,8 +14,16 @@
 import os
 
 from skew.arn import ARN
+from skew.awsdefaults import get_all_activated_regions, get_caller_identity_account_id
 
-__version__ = open(os.path.join(os.path.dirname(__file__), '_version')).read()
+__all__ = [
+    "__version__",
+    "get_all_activated_regions",
+    "get_caller_identity_account_id",
+    "scan",
+]
+
+__version__ = open(os.path.join(os.path.dirname(__file__), "_version")).read()
 
 
 def scan(sku, **kwargs):

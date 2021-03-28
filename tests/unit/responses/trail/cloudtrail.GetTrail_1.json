@@ -1,0 +1,18 @@
+{
+    "status_code": 200,
+    "data": {
+        "Trail": {
+            "Name": "awslog",
+            "S3BucketName": "awslog",
+            "IncludeGlobalServiceEvents": true,
+            "IsMultiRegionTrail": true,
+            "HomeRegion": "us-east-1",
+            "TrailARN": "arn:aws:cloudtrail:us-east-1:123456789012:trail/awslog",
+            "LogFileValidationEnabled": false,
+            "CloudWatchLogsLogGroupArn": "arn:aws:logs:us-east-1:123456789012:log-group:CloudTrail/DefaultLogGroup:*",
+            "CloudWatchLogsRoleArn": "arn:aws:iam::123456789012:role/CloudTrail_CloudWatchLogs_Role",
+            "HasCustomEventSelectors": false,
+            "IsOrganizationTrail": false
+        }
+    }
+}

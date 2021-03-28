@@ -24,6 +24,12 @@ This pattern identifies a specific EC2 instance running in the `us-west-2`
 region under the account ID `123456789012`.  The account ID is the 12-digit
 unique identifier for a specific AWS account as described
 [here](http://docs.aws.amazon.com/general/latest/gr/acct-identifiers.html).
+
+## Configuration
+
+Without any configuration file, `skew` use the account ID of the caller,
+and credentials defined on your system (aws environment variable, iam role of your instance, ...)
+
 To allow `skew` to find your account number, you need to create a `skew`
 YAML config file.  By default, `skew` will look for your config file in
 `~/.skew` but you can use the `SKEW_CONFIG` environment variable to tell `skew`
@@ -46,15 +52,19 @@ file.
 
 The main purpose of skew is to identify resources or sets of resources
 across services, regions, and accounts and to quickly and easily return the
-data associated with those resources. For example, if you wanted to return
-the data associated with the example ARN above:
+data associated with those resources.
+
+## Usage
+
+For example, if you wanted to return the data associated with the example ARN above:
 
 ```python
 from skew import scan
 
 arn = scan('arn:aws:ec2:us-west-2:123456789012:instance/i-12345678')
 for resource in arn:
-    print(resource.data)
+    print(resource.data) # return a dict
+    print(resource.json_dump()) # dump resource in json
 ```
 
 The call to `scan` returns an ARN object which implements the
@@ -81,8 +91,28 @@ you would use:
 arn = scan('arn:aws:dynamodb:us-.*:234567890123:table/*')
 ```
 
-CloudWatch Metrics
-------------------
+## Command line Usage
+
+```bash
+python -m "skew" --uri "arn:aws:events:eu-west-1:*:rule/*" --output-path "./data"
+```
+
+In order to retreive all options:
+
+```bash
+python -m "skew" -h
+usage: __main__.py [-h] --uri URI --output-path OUTPUT_PATH [--normalize]
+
+SKEW alias Stock Keeping Unit
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --uri URI             scan uri (arn:aws:*:*:1235678910:*/*)
+  --output-path OUTPUT_PATH
+                        output directory
+```
+
+## CloudWatch Metrics
 
 In addition to making the metadata about a particular AWS resource available
 to you, `skew` also tries to make it easy to access the available CloudWatch
@@ -154,8 +184,7 @@ You can also customize the data returned rather than using the default settings:
 >>>
 ```
 
-Filtering Data
---------------
+## Filtering Data
 
 Each resource that is retrieved is a Python dictionary.  Some of these (e.g.
 an EC2 Instance) can be quite large and complex.  Skew allows you to filter
@@ -182,8 +211,7 @@ filtered data is available as the `filtered_data` attribute of the
 Resource object.  The full, unfiltered data is still available as the
 `data` attribute.
 
-Multithreaded Usage
--------------------
+## Multithreaded Usage
 
 Skew is single-threaded by default, like most Python libraries. In order to
 speed up the enumeration of matching resources, you can use multiple threads:
@@ -211,11 +239,121 @@ for service in arn.service.choices():
 
 (thanks to @alFReD-NSH for the snippet)
 
-More Examples
--------------
+## More Examples
 
 [Find Unattached Volumes](https://gist.github.com/garnaat/73804a6b0bd506ee6075)
 
 [Audit Security Groups](https://gist.github.com/garnaat/4123f1aefe7d65df9b48)
 
 [Find Untagged Instances](https://gist.github.com/garnaat/11004f5661b4798d27c7)
+
+## Supported Service
+
+| Name             |
+| ---------------- |
+| route53          |
+| cloudfront       |
+| elasticbeanstalk |
+| ecs              |
+| kms              |
+| redshift         |
+| efs              |
+| sns              |
+| cloudwatch       |
+| cloudtrail       |
+| acm              |
+| sqs              |
+| elasticache      |
+| ecr              |
+| lambda           |
+| elb              |
+| stepfunctions    |
+| events           |
+| iam              |
+| rds              |
+| cloudsearch      |
+| logs             |
+| firehose         |
+| autoscaling      |
+| s3               |
+| support          |
+| ec2              |
+| cloudformation   |
+| opsworks         |
+| es               |
+| elbv2            |
+| kinesis          |
+| ses              |
+| dynamodb         |
+| apigateway       |
+
+## Supported Resource
+
+| Name                                    |
+| --------------------------------------- |
+| aws.acm.certificate                     |
+| aws.apigateway.restapis                 |
+| aws.autoscaling.autoScalingGroup        |
+| aws.autoscaling.launchConfigurationName |
+| aws.cloudfront.distribution             |
+| aws.cloudformation.stack                |
+| aws.cloudsearch.domain                  |
+| aws.cloudwatch.alarm                    |
+| aws.logs.log-group                      |
+| aws.cloudtrail.trail                    |
+| aws.dynamodb.table                      |
+| aws.ec2.address                         |
+| aws.ec2.customer-gateway                |
+| aws.ec2.key-pair                        |
+| aws.ec2.image                           |
+| aws.ec2.instance                        |
+| aws.ec2.natgateway                      |
+| aws.ec2.network-acl                     |
+| aws.ec2.route-table                     |
+| aws.ec2.internet-gateway                |
+| aws.ec2.security-group                  |
+| aws.ec2.snapshot                        |
+| aws.ec2.volume                          |
+| aws.ec2.vpc                             |
+| aws.ec2.flow-log                        |
+| aws.ec2.vpc-peering-connection          |
+| aws.ec2.subnet                          |
+| aws.ec2.launch-template                 |
+| aws.ecs.cluster                         |
+| aws.ecs.task-definition                 |
+| aws.ecr.registery                       |
+| aws.ecr.repository                      |
+| aws.efs.filesystem                      |
+| aws.elasticache.cluster                 |
+| aws.elasticache.subnet-group            |
+| aws.elasticache.snapshot                |
+| aws.elasticbeanstalk.application        |
+| aws.elasticbeanstalk.environment        |
+| aws.elb.loadbalancer                    |
+| aws.elbv2.loadbalancer                  |
+| aws.elbv2.targetgroup                   |
+| aws.es.domain                           |
+| aws.events.rule                         |
+| aws.firehose.deliverystream             |
+| aws.iam.group                           |
+| aws.iam.instance-profile                |
+| aws.iam.role                            |
+| aws.iam.policy                          |
+| aws.iam.user                            |
+| aws.iam.server-certificate              |
+| aws.kinesis.stream                      |
+| aws.kms.key                             |
+| aws.lambda.function                     |
+| aws.opsworks.stack                      |
+| aws.rds.db                              |
+| aws.rds.secgrp                          |
+| aws.redshift.cluster                    |
+| aws.route53.hostedzone                  |
+| aws.route53.healthcheck                 |
+| aws.s3.bucket                           |
+| aws.stepfunctions.statemachine          |
+| aws.sqs.queue                           |
+| aws.ses.identity                        |
+| aws.sns.subscription                    |
+| aws.sns.topic                           |
+| aws.support.check                       |

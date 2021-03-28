@@ -1,5 +1,6 @@
 # Copyright (c) 2014 Scopely, Inc.
 # Copyright (c) 2015 Mitch Garnaat
+# Copyright (c) 2020 Jerome Guibert
 #
 # Licensed under the Apache License, Version 2.0 (the "License"). You
 # may not use this file except in compliance with the License. A copy of
@@ -23,37 +24,34 @@ LOG = logging.getLogger(__name__)
 
 
 class Certificate(AWSResource):
-
     class Meta(object):
-        service = 'acm'
-        type = 'certificate'
-        enum_spec = ('list_certificates', 'CertificateSummaryList', None)
-        detail_spec = ('describe_certificate', 'CertificateArn', 'Certificate')
-        id = 'CertificateArn'
-        tags_spec = ('list_tags_for_certificate', 'Tags[]',
-                     'CertificateArn', 'id')
+        service = "acm"
+        type = "certificate"
+        enum_spec = ("list_certificates", "CertificateSummaryList", None)
+        detail_spec = ("describe_certificate", "CertificateArn", "Certificate")
+        id = "CertificateArn"
+        tags_spec = ("list_tags_for_certificate", "Tags[]", "CertificateArn", "id")
         filter_name = None
-        name = 'DomainName'
-        date = 'CreatedAt'
+        name = "DomainName"
+        date = "CreatedAt"
         dimension = None
 
     @classmethod
     def filter(cls, arn, resource_id, data):
-        certificate_id = data.get(cls.Meta.id).split('/')[-1]
-        LOG.debug('%s == %s', resource_id, certificate_id)
+        certificate_id = data.get(cls.Meta.id).split("/")[-1]
+        LOG.debug("%s == %s", resource_id, certificate_id)
         return resource_id == certificate_id
 
     @property
     def arn(self):
-        return self.data['CertificateArn']
+        return self._data["CertificateArn"]
 
     def __init__(self, client, data, query=None):
         super(Certificate, self).__init__(client, data, query)
 
-        self._id = data['CertificateArn']
+        self._id = data["CertificateArn"]
 
         detail_op, param_name, detail_path = self.Meta.detail_spec
-        params = {param_name: data['CertificateArn']}
+        params = {param_name: data["CertificateArn"]}
         data = client.call(detail_op, **params)
-
-        self.data = jmespath.search(detail_path, data)
+        self._data = jmespath.search(detail_path, data)

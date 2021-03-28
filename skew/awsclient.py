@@ -1,4 +1,5 @@
 # Copyright 2015 Mitch Garnaat
+# Copyright (c) 2020 Jerome Guibert
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,6 +20,8 @@ import datetime
 import jmespath
 import boto3
 from botocore.exceptions import ClientError
+from botocore.config import Config
+import botocore
 
 from skew.config import get_config
 
@@ -35,23 +38,31 @@ def json_encoder(obj):
 
 class AWSClient(object):
 
+    boto3_retry_config = {"max_attempts": 20, "mode": "adaptive"}
+
     def __init__(self, service_name, region_name, account_id, **kwargs):
-        self._config = get_config()
+        _config = get_config()
         self._service_name = service_name
         self._region_name = region_name
         self._account_id = account_id
         self._has_credentials = False
-        self.aws_creds = kwargs.get('aws_creds')
-        if self.aws_creds is None:
-            self.aws_creds = self._config['accounts'][account_id].get(
-                'credentials')
-        if self.aws_creds is None:
-            # no aws_creds, need profile to get creds from ~/.aws/credentials
-            self._profile = self._config['accounts'][account_id]['profile']
-        self.placebo = kwargs.get('placebo')
-        self.placebo_dir = kwargs.get('placebo_dir')
-        self.placebo_mode = kwargs.get('placebo_mode', 'record')
-        self._client = self._create_client()
+        self.aws_creds = kwargs.get("aws_creds")
+        self._profile = None
+        if self.aws_creds is None and account_id in _config["accounts"]:
+            self.aws_creds = _config["accounts"][account_id].get("credentials")
+            if self.aws_creds:
+                # no aws_creds, need profile to get creds from ~/.aws/credentials or iam metadata role instance
+                self._profile = _config["accounts"][account_id].get("profile")
+
+        self._client = self._create_client(
+            placebo=kwargs.get("placebo"),
+            placebo_dir=kwargs.get("placebo_dir"),
+            placebo_mode=kwargs.get("placebo_mode", "record"),
+        )
+        # remove test key from client call
+        kwargs.pop("placebo", None)
+        kwargs.pop("placebo_dir", None)
+        kwargs.pop("placebo_mode", None)
 
     @property
     def service_name(self):
@@ -69,20 +80,27 @@ class AWSClient(object):
     def profile(self):
         return self._profile
 
-    def _create_client(self):
+    def _create_client(self, placebo=None, placebo_dir=None, placebo_mode=None):
+        # Initialize Session
         if self.aws_creds:
             session = boto3.Session(**self.aws_creds)
+        elif self.profile:
+            session = boto3.Session(profile_name=self.profile)
         else:
-            session = boto3.Session(
-                profile_name=self.profile)
-        if self.placebo and self.placebo_dir:
-            pill = self.placebo.attach(session, self.placebo_dir)
-            if self.placebo_mode == 'record':
+            session = boto3.Session()
+        # Placebo Condiguration
+        if placebo and placebo_dir:
+            pill = placebo.attach(session, data_path=placebo_dir)
+            if placebo_mode == "record":
                 pill.record()
-            elif self.placebo_mode == 'playback':
+            elif placebo_mode == "playback":
                 pill.playback()
-        return session.client(self.service_name,
-                              region_name=self.region_name if self.region_name else None)
+        # create boto3 client
+        return session.client(
+            self.service_name,
+            region_name=self.region_name if self.region_name else None,
+            config=Config(retries=self.boto3_retry_config),
+        )
 
     def call(self, op_name, query=None, **kwargs):
         """
@@ -112,8 +130,8 @@ class AWSClient(object):
             to the method when making the request.
         """
         LOG.debug(kwargs)
-        if query:
-            query = jmespath.compile(query)
+
+        data = {}
         if self._client.can_paginate(op_name):
             paginator = self._client.get_paginator(op_name)
             results = paginator.paginate(**kwargs)
@@ -121,27 +139,35 @@ class AWSClient(object):
         else:
             op = getattr(self._client, op_name)
             done = False
-            data = {}
             while not done:
                 try:
                     data = op(**kwargs)
                     done = True
                 except ClientError as e:
                     LOG.debug(e, kwargs)
-                    if 'Throttling' in str(e):
+                    if "Throttling" in str(e):
                         time.sleep(1)
-                    elif 'AccessDenied' in str(e):
+                    elif "AccessDenied" in str(e):
                         done = True
-                    elif 'NoSuchTagSet' in str(e):
+                    elif "UnrecognizedClientException" in str(e):
+                        LOG.error(e)
+                        self._client = self._create_client()
+                    elif "NoSuchTagSet" in str(e):
+                        done = True
+                    else:
+                        # Avoid infinite loop
                         done = True
                 except Exception:
                     done = True
         if query:
-            data = query.search(data)
+            return jmespath.compile(query).search(data)
         return data
 
 
 def get_awsclient(service_name, region_name, account_id, **kwargs):
-    if region_name == '':
-        region_name = None
-    return AWSClient(service_name, region_name, account_id, **kwargs)
+    return AWSClient(
+        service_name=service_name,
+        region_name=None if region_name == "" else region_name,
+        account_id=account_id,
+        **kwargs
+    )

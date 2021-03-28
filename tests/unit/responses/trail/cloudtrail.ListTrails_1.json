@@ -1,0 +1,12 @@
+{
+    "status_code": 200,
+    "data": {
+        "Trails": [
+            {
+                "TrailARN": "arn:aws:cloudtrail:us-east-1:123456789012:trail/awslog",
+                "HomeRegion": "us-east-1",
+                "Name": "awslog"
+            }
+        ]
+    }
+}

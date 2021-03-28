@@ -1,4 +1,7 @@
+# Copyright (c) 2014 Scopely, Inc.
+# Copyright (c) 2015 Mitch Garnaat
 # Copyright (c) 2019 Christophe Morio
+# Copyright (c) 2020 Jerome Guibert
 #
 # Licensed under the Apache License, Version 2.0 (the "License"). You
 # may not use this file except in compliance with the License. A copy of
@@ -13,34 +16,27 @@
 
 import logging
 
+import jmespath
+
 from skew.resources.aws import AWSResource
+
 
 LOG = logging.getLogger(__name__)
 
 
-class RestAPI(AWSResource):
+class Domain(AWSResource):
     class Meta(object):
-        service = "apigateway"
-        type = "restapis"
-        enum_spec = ("get_rest_apis", "items", None)
-        id = "id"
-        filter_name = None
-        filter_type = None
+        service = "cloudsearch"
+        type = "domain"
+        enum_spec = ("describe_domains", "DomainStatusList", None)
         detail_spec = None
-        name = "name"
-        date = "createdDate"
-        dimension = "GatewayName"
-
-    @classmethod
-    def filter(cls, arn, resource_id, data):
-        api_id = data.get(cls.Meta.id)
-        LOG.debug("%s == %s", resource_id, api_id)
-        return resource_id == api_id
+        id = "ARN"
+        tags_spec = None
+        filter_name = None
+        name = "DomainName"
+        date = "Created"
+        dimension = None
 
     @property
     def arn(self):
-        # arn:aws:apigateway:us-east-1::/restapis/vwxyz12345
-        return "arn:aws:apigateway:%s::restapis/%s" % (
-            self._client.region_name,
-            self.id,
-        )
+        return self._data["ARN"]

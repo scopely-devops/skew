@@ -1,5 +1,6 @@
 # Copyright (c) 2014 Scopely, Inc.
 # Copyright (c) 2015 Mitch Garnaat
+# Copyright (c) 2020 Jerome Guibert
 #
 # Licensed under the Apache License, Version 2.0 (the "License"). You
 # may not use this file except in compliance with the License. A copy of
@@ -83,58 +84,65 @@ class AWSResource(Resource):
       given type.  But you can also tell it to filter the results by
       passing in a list of id's.  This parameter tells it the name of the
       parameter to use to specify this list of id's.
+
+
     """
 
     class Meta(object):
-        type = 'awsresource'
+        type = "awsresource"
 
     @classmethod
     def filter(cls, arn, resource_id, data):
+        """
+        If the API does not support filtering, the resource
+        return True if the returned data matches the
+        resource ID we are looking for.
+        """
+        LOG.warning("filter classmethod must be implemented for %s", cls)
         pass
 
     def __init__(self, client, data, query=None):
-        self._client = client
+        super(AWSResource, self).__init__(client=client, data=data)
         self._query = query
-        if data is None:
-            data = {}
-        self.data = data
-        if self._query:
-            self.filtered_data = self._query.search(self.data)
-        else:
-            self.filtered_data = None
-        if hasattr(self.Meta, 'id') and isinstance(self.data, dict):
-            self._id = self.data.get(self.Meta.id, '')
-        else:
-            self._id = ''
+        self.filtered_data = self._query.search(self._data) if self._query else None
         self._cloudwatch = None
-        if hasattr(self.Meta, 'dimension') and self.Meta.dimension:
+        if hasattr(self.Meta, "dimension") and self.Meta.dimension:
             self._cloudwatch = skew.awsclient.get_awsclient(
-                'cloudwatch', self._client.region_name,
-                self._client.account_id)
-        self._metrics = None
-        self._name = None
-        self._date = None
+                "cloudwatch", self._client.region_name, self._client.account_id
+            )
         self._tags = None
+        self._extra_attribute_loaded = False
 
     def __repr__(self):
         return self.arn
 
     @property
+    def data(self):
+        if not self._extra_attribute_loaded:
+            if hasattr(self, "_load_extra_attribute"):
+                self._load_extra_attribute()
+            self._extra_attribute_loaded = True
+        return super(AWSResource, self).data
+
+    @property
     def arn(self):
-        return 'arn:aws:%s:%s:%s:%s/%s' % (
+        return "arn:aws:%s:%s:%s:%s/%s" % (
             self._client.service_name,
             self._client.region_name,
-            self._client.account_id, self.resourcetype, self.id)
+            self._client.account_id,
+            self.resourcetype,
+            self.id,
+        )
 
     @property
     def metrics(self):
         if self._metrics is None:
             if self._cloudwatch:
                 data = self._cloudwatch.call(
-                    'list_metrics',
-                    Dimensions=[{'Name': self.Meta.dimension,
-                                 'Value': self._id}])
-                self._metrics = jmespath.search('Metrics', data)
+                    "list_metrics",
+                    Dimensions=[{"Name": self.Meta.dimension, "Value": self._id}],
+                )
+                self._metrics = jmespath.search("Metrics", data)
             else:
                 self._metrics = []
         return self._metrics
@@ -142,48 +150,38 @@ class AWSResource(Resource):
     @property
     def tags(self):
         """
-        Convert the ugly Tags JSON into a real dictionary and
+        Load and Convert the ugly Tags JSON into a real dictionary and
         memorize the result.
         """
         if self._tags is None:
-            LOG.debug('need to build tags')
+            LOG.debug("need to build tags")
             self._tags = {}
 
-            if hasattr(self.Meta, 'tags_spec') and (self.Meta.tags_spec is not None):
-                LOG.debug('have a tags_spec')
+            if hasattr(self.Meta, "tags_spec") and (self.Meta.tags_spec is not None):
+                LOG.debug("have a tags_spec")
                 method, path, param_name, param_value = self.Meta.tags_spec[:4]
                 kwargs = {}
-                filter_type = getattr(self.Meta, 'filter_type', None)
-                if filter_type == 'arn':
+                filter_type = getattr(self.Meta, "filter_type", None)
+                if filter_type == "arn":
                     kwargs = {param_name: [getattr(self, param_value)]}
-                elif filter_type == 'list':
+                elif filter_type == "list":
                     kwargs = {param_name: [getattr(self, param_value)]}
                 else:
                     kwargs = {param_name: getattr(self, param_value)}
                 if len(self.Meta.tags_spec) > 4:
                     kwargs.update(self.Meta.tags_spec[4])
-                LOG.debug('fetching tags')
-                self.data['Tags'] = self._client.call(
-                    method, query=path, **kwargs)
-                LOG.debug(self.data['Tags'])
+                LOG.debug("fetching tags")
+                self._data["Tags"] = self._client.call(method, query=path, **kwargs)
+                LOG.debug(self._data["Tags"])
 
-            if 'Tags' in self.data:
-                _tags = self.data['Tags']
-                if isinstance(_tags, list):
-                    for kvpair in _tags:
-                        if kvpair['Key'] in self._tags:
-                            if not isinstance(self._tags[kvpair['Key']], list):
-                                self._tags[kvpair['Key']] = [self._tags[kvpair['Key']]]
-                            self._tags[kvpair['Key']].append(kvpair['Value'])
-                        else:
-                            self._tags[kvpair['Key']] = kvpair['Value']
-                elif isinstance(_tags, dict):
-                    self._tags = _tags
+            if "Tags" in self._data:
+                self._tags = self._normalize_tags(self._data["Tags"])
+
         return self._tags
 
     def find_metric(self, metric_name):
         for m in self.metrics:
-            if m['MetricName'] == metric_name:
+            if m["MetricName"] == metric_name:
                 return m
         return None
 
@@ -191,12 +189,20 @@ class AWSResource(Resource):
         # python2.6 does not have timedelta.total_seconds() so we have
         # to calculate this ourselves.  This is straight from the
         # datetime docs.
-        return ((delta.microseconds + (delta.seconds + delta.days * 24 * 3600)
-                 * 10 ** 6) / 10 ** 6)
+        return (
+            delta.microseconds + (delta.seconds + delta.days * 24 * 3600) * 10 ** 6
+        ) / 10 ** 6
 
-    def get_metric_data(self, metric_name=None, metric=None,
-                        days=None, hours=1, minutes=None,
-                        statistics=None, period=None):
+    def get_metric_data(
+        self,
+        metric_name=None,
+        metric=None,
+        days=None,
+        hours=1,
+        minutes=None,
+        statistics=None,
+        period=None,
+    ):
         """
         Get metric data for this resource.  You can specify the time
         frame for the data as either the number of days or number of
@@ -234,7 +240,7 @@ class AWSResource(Resource):
             been calculated by skew.
         """
         if not statistics:
-            statistics = ['Average']
+            statistics = ["Average"]
         if days:
             delta = datetime.timedelta(days=days)
         elif hours:
@@ -249,18 +255,47 @@ class AWSResource(Resource):
             end = datetime.datetime.utcnow()
             start = end - delta
             data = self._cloudwatch.call(
-                'get_metric_statistics',
-                Dimensions=metric['Dimensions'],
-                Namespace=metric['Namespace'],
-                MetricName=metric['MetricName'],
-                StartTime=start.isoformat(), EndTime=end.isoformat(),
-                Statistics=statistics, Period=period)
-            return MetricData(jmespath.search('Datapoints', data),
-                              period)
+                "get_metric_statistics",
+                Dimensions=metric["Dimensions"],
+                Namespace=metric["Namespace"],
+                MetricName=metric["MetricName"],
+                StartTime=start.isoformat(),
+                EndTime=end.isoformat(),
+                Statistics=statistics,
+                Period=period,
+            )
+            return MetricData(jmespath.search("Datapoints", data), period)
         else:
-            raise ValueError('Metric (%s) not available' % metric_name)
+            raise ValueError("Metric (%s) not available" % metric_name)
+
+    def _normalize_tags(self, tags):
+        """Convert the ugly Tags JSON into a real dictionary. """
+        result = {}
+        if isinstance(tags, list):
+            for kvpair in tags:
+                # Compatibility fix for ECS, that use lowercase 'key' and 'value' as dict keys
+                # https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ecs.html#ECS.Client.list_tags_for_resource
+                tags_key = kvpair.get("Key", kvpair.get("key"))
+                tags_value = kvpair.get("Value", kvpair.get("value"))
+                if tags_key in tags:
+                    if not isinstance(tags[tags_key], list):
+                        result[tags_key] = [tags[tags_key]]
+                    result[tags_key].append(tags_value)
+                else:
+                    result[tags_key] = tags_value
+        elif isinstance(tags, dict):
+            result = tags
+        return result
+
+    def _feed_from_spec(self, attr_spec):
+        """Utilty to call boto3 on demand."""
+        method, path, param_name, param_value = attr_spec[:4]
+        kwargs = {param_name: getattr(self, param_value)}
+        if path:
+            kwargs["query"] = path
+        return self._client.call(method, **kwargs)
 
 
-ArnComponents = namedtuple('ArnComponents',
-                           ['scheme', 'provider', 'service', 'region',
-                            'account', 'resource'])
+ArnComponents = namedtuple(
+    "ArnComponents", ["scheme", "provider", "service", "region", "account", "resource"]
+)

@@ -1,5 +1,7 @@
 # Copyright (c) 2014 Scopely, Inc.
 # Copyright (c) 2015 Mitch Garnaat
+# Copyright (c) 2019 Christophe Morio
+# Copyright (c) 2020 Jerome Guibert
 #
 # Licensed under the Apache License, Version 2.0 (the "License"). You
 # may not use this file except in compliance with the License. A copy of
@@ -12,33 +14,40 @@
 # ANY KIND, either express or implied. See the License for the specific
 # language governing permissions and limitations under the License.
 
+import logging
+
+import jmespath
+
 from skew.resources.aws import AWSResource
 
 
-class Queue(AWSResource):
+LOG = logging.getLogger(__name__)
+
+
+class Identity(AWSResource):
     class Meta(object):
-        service = "sqs"
-        type = "queue"
-        enum_spec = ("list_queues", "QueueUrls", None)
-        detail_spec = ("get_queue_attributes", "QueueUrl", "QueueUrl")
-        id = "QueueUrl"
-        filter_name = "QueueNamePrefix"
-        filter_type = "scalar"
-        name = "QueueName"
+        service = "ses"
+        type = "identity"
+        enum_spec = ("list_identities", "Identities", None)
+        detail_spec = ("describe_table", "TableName", "Table")
+        id = "Identity"
+        tags_spec = None
+        filter_name = None
+        name = "IdentityName"
         date = None
-        dimension = "QueueName"
-        tags_spec = ("list_queue_tags", "Tags", "QueueUrl", "name")
+        dimension = "IdentityName"
 
     def __init__(self, client, data, query=None):
-        super(Queue, self).__init__(client, data, query)
-        self.data = {self.Meta.id: data,
-                     'QueueName': data.split('/')[-1]}
-        self._id = self.data['QueueName']
+        super(Identity, self).__init__(client, data, query)
+        arn = self._data
+        self._data = {"IdentityName": arn}
 
     @property
     def arn(self):
-        return 'arn:aws:%s:%s:%s:%s' % (
+        return "arn:aws:%s:%s:%s:%s/%s" % (
             self._client.service_name,
             self._client.region_name,
             self._client.account_id,
-            self.id)
+            self.resourcetype,
+            self._data["IdentityName"],
+        )
