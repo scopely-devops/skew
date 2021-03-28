@@ -63,6 +63,7 @@ ResourceTypes = {
     'aws.iam.server-certificate': 'aws.iam.ServerCertificate',
     'aws.kinesis.stream': 'aws.kinesis.Stream',
     'aws.lambda.function': 'aws.lambda.Function',
+    'aws.lambda.layer': 'aws.lambda.Layer',
     'aws.rds.db': 'aws.rds.DBInstance',
     'aws.rds.secgrp': 'aws.rds.DBSecurityGroup',
     'aws.rds.reserved': 'aws.rds.Reserved',
